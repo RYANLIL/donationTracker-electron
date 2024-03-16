@@ -23,14 +23,17 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   // You can expose other APTs you need here.
   // ...
 });
+
 /**
  * Called in render receives data and passes it to the main process*
  * @param friends list of all friends from indexedDB
  */
 function saveData(friends: Friend[]) {
-  ipcRenderer.send("saveToJson", friends);
+  // Sends data to main Process
+  ipcRenderer.send("saveToJSON", friends);
 }
 
+//Exposing saveData function from preload to renderer process
 contextBridge.exposeInMainWorld("fileOps", { saveData });
 
 // --------- Preload scripts loading ---------

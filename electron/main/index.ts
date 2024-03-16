@@ -128,7 +128,9 @@ ipcMain.handle("open-win", (_, arg) => {
   }
 });
 
-ipcMain.on("saveToJson", (sender, data) => {
+// Waits for the renderer process to emit `saveToJSON` IPC event *
+
+ipcMain.on("saveToJSON", (sender, data) => {
   savetoJSON(sender, data);
   console.log("Data Saved");
 });

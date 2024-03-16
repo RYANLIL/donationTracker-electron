@@ -40,8 +40,6 @@ export function FriendList({ minAge, maxAge }: props) {
     [minAge, maxAge]
   );
 
-  function saveToJSON(person: Friend[]) {}
-
   return (
     <ul>
       {friends?.map((friend) => (
