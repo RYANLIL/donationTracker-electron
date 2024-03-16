@@ -24,6 +24,8 @@
     "@fontsource/roboto": "^5.0.12",
     "@mui/icons-material": "^5.15.13",
     "@mui/material": "^5.15.13",
+    "dexie": "^3.2.6",
+    "dexie-react-hooks": "^1.1.7",
     "electron-updater": "^6.1.8"
   },
   "devDependencies": {

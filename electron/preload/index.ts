@@ -1,3 +1,4 @@
+import { Friend } from "@/db/db";
 import { ipcRenderer, contextBridge } from "electron";
 
 // --------- Expose some API to the Renderer process ---------
@@ -22,6 +23,15 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   // You can expose other APTs you need here.
   // ...
 });
+/**
+ * Called in render receives data and passes it to the main process*
+ * @param friends list of all friends from indexedDB
+ */
+function saveData(friends: Friend[]) {
+  ipcRenderer.send("saveToJson", friends);
+}
+
+contextBridge.exposeInMainWorld("fileOps", { saveData });
 
 // --------- Preload scripts loading ---------
 function domReady(

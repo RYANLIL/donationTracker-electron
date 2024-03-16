@@ -2,6 +2,7 @@ import { app, BrowserWindow, shell, ipcMain } from "electron";
 import { release } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import savetoJSON from "./saveToFile";
 //import { update } from './update'
 
 globalThis.__filename = fileURLToPath(import.meta.url);
@@ -47,6 +48,8 @@ const indexHtml = join(process.env.DIST, "index.html");
 
 async function createWindow() {
   win = new BrowserWindow({
+    width: 1024,
+    height: 768,
     title: "Main window",
     icon: join(process.env.VITE_PUBLIC, "favicon.ico"),
     webPreferences: {
@@ -123,4 +126,9 @@ ipcMain.handle("open-win", (_, arg) => {
   } else {
     childWindow.loadFile(indexHtml, { hash: arg });
   }
+});
+
+ipcMain.on("saveToJson", (sender, data) => {
+  savetoJSON(sender, data);
+  console.log("Data Saved");
 });

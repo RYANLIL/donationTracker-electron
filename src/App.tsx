@@ -1,15 +1,18 @@
 import { useState } from "react";
-import UpdateElectron from "@/components/update";
 import logoVite from "./assets/logo-vite.svg";
 import logoElectron from "./assets/logo-electron.svg";
 import "./App.css";
+import { AddFriendForm } from "./components/AddFriend";
+import { FriendList } from "./components/FriendList";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <div className="App">
-      <div className="logo-box">
+      <AddFriendForm defaultAge={18} />
+      <FriendList minAge={1} maxAge={220} />
+      {/* <div className="logo-box">
         <a
           href="https://github.com/electron-vite/electron-vite-react"
           target="_blank"
@@ -41,9 +44,7 @@ function App() {
       <div className="flex-center">
         Place static files into the<code>/public</code> folder{" "}
         <img style={{ width: "5em" }} src="./node.svg" alt="Node logo" />
-      </div>
-
-      <UpdateElectron />
+      </div> */}
     </div>
   );
 }
