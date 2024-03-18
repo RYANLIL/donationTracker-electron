@@ -19,25 +19,28 @@
     "pree2e": "vite build --mode=test"
   },
   "dependencies": {
+    "@electron/rebuild": "^3.6.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.12",
     "@mui/icons-material": "^5.15.13",
     "@mui/material": "^5.15.13",
+    "better-sqlite3": "^8.7.0",
     "dexie": "^3.2.6",
+    "dexie-export-import": "^4.1.1",
     "dexie-react-hooks": "^1.1.7",
-    "electron-updater": "^6.1.8"
+    "electron": "^28.0.0",
+    "electron-updater": "^6.1.8",
+    "vite": "^4.4.9"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
     "@vitejs/plugin-react": "^4.2.1",
-    "electron": "^29.1.1",
     "electron-builder": "^24.13.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.4.2",
-    "vite": "^5.1.5",
     "vite-plugin-electron": "^0.28.2",
     "vite-plugin-electron-renderer": "^0.14.5"
   }

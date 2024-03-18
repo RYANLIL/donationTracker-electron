@@ -1,6 +1,6 @@
 import { Friend } from "@/db/db";
 import { dirname, join } from "node:path";
-import fs from "fs";
+import fs from "node:fs";
 import { app } from "electron";
 
 export default function savetoJSON(
@@ -21,11 +21,30 @@ export default function savetoJSON(
 
   console.log(root);
   //Check if data directory exists of not create it
-  if (!fs.existsSync(root)) {
-    fs.mkdirSync(root, { recursive: true });
-  }
-  const path = join(root, fileName);
+  try {
+    if (!fs.existsSync(root)) {
+      fs.mkdirSync(root, { recursive: true });
+    }
 
-  fs.writeFileSync(path, sData);
-  console.log("Data Saved");
+    // TODO: change to createWriteStream
+    const path = join(root, fileName);
+
+    fs.writeFileSync(path, sData);
+    console.log("Data Saved");
+  } catch (e) {
+    throw new Error("Failed to write file to disk at saveToFile.ts");
+  }
 }
+
+function writeFile(filepath: string) {
+  const writableStream = fs.createWriteStream(filepath);
+  writableStream.on("error", (error) => {
+    console.log(
+      `An error occurred while writing to the file. Error: ${error.message}`
+    );
+  });
+}
+
+// TODO: Look into dexie-export-import============================================================================
+// TODO: Look into dexie-export-import============================================================================
+// TODO: Look into dexie-export-import============================================================================

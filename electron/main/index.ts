@@ -3,7 +3,7 @@ import { release } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import savetoJSON from "./saveToFile";
-//import { update } from './update'
+import { getSqlite3 } from "./better-sqlite3";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -133,4 +133,51 @@ ipcMain.handle("open-win", (_, arg) => {
 ipcMain.on("saveToJSON", (sender, data) => {
   savetoJSON(sender, data);
   console.log("Data Saved");
+  testSQL();
 });
+
+function testSQL() {
+  let root = app.isPackaged
+    ? join(app.getPath("exe"), "resources/data/test.db")
+    : join(__dirname, "resources/data/test.db");
+
+  root =
+    process.env.NODE_ENV === "development"
+      ? "./demo_table.db"
+      : join(process.resourcesPath, "./demo_table.db");
+
+  const db = getSqlite3(root);
+  db.pragma("journal_mode = WAL");
+
+  let tableExist = db
+    .prepare(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name='cats'"
+    )
+    .get();
+  if (tableExist === undefined) {
+    console.log("CATS DON'T EXISTS");
+    console.log(tableExist);
+    let createTable = db.prepare("CREATE TABLE cats (name text, age integer)");
+    let info = createTable.run();
+    console.log(info.changes);
+    console.log(info.lastInsertRowid);
+  }
+
+  const insert = db.prepare(
+    "INSERT INTO cats (name, age) VALUES (@name, @age)"
+  );
+
+  const insertMany = db.transaction((cats) => {
+    for (const cat of cats) insert.run(cat);
+  });
+
+  try {
+    insertMany([
+      { name: "Joey", age: 2 },
+      { name: "Sally", age: 4 },
+      { name: "Junior", age: 1 },
+    ]);
+  } catch (err) {
+    if (!db.inTransaction) throw err; // (transaction was forcefully rolled back)
+  }
+}
