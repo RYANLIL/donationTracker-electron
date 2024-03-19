@@ -204,15 +204,15 @@ function testSQL() {
   }
 }
 
-console.log("USER_DATA_PATH");
-console.log(USER_DATA_FOLDER);
-console.log("DATABASE_FOLDER ");
-console.log(DATABASE_FOLDER);
-console.log("DATABASE_FOLDER_PATH ");
-console.log(DATABASE_PATH);
-console.log("USER_CONFIG_PATH ");
-console.log(USER_CONFIG_PATH);
-console.log("RAW_SQL_FOLDER ");
-console.log(RAW_SQL_FOLDER);
+// console.log("USER_DATA_PATH");
+// console.log(USER_DATA_FOLDER);
+// console.log("DATABASE_FOLDER ");
+// console.log(DATABASE_FOLDER);
+// console.log("DATABASE_FOLDER_PATH ");
+// console.log(DATABASE_PATH);
+// console.log("USER_CONFIG_PATH ");
+// console.log(USER_CONFIG_PATH);
+// console.log("RAW_SQL_FOLDER ");
+// console.log(RAW_SQL_FOLDER);
 
 //readyDatabase();

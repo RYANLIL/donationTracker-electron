@@ -17,6 +17,6 @@ export const DATABASE_FOLDER = join(USER_DATA_FOLDER, "./user-databases");
 export const DATABASE_PATH = join(DATABASE_FOLDER, "./donation-tracker.sqlite");
 
 //****************TODO: NOT SURE IF PATHED CORRECTLY IN PACKAGED APP*********************** */
-export const RAW_SQL_FOLDER = !isDev
+export const RAW_SQL_FOLDER = isDev
   ? "./sql-files"
   : join(process.resourcesPath, "./sql-files");

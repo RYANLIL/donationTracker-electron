@@ -1,0 +1,27 @@
+TODO: process for migrations
+sample object from returned from running 
+const db = getSqlite3(DATABASE_PATH);
+let peopleTbl = db.pragma("table_info(person)");
+console.log(peopleTbl);
+{
+    cid: 0,
+    name: 'id',
+    type: 'INTEGER',
+    notnull: 0,
+    dflt_value: null,
+    pk: 1
+  },
+
+
+returns list of table names
+let tables = db.prepare(
+    "SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'"
+  );
+  let res = tables.all();
+
+  [
+  { name: 'person' },
+  { name: 'address' },
+  { name: 'donation_records' },
+  { name: 'receipt_records' }
+]
