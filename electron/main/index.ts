@@ -13,6 +13,12 @@ import {
   USER_DATA_FOLDER,
 } from "../../constants";
 import { readyDatabase } from "./data/intialiaze";
+import {
+  deletePerson,
+  getAllPersons,
+  insertPerson,
+  updatePerson,
+} from "./logic/person-logic";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -215,4 +221,47 @@ function testSQL() {
 // console.log("RAW_SQL_FOLDER ");
 // console.log(RAW_SQL_FOLDER);
 
-//readyDatabase();
+readyDatabase();
+
+//Testing CRUD Person
+import { Bilbo } from "../../sql-files/mock-data/mock-objects";
+const db = getSqlite3(DATABASE_PATH);
+
+insertPerson(db, Bilbo);
+Bilbo.firstName = "bob";
+insertPerson(db, Bilbo);
+Bilbo.firstName = "foggy-/bob";
+insertPerson(db, Bilbo);
+// deletePerson(db, 2);
+
+// let a = Bilbo;
+// a.id = 3;
+// a.firstName = "it updated woot";
+// updatePerson(db, a);
+
+//const insert = db.prepare("INSERT INTO cats (name, age) VALUES (@name, @age)");
+// const insert = db.prepare(
+//   "INSERT INTO person (firstName, lastName, phone1,phone2) VALUES (@firstName, @lastName, @phone1, @phone2)"
+// );
+
+//const insertMany = db.transaction((Bilbo) => {
+//insert.run(Bilbo);
+//});
+//insertMany(Bilbo);
+// insertMany([
+//   { name: "Joey", age: 2 },
+//   { name: "Sally", age: 4 },
+//   { name: "Junior", age: 1 },
+// ]);
+
+// let a = {
+//   firstName: Bilbo.firstName,
+//   lastName: Bilbo.lastName,
+//   phone1: Bilbo.phone1,
+//   phone2: Bilbo.phone2,
+// };
+// console.log(Bilbo);
+// console.log(a);
+
+let allPerson = getAllPersons(db);
+console.log(allPerson);

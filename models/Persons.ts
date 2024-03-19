@@ -6,14 +6,14 @@ export interface IPersonInfo {
 }
 
 export interface IPerson extends IMetaData {
-  id: number;
+  id?: number;
   firstName: string;
   lastName: string;
   phone1: string;
   phone2: string;
 }
 export interface IAddress extends IMetaData {
-  id: number;
+  id?: number;
   fk_personId: number;
   address1: string;
   address2: string;
@@ -39,7 +39,7 @@ export interface IReceiptRecord extends IMetaData {
 }
 
 interface IMetaData {
-  isDeleted: boolean;
-  createdAt: string;
-  deletedAt: string;
+  isDeleted?: boolean;
+  createdAt?: string;
+  deletedAt?: string;
 }

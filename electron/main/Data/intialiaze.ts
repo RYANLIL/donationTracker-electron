@@ -93,12 +93,8 @@ export function readyDatabase() {
   }
 
   console.log(res);
-
-  db.close();
 }
 
 export function insertMockData() {
   const db = getSqlite3(DATABASE_PATH);
-
-  db.close();
 }
