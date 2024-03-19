@@ -7,12 +7,12 @@ CREATE TABLE "person" (
 
 	"isDeleted"	INTEGER DEFAULT 0 NOT NULL,
 	"createdAt" TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"deletedAt" TEXT DEFAULT '' NOT NULL,	
+	"deletedAt" TEXT DEFAULT '' NOT NULL
 );
 
 CREATE TABLE "address" (
     "id"			INTEGER PRIMARY KEY,
-    "fk_personId" 	INTEGER DEFAULT 0 REFERENCES Person(ID)NOT NULL 
+    "fk_personId" 	INTEGER DEFAULT 0 REFERENCES Person(ID) NOT NULL, 
     "address1"		TEXT DEFAULT '' NOT NULL,
 	"address2"		TEXT DEFAULT '' NOT NULL,
 	"address3"		TEXT DEFAULT '' NOT NULL,
@@ -23,18 +23,18 @@ CREATE TABLE "address" (
 
     "isDeleted"		INTEGER DEFAULT 0 NOT NULL,
 	"createdAt" 	TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"deletedAt" 	TEXT DEFAULT '' NOT NULL,
+	"deletedAt" 	TEXT DEFAULT '' NOT NULL
 );
 
 CREATE TABLE "donation_records" (
 	"id"			INTEGER PRIMARY KEY,
 	"fk_PersonId"	INTEGER DEFAULT 0 REFERENCES Person(ID) NOT NULL, --foreign key
 	"amount"		REAL DEFAULT 0 NOT NULL,
-	"date"			TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL
+	"date"			TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
 
 	"isDeleted"		INTEGER DEFAULT 0 NOT NULL,
 	"createdAt" 	TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"deletedAt" 	TEXT DEFAULT '' NOT NULL,
+	"deletedAt" 	TEXT DEFAULT '' NOT NULL
 );
 
 
@@ -47,5 +47,5 @@ CREATE TABLE "receipt_records" (
 
 	"isDeleted"		INTEGER DEFAULT 0 NOT NULL,
 	"createdAt" 	TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"deletedAt" 	TEXT DEFAULT '' NOT NULL,
+	"deletedAt" 	TEXT DEFAULT '' NOT NULL
 );

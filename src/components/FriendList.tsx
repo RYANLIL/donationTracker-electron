@@ -1,6 +1,6 @@
 import { Friend, db } from "@/db/db";
 import { useLiveQuery } from "dexie-react-hooks";
-import IPerson from "models/Persons";
+
 interface props {
   minAge: number;
   maxAge: number;

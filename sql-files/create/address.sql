@@ -1,6 +1,6 @@
 CREATE TABLE "address" (
     "id"			INTEGER PRIMARY KEY,
-    "fk_personId" 	INTEGER DEFAULT 0 REFERENCES Person(ID)NOT NULL 
+    "fk_personId" 	INTEGER DEFAULT 0 REFERENCES Person(ID)NOT NULL,
     "address1"		TEXT DEFAULT '' NOT NULL,
 	"address2"		TEXT DEFAULT '' NOT NULL,
 	"address3"		TEXT DEFAULT '' NOT NULL,
@@ -11,5 +11,5 @@ CREATE TABLE "address" (
 
     "isDeleted"		INTEGER DEFAULT 0 NOT NULL,
 	"createdAt"		TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"deletedAt" 	TEXT DEFAULT '' NOT NULL,
+	"deletedAt" 	TEXT DEFAULT '' NOT NULL
 );

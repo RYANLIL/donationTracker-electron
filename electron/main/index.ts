@@ -5,7 +5,15 @@ import { release } from "node:os";
 import { app, BrowserWindow, shell, ipcMain } from "electron";
 import savetoJSON from "./data/saveToFile";
 import { getSqlite3 } from "./data/better-sqlite3";
-import { USER_DATA_PATH } from "../../constants";
+import {
+  DATABASE_FOLDER,
+  DATABASE_PATH,
+  RAW_SQL_FOLDER,
+  USER_CONFIG_PATH,
+  USER_DATA_FOLDER,
+} from "../../constants";
+import { readyDatabase } from "./data/intialiaze";
+
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
 
@@ -142,12 +150,12 @@ ipcMain.on("saveToJSON", (sender, data) => {
 });
 
 function isFirstRun() {
-  const flagFilePath = join(USER_DATA_PATH, "first_run.flag");
+  const flagFilePath = join(USER_DATA_FOLDER, "first_run.flag");
   // Check if the flag file exists
   return !fs.existsSync(flagFilePath);
 }
 function markFirstRun() {
-  const flagFilePath = join(USER_DATA_PATH, "first_run.flag");
+  const flagFilePath = join(USER_DATA_FOLDER, "first_run.flag");
   console.log(flagFilePath);
   // Create the flag file
   fs.writeFileSync(flagFilePath, "");
@@ -195,3 +203,16 @@ function testSQL() {
     if (!db.inTransaction) throw err; // (transaction was forcefully rolled back)
   }
 }
+
+console.log("USER_DATA_PATH");
+console.log(USER_DATA_FOLDER);
+console.log("DATABASE_FOLDER ");
+console.log(DATABASE_FOLDER);
+console.log("DATABASE_FOLDER_PATH ");
+console.log(DATABASE_PATH);
+console.log("USER_CONFIG_PATH ");
+console.log(USER_CONFIG_PATH);
+console.log("RAW_SQL_FOLDER ");
+console.log(RAW_SQL_FOLDER);
+
+//readyDatabase();

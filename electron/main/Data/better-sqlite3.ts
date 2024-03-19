@@ -12,6 +12,5 @@ let database: Database.Database;
 export function getSqlite3(
   filename = path.join(app.getPath("documents"), "donation-tracker.sqlite")
 ) {
-  console.log(filename);
   return (database ??= new Database(filename));
 }
