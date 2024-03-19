@@ -1,10 +1,11 @@
 import { app, BrowserWindow, shell, ipcMain } from "electron";
 import { release } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import savetoJSON from "./saveToFile";
-import { getSqlite3 } from "./better-sqlite3";
-
+import savetoJSON from "./data/saveToFile";
+import { getSqlite3 } from "./data/better-sqlite3";
+import fs from "node:fs";
+import { USER_DATA_PATH } from "../../constants";
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
 
@@ -131,20 +132,33 @@ ipcMain.handle("open-win", (_, arg) => {
 // Waits for the renderer process to emit `saveToJSON` IPC event *
 
 ipcMain.on("saveToJSON", (sender, data) => {
-  savetoJSON(sender, data);
   console.log("Data Saved");
-  testSQL();
+  //testSQL();
+  let first = isFirstRun();
+  console.log("FIRST RUNNN?", first);
+  if (first) {
+    markFirstRun();
+  }
 });
 
-function testSQL() {
-  let root = app.isPackaged
-    ? join(app.getPath("exe"), "resources/data/test.db")
-    : join(__dirname, "resources/data/test.db");
+function isFirstRun() {
+  const flagFilePath = join(USER_DATA_PATH, "first_run.flag");
+  // Check if the flag file exists
+  return !fs.existsSync(flagFilePath);
+}
+function markFirstRun() {
+  const flagFilePath = join(USER_DATA_PATH, "first_run.flag");
+  console.log(flagFilePath);
+  // Create the flag file
+  fs.writeFileSync(flagFilePath, "");
+}
 
-  root =
+function testSQL() {
+  const root =
     process.env.NODE_ENV === "development"
-      ? "./demo_table.db"
-      : join(process.resourcesPath, "./demo_table.db");
+      ? "./donation-tracker.sqlite"
+      : join(process.resourcesPath, "./donation-tracker.sqlite");
+  //: join(app.getPath("userData"), "./donation-tracker.sqlite");
 
   const db = getSqlite3(root);
   db.pragma("journal_mode = WAL");
@@ -167,7 +181,7 @@ function testSQL() {
     "INSERT INTO cats (name, age) VALUES (@name, @age)"
   );
 
-  const insertMany = db.transaction((cats) => {
+  const insertMany = db.transaction((cats: object[]) => {
     for (const cat of cats) insert.run(cat);
   });
 
