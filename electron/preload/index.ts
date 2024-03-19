@@ -1,5 +1,5 @@
-import { Friend } from "@/db/db";
 import { ipcRenderer, contextBridge } from "electron";
+import { Friend } from "@/db/db";
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld("ipcRenderer", {

@@ -1,7 +1,7 @@
-import { app } from "electron";
 import path, { dirname } from "node:path";
-import Database from "better-sqlite3";
 import { fileURLToPath } from "node:url";
+import { app } from "electron";
+import Database from "better-sqlite3";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);

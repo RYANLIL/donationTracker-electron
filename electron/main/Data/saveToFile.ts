@@ -1,7 +1,6 @@
-import { Friend } from "@/db/db";
 import { dirname, join } from "node:path";
 import fs from "node:fs";
-import { app } from "electron";
+import { Friend } from "@/db/db";
 
 export default function savetoJSON(
   sender: Electron.IpcMainEvent,

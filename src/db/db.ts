@@ -1,6 +1,5 @@
 // db.ts
 import Dexie, { Table } from "dexie";
-import IPerson from "../../models/Persons";
 
 export interface Friend {
   id?: number;

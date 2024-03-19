@@ -2,7 +2,7 @@ export interface IPersonInfo {
   person: IPerson;
   address: IAddress;
   donations: IDonationRecord[];
-  receiptsPrinted: IReceiptPrinted[];
+  receipts: IReceiptRecord[];
 }
 
 export interface IPerson extends IMetaData {
@@ -14,7 +14,7 @@ export interface IPerson extends IMetaData {
 }
 export interface IAddress extends IMetaData {
   id: number;
-  fk_personID: number;
+  fk_personId: number;
   address1: string;
   address2: string;
   address3: string;
@@ -26,15 +26,15 @@ export interface IAddress extends IMetaData {
 
 export interface IDonationRecord extends IMetaData {
   id: number;
-  fk_personID: number;
+  fk_personId: number;
   amount: number;
   date: Date;
 }
-export interface IReceiptPrinted extends IMetaData {
+export interface IReceiptRecord extends IMetaData {
   id: number;
-  fk_personID: number;
+  fk_personId: number;
   amount: number;
-  year: number;
+  datePrinted: string;
   isPrinted: boolean;
 }
 

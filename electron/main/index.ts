@@ -1,10 +1,10 @@
-import { app, BrowserWindow, shell, ipcMain } from "electron";
-import { release } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import fs from "node:fs";
+import { release } from "node:os";
+import { app, BrowserWindow, shell, ipcMain } from "electron";
 import savetoJSON from "./data/saveToFile";
 import { getSqlite3 } from "./data/better-sqlite3";
-import fs from "node:fs";
 import { USER_DATA_PATH } from "../../constants";
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
