@@ -10,10 +10,12 @@ export default function savetoJSON(
   const sData = JSON.stringify(friends);
 
   //Sets path to write json based on dev or production build
-  const root = app.isPackaged
-    ? join(app.getPath("exe"), "resources/data/")
-    : join(__dirname, "resources/data/");
+  const root =
+    process.env.NODE_ENV === "development"
+      ? "./demo_table.db"
+      : join(process.resourcesPath, "./demo_table.db");
   console.log(root);
+
   const fileName = `BackUpDonationTracker-${new Date()
     .toISOString()
     .replaceAll(":", "-")
@@ -44,7 +46,3 @@ function writeFile(filepath: string) {
     );
   });
 }
-
-// TODO: Look into dexie-export-import============================================================================
-// TODO: Look into dexie-export-import============================================================================
-// TODO: Look into dexie-export-import============================================================================
