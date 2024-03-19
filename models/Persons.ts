@@ -1,14 +1,20 @@
-export default interface IPerson {
+export interface IPersonInfo {
+  person: IPerson;
+  address: IAddress;
+  donations: IDonationRecord[];
+  receiptsPrinted: IReceiptPrinted[];
+}
+
+export interface IPerson extends IMetaData {
+  id: number;
   firstName: string;
   lastName: string;
   phone1: string;
   phone2: string;
-  address: IAddress;
-  donations: IDonationRecord[];
-  yearsPrinted: IYearsPrinted[];
 }
-
-interface IAddress {
+export interface IAddress extends IMetaData {
+  id: number;
+  fk_personID: number;
   address1: string;
   address2: string;
   address3: string;
@@ -18,12 +24,22 @@ interface IAddress {
   postalCode: string;
 }
 
-interface IDonationRecord {
+export interface IDonationRecord extends IMetaData {
+  id: number;
+  fk_personID: number;
   amount: number;
   date: Date;
 }
-interface IYearsPrinted {
+export interface IReceiptPrinted extends IMetaData {
+  id: number;
+  fk_personID: number;
+  amount: number;
   year: number;
-  total: number;
-  printed: boolean;
+  isPrinted: boolean;
+}
+
+interface IMetaData {
+  isDeleted: boolean;
+  createdAt: string;
+  deletedAt: string;
 }
