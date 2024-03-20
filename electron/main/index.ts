@@ -12,7 +12,7 @@ import {
   USER_CONFIG_PATH,
   USER_DATA_FOLDER,
 } from "../../constants";
-import { readyDatabase } from "./data/intialiaze";
+import { readyDatabase } from "./data/initialize";
 import {
   deletePerson,
   getAllPersons,

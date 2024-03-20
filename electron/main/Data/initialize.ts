@@ -13,7 +13,6 @@ import {
 } from "../../../constants";
 import { getSqlite3 } from "./better-sqlite3";
 import { existsSync, mkdirSync } from "node:fs";
-export default function initialize() {}
 
 /**
  * TODO: check if tables/index's exists if not create them
