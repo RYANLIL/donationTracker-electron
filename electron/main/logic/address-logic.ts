@@ -6,8 +6,12 @@ import { Database } from "better-sqlite3";
  * @param db
  * @param address
  * @returns better-sqlite3 `info` object
- * info.changes: the total number of rows that were inserted, updated, or deleted by this operation. Changes made by foreign key actions or trigger programs do not count.
- * info.lastInsertRowid: the rowid of the last row inserted into the database (ignoring those caused by trigger programs). If the current statement did not insert any rows into the database, this number should be completely ignored.
+ * info.changes: the total number of rows that were inserted, updated, or deleted
+ * by this operation. Changes made by foreign key actions or trigger programs do
+ * not count. info.lastInsertRowid: the rowid of the last row inserted into the
+ *  database (ignoring those caused by trigger programs). If the current
+ * statement did not insert any rows into the database, this number should be
+ * completely ignored.
  */
 export function insertAddress(db: Database, address: IAddress) {
   const insert = db.prepare(
@@ -21,8 +25,12 @@ export function insertAddress(db: Database, address: IAddress) {
  * @param db
  * @param address
  * @returns better-sqlite3 `info` object
- * info.changes: the total number of rows that were inserted, updated, or deleted by this operation. Changes made by foreign key actions or trigger programs do not count.
- * info.lastInsertRowid: the rowid of the last row inserted into the database (ignoring those caused by trigger programs). If the current statement did not insert any rows into the database, this number should be completely ignored.
+ * info.changes: the total number of rows that were inserted, updated, or deleted
+ * by this operation. Changes made by foreign key actions or trigger programs do
+ * not count. info.lastInsertRowid: the rowid of the last row inserted into the
+ *  database (ignoring those caused by trigger programs). If the current
+ * statement did not insert any rows into the database, this number should be
+ * completely ignored.
  */
 export function updateAddress(db: Database, address: IAddress) {
   const insert = db.prepare(
@@ -45,8 +53,12 @@ export function updateAddress(db: Database, address: IAddress) {
  * @param db
  * @param id
  * @returns better-sqlite3 `info` object
- * info.changes: the total number of rows that were inserted, updated, or deleted by this operation. Changes made by foreign key actions or trigger programs do not count.
- * info.lastInsertRowid: the rowid of the last row inserted into the database (ignoring those caused by trigger programs). If the current statement did not insert any rows into the database, this number should be completely ignored.
+ * info.changes: the total number of rows that were inserted, updated, or deleted
+ * by this operation. Changes made by foreign key actions or trigger programs do
+ * not count. info.lastInsertRowid: the rowid of the last row inserted into the
+ *  database (ignoring those caused by trigger programs). If the current
+ * statement did not insert any rows into the database, this number should be
+ * completely ignored.
  */
 export function deleteAddress(db: Database, id: number) {
   const insert = db.prepare("DELETE FROM address WHERE id = ?");
@@ -56,9 +68,13 @@ export function deleteAddress(db: Database, id: number) {
 /**
  *
  * @param db
- * @returns IAddress better-sqlite3 `info` object
- * info.changes: the total number of rows that were inserted, updated, or deleted by this operation. Changes made by foreign key actions or trigger programs do not count.
- * info.lastInsertRowid: the rowid of the last row inserted into the database (ignoring those caused by trigger programs). If the current statement did not insert any rows into the database, this number should be completely ignored.
+ * @returns better-sqlite3 `info` object
+ * info.changes: the total number of rows that were inserted, updated, or deleted
+ * by this operation. Changes made by foreign key actions or trigger programs do
+ * not count. info.lastInsertRowid: the rowid of the last row inserted into the
+ *  database (ignoring those caused by trigger programs). If the current
+ * statement did not insert any rows into the database, this number should be
+ * completely ignored.
  */
 export function getAllAddressByPersonId(db: Database, id: number) {
   const insert = db.prepare("SELECT * FROM address where fk_personId = ? ");

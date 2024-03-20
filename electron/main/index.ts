@@ -8,7 +8,7 @@ import { getSqlite3 } from "./data/better-sqlite3";
 import {
   DATABASE_FOLDER,
   DATABASE_PATH,
-  RAW_SQL_FOLDER,
+  ADD_RESOURCES,
   USER_CONFIG_PATH,
   USER_DATA_FOLDER,
 } from "../../constants";
@@ -218,13 +218,13 @@ function testSQL() {
 // console.log(DATABASE_PATH);
 // console.log("USER_CONFIG_PATH ");
 // console.log(USER_CONFIG_PATH);
-// console.log("RAW_SQL_FOLDER ");
-// console.log(RAW_SQL_FOLDER);
+// console.log("ADD_RESOURCES ");
+// console.log(ADD_RESOURCES);
 
 readyDatabase();
 
 //Testing CRUD Person
-import { Bilbo } from "../../sql-files/mock-data/mock-objects";
+import { Bilbo } from "../../additional-resources/mock-data/mock-objects";
 const db = getSqlite3(DATABASE_PATH);
 
 insertPerson(db, Bilbo);
