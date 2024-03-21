@@ -7,5 +7,5 @@ CREATE TABLE "person" (
 
 	"isDeleted"	INTEGER DEFAULT 0 NOT NULL,
 	"createdAt" TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"deletedAt" TEXT DEFAULT '' NOT NULL
+	"deletedAt" TEXT DEFAULT '' NOT NULL	
 );
