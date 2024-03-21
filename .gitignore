@@ -31,6 +31,9 @@ yarn.lock
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
 *.db
 *.sqlite
 *.sqlite3
+
+*.flag

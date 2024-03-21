@@ -12,13 +12,9 @@ import {
   USER_CONFIG_PATH,
   USER_DATA_FOLDER,
 } from "../../constants";
-import { readyDatabase } from "./data/initialize";
-import {
-  deletePerson,
-  getAllPersons,
-  insertPerson,
-  updatePerson,
-} from "./logic/person-logic";
+import InitDb from "./data/initialize";
+import PersonLogic from "./logic/person-logic";
+import AddressLogic from "./logic/address-logic";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -149,7 +145,7 @@ ipcMain.on("saveToJSON", (sender, data) => {
   console.log("Data Saved");
   //testSQL();
   let first = isFirstRun();
-  console.log("FIRST RUNNN?", first);
+  console.log("FIRST RUN?", first);
   if (first) {
     markFirstRun();
   }
@@ -163,6 +159,9 @@ function isFirstRun() {
 function markFirstRun() {
   const flagFilePath = join(USER_DATA_FOLDER, "first_run.flag");
   console.log(flagFilePath);
+  const initDb = new InitDb();
+  initDb.readyDatabase();
+  initDb.insertMockData();
   // Create the flag file
   fs.writeFileSync(flagFilePath, "");
 }
@@ -210,6 +209,23 @@ function testSQL() {
   }
 }
 
+const db = getSqlite3(DATABASE_PATH);
+import {
+  Bilbo,
+  address1,
+} from "../../additional-resources/mock-data/mock-objects";
+
+// const initDb = new InitDb();
+// initDb.readyDatabase();
+
+// const personLogic = new PersonLogic(db);
+// personLogic.insertPerson(Bilbo);
+// const addrLogic = new AddressLogic(db);
+// addrLogic.insertAddress(address1);
+
+// let p = personLogic.getAllPersons();
+// console.log(p);
+
 // console.log("USER_DATA_PATH");
 // console.log(USER_DATA_FOLDER);
 // console.log("DATABASE_FOLDER ");
@@ -221,17 +237,15 @@ function testSQL() {
 // console.log("ADD_RESOURCES ");
 // console.log(ADD_RESOURCES);
 
-readyDatabase();
-
 //Testing CRUD Person
-import { Bilbo } from "../../additional-resources/mock-data/mock-objects";
-const db = getSqlite3(DATABASE_PATH);
+// import { Bilbo } from "../../additional-resources/mock-data/mock-objects";
+// const db = getSqlite3(DATABASE_PATH);
 
-insertPerson(db, Bilbo);
-Bilbo.firstName = "bob";
-insertPerson(db, Bilbo);
-Bilbo.firstName = "foggy-/bob";
-insertPerson(db, Bilbo);
+// insertPerson(db, Bilbo);
+// Bilbo.firstName = "bob";
+// insertPerson(db, Bilbo);
+// Bilbo.firstName = "foggy-/bob";
+// insertPerson(db, Bilbo);
 // deletePerson(db, 2);
 
 // let a = Bilbo;
@@ -263,5 +277,5 @@ insertPerson(db, Bilbo);
 // console.log(Bilbo);
 // console.log(a);
 
-let allPerson = getAllPersons(db);
-console.log(allPerson);
+// let allPerson = getAllPersons(db);
+// console.log(allPerson);

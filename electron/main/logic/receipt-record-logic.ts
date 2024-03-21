@@ -1,7 +1,7 @@
 import { IDonationRecord } from "models/Persons";
 import { Database } from "better-sqlite3";
 
-export default class DonationRecordLogic {
+export default class ReceiptRecordLogic {
   constructor(private _db: Database) {}
 
   /**
@@ -15,11 +15,12 @@ export default class DonationRecordLogic {
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
    */
-  insertDonationRecord(donationRecord: IDonationRecord) {
+  insertDonationRecord(receiptRecord: IDonationRecord) {
     const stmnt = this._db.prepare(
-      `INSERT INTO donation_records (fk_personId,amount,date) VALUES(@fk_personId,@amount,@date);`
+      `INSERT INTO receipt_record (fk_personId,amount,datePrinted,isPrinted)
+        VALUES(@fk_personId,@amount,@datePrinted,@isPrinted);`
     );
-    return stmnt.run(donationRecord);
+    return stmnt.run(receiptRecord);
   }
 
   /**
@@ -37,7 +38,8 @@ export default class DonationRecordLogic {
       `UPDATE donation_record SET 
         fk_personId = @fk_personId,
         amount = @amount,
-        date = @date        
+        datePrinted = @datePrinted        
+        isPrinted = @isPrinted        
       WHERE id = @id`
     );
 
@@ -69,7 +71,7 @@ export default class DonationRecordLogic {
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
    */
-  getAllDonationRecords(id: number) {
+  getDonationRecordsById(id: number) {
     const stmnt = this._db.prepare(
       "SELECT * FROM donation_records where fk_personId = ? "
     );
