@@ -32,9 +32,15 @@ function saveData(friends: Friend[]) {
   // Sends data to main Process
   ipcRenderer.send("saveToJSON", friends);
 }
-
+//Async function
+const getAllPersons = () => {
+  console.log(
+    "getting all people********************************************************"
+  );
+  return ipcRenderer.invoke("getAllPersons");
+};
 //Exposing saveData function from preload to renderer process
-contextBridge.exposeInMainWorld("fileOps", { saveData });
+contextBridge.exposeInMainWorld("fileOps", { saveData, getAllPersons });
 
 // --------- Preload scripts loading ---------
 function domReady(

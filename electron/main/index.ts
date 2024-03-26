@@ -140,7 +140,6 @@ ipcMain.handle("open-win", (_, arg) => {
 });
 
 // Waits for the renderer process to emit `saveToJSON` IPC event *
-
 ipcMain.on("saveToJSON", (sender, data) => {
   console.log("Data Saved");
   //testSQL();
@@ -149,6 +148,13 @@ ipcMain.on("saveToJSON", (sender, data) => {
   if (first) {
     markFirstRun();
   }
+});
+ipcMain.handle("getAllPersons", (sender, data) => {
+  console.log("Get All Persons");
+
+  const personLogic = new PersonLogic(db);
+  const personData = personLogic.getAllPersons();
+  return personData;
 });
 
 function isFirstRun() {
@@ -214,6 +220,7 @@ import {
   Bilbo,
   address1,
 } from "../../additional-resources/mock-data/mock-objects";
+import { IPerson } from "models/Persons";
 
 // const initDb = new InitDb();
 // initDb.readyDatabase();
