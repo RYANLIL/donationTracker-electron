@@ -10,6 +10,7 @@ export interface IPerson extends IMetaData {
   lastName: string;
   phone1: string;
   phone2: string;
+  email: string;
 }
 export interface IAddress extends IMetaData {
   fk_personId: number;

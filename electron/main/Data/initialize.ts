@@ -45,6 +45,7 @@ export default class InitDatabase {
             "lastName"	TEXT DEFAULT '' NOT NULL,
             "phone1"	TEXT DEFAULT '' NOT NULL,
             "phone2"	TEXT DEFAULT '' NOT NULL,
+	          "email"		TEXT DEFAULT '' NOT NULL,
         
             "isDeleted"	INTEGER DEFAULT 0 NOT NULL,
             "createdAt" TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
