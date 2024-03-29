@@ -5,14 +5,16 @@
  * Warn user about data loss and backup if they already have existing
  * installation
  */
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync, fstat, mkdirSync, readFileSync } from "node:fs";
 import { Database } from "better-sqlite3";
 import {
   USER_DATA_FOLDER,
   DATABASE_FOLDER,
   DATABASE_PATH,
+  ADD_RESOURCES,
 } from "../../../constants";
 import { getSqlite3 } from "./better-sqlite3";
+import { join } from "node:path";
 
 export default class InitDatabase {
   private _db: Database;
@@ -103,5 +105,11 @@ export default class InitDatabase {
     console.log(res);
   }
 
-  insertMockData() {}
+  insertMockData() {
+    let mockSQL = readFileSync(
+      join(ADD_RESOURCES, "/mock-data/Person_MOCK_DATA.sql"),
+      "utf8"
+    );
+    this._db.exec(mockSQL);
+  }
 }

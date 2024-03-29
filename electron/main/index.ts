@@ -143,33 +143,33 @@ ipcMain.handle("open-win", (_, arg) => {
 ipcMain.on("saveToJSON", (sender, data) => {
   console.log("Data Saved");
   //testSQL();
-  let first = isFirstRun();
-  console.log("FIRST RUN?", first);
-  if (first) {
-    markFirstRun();
-  }
 });
 ipcMain.handle("getAllPersons", (sender, data) => {
-  console.log("Get All Persons");
-
+  console.log("Getting All Persons");
   const personLogic = new PersonLogic(db);
   const personData = personLogic.getAllPersons();
   return personData;
 });
-
-function isFirstRun() {
+//****************Checking and setting first run flag */
+const isFirstRun = () => {
   const flagFilePath = join(USER_DATA_FOLDER, "first_run.flag");
   // Check if the flag file exists
   return !fs.existsSync(flagFilePath);
-}
-function markFirstRun() {
+};
+const markFirstRun = () => {
   const flagFilePath = join(USER_DATA_FOLDER, "first_run.flag");
   console.log(flagFilePath);
   const initDb = new InitDb();
   initDb.readyDatabase();
-  initDb.insertMockData();
+  //initDb.insertMockData();
   // Create the flag file
   fs.writeFileSync(flagFilePath, "");
+};
+
+if (isFirstRun()) {
+  markFirstRun();
+  const initDb = new InitDb();
+  initDb.readyDatabase();
 }
 
 function testSQL() {
