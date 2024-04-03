@@ -2,13 +2,19 @@ import { Stack } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
+  GridRowParams,
   GridRowsProp,
   GridToolbar,
 } from "@mui/x-data-grid";
 import { IPerson } from "models/Persons";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function Table() {
+interface ITableProps {
+  setdetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setPersonId: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export default function Table(props: ITableProps) {
   const [persons, setPersons] = useState<IPerson[]>();
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -22,15 +28,16 @@ export default function Table() {
   useEffect(() => {
     async function getAllPersons() {
       const data = await window.fileOps.getAllPersons();
-      console.log(data);
       setPersons(data);
       setDataLoaded(true);
     }
-    getAllPersons();
+    if (!persons) getAllPersons();
   }, []);
 
-  const handleRowClick = (e) => {
+  const handleRowClick = (e: GridRowParams) => {
     console.log(e);
+    props.setPersonId(e.row.id);
+    props.setdetailOpen(true);
   };
 
   const customToolBar = () => {
@@ -52,7 +59,7 @@ export default function Table() {
           slotProps={{ toolbar: { showQuickFilter: true } }}
         />
       ) : (
-        "Loading"
+        "Loading..."
       )}
     </Stack>
   );
