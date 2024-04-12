@@ -34,9 +34,7 @@ function saveData(friends: Friend[]) {
 }
 //Async function
 const getAllPersons = () => {
-  console.log(
-    "getting all people********************************************************"
-  );
+  console.log("getting all people electron preload");
   return ipcRenderer.invoke("getAllPersons");
 };
 //Exposing saveData function from preload to renderer process

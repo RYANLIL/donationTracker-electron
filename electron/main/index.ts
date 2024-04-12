@@ -144,8 +144,9 @@ ipcMain.on("saveToJSON", (sender, data) => {
   console.log("Data Saved");
   //testSQL();
 });
+const db = getSqlite3(DATABASE_PATH);
 ipcMain.handle("getAllPersons", (sender, data) => {
-  console.log("Getting All Persons");
+  console.log("Getting All Persons - electron main");
   const personLogic = new PersonLogic(db);
   const personData = personLogic.getAllPersons();
   return personData;
@@ -179,7 +180,6 @@ function testSQL() {
       : join(process.resourcesPath, "./donation-tracker.sqlite");
   //: join(app.getPath("userData"), "./donation-tracker.sqlite");
 
-  const db = getSqlite3(root);
   db.pragma("journal_mode = WAL");
 
   let tableExist = db
@@ -214,75 +214,3 @@ function testSQL() {
     if (!db.inTransaction) throw err; // (transaction was forcefully rolled back)
   }
 }
-
-const db = getSqlite3(DATABASE_PATH);
-import {
-  Bilbo,
-  address1,
-} from "../../additional-resources/mock-data/mock-objects";
-import { IPerson } from "models/Persons";
-
-// const initDb = new InitDb();
-// initDb.readyDatabase();
-
-// const personLogic = new PersonLogic(db);
-// personLogic.insertPerson(Bilbo);
-// const addrLogic = new AddressLogic(db);
-// addrLogic.insertAddress(address1);
-
-// let p = personLogic.getAllPersons();
-// console.log(p);
-
-// console.log("USER_DATA_PATH");
-// console.log(USER_DATA_FOLDER);
-// console.log("DATABASE_FOLDER ");
-// console.log(DATABASE_FOLDER);
-// console.log("DATABASE_FOLDER_PATH ");
-// console.log(DATABASE_PATH);
-// console.log("USER_CONFIG_PATH ");
-// console.log(USER_CONFIG_PATH);
-// console.log("ADD_RESOURCES ");
-// console.log(ADD_RESOURCES);
-
-//Testing CRUD Person
-// import { Bilbo } from "../../additional-resources/mock-data/mock-objects";
-// const db = getSqlite3(DATABASE_PATH);
-
-// insertPerson(db, Bilbo);
-// Bilbo.firstName = "bob";
-// insertPerson(db, Bilbo);
-// Bilbo.firstName = "foggy-/bob";
-// insertPerson(db, Bilbo);
-// deletePerson(db, 2);
-
-// let a = Bilbo;
-// a.id = 3;
-// a.firstName = "it updated woot";
-// updatePerson(db, a);
-
-//const insert = db.prepare("INSERT INTO cats (name, age) VALUES (@name, @age)");
-// const insert = db.prepare(
-//   "INSERT INTO person (firstName, lastName, phone1,phone2) VALUES (@firstName, @lastName, @phone1, @phone2)"
-// );
-
-//const insertMany = db.transaction((Bilbo) => {
-//insert.run(Bilbo);
-//});
-//insertMany(Bilbo);
-// insertMany([
-//   { name: "Joey", age: 2 },
-//   { name: "Sally", age: 4 },
-//   { name: "Junior", age: 1 },
-// ]);
-
-// let a = {
-//   firstName: Bilbo.firstName,
-//   lastName: Bilbo.lastName,
-//   phone1: Bilbo.phone1,
-//   phone2: Bilbo.phone2,
-// };
-// console.log(Bilbo);
-// console.log(a);
-
-// let allPerson = getAllPersons(db);
-// console.log(allPerson);

@@ -18,7 +18,13 @@ interface IDetailsPage {
 }
 
 export default function DetailsPage(props: IDetailsPage) {
-  const [personDetails, setPersonDetails] = useState<IPerson>();
+  const [personDetails, setPersonDetails] = useState<IPerson>({
+    firstName: "",
+    lastName: "",
+    phone1: "",
+    phone2: "",
+    email: "",
+  });
   const [address, setAddress] = useState<IAddress>();
   const [donationRec, setDonationRec] = useState<IDonationRecord>();
   const [receiptRec, setReceiptRec] = useState<IReceiptRecord>();
