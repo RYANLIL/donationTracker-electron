@@ -80,6 +80,6 @@ export default class AddressLogic {
     const stmnt = this._db.prepare(
       "SELECT * FROM address where fk_personId = ? "
     );
-    return stmnt.get(id);
+    return stmnt.get(id) as IAddress;
   }
 }

@@ -37,8 +37,16 @@ const getAllPersons = () => {
   console.log("getting all people electron preload");
   return ipcRenderer.invoke("getAllPersons");
 };
+const getPersonDetails = (id: number) => {
+  console.log("getting person details electron preload");
+  return ipcRenderer.invoke("getPersonDetails", id);
+};
 //Exposing saveData function from preload to renderer process
-contextBridge.exposeInMainWorld("fileOps", { saveData, getAllPersons });
+contextBridge.exposeInMainWorld("fileOps", {
+  saveData,
+  getAllPersons,
+  getPersonDetails,
+});
 
 // --------- Preload scripts loading ---------
 function domReady(

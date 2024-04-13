@@ -66,8 +66,9 @@ export default class PersonLogic {
    * info.changes: the total number of rows that were inserted, updated, or deleted by this operation. Changes made by foreign key actions or trigger programs do not count.
    * info.lastInsertRowid: the rowid of the last row inserted into the database (ignoring those caused by trigger programs). If the current statement did not insert any rows into the database, this number should be completely ignored.
    */
-  getPersonById(id: number) {
+  getPersonById(id: number): IPerson {
     const stmnt = this._db.prepare("SELECT * FROM person WHERE id = ?");
-    return stmnt.run(id);
+    const data = stmnt.get(id) as IPerson;
+    return data;
   }
 }

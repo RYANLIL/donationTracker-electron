@@ -1,8 +1,30 @@
-export interface IPersonInfo {
+export class PersonInfo {
   person: IPerson;
   address: IAddress;
   donations: IDonationRecord[];
   receipts: IReceiptRecord[];
+
+  constructor() {
+    this.person = {
+      firstName: "",
+      lastName: "",
+      phone1: "",
+      phone2: "",
+      email: "",
+    };
+    this.address = {
+      fk_personId: -1,
+      address1: "",
+      address2: "",
+      address3: "",
+      city: "",
+      province: "",
+      country: "",
+      postalCode: "",
+    };
+    this.donations = [];
+    this.receipts = [];
+  }
 }
 
 export interface IPerson extends IMetaData {

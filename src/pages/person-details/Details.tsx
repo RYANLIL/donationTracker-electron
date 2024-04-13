@@ -25,22 +25,32 @@ export default function DetailsPage(props: IDetailsPage) {
     phone2: "",
     email: "",
   });
-  const [address, setAddress] = useState<IAddress>();
-  const [donationRec, setDonationRec] = useState<IDonationRecord>();
-  const [receiptRec, setReceiptRec] = useState<IReceiptRecord>();
+  const [address, setAddress] = useState<IAddress>({
+    fk_personId: -1,
+    address1: "",
+    address2: "",
+    address3: "",
+    city: "",
+    province: "",
+    country: "",
+    postalCode: "",
+  });
+  const [donationRecs, setDonationRecs] = useState<IDonationRecord[]>([]);
+  const [receiptRecs, setReceiptRecs] = useState<IReceiptRecord[]>([]);
   useEffect(() => {
     async function getDetails(personId: number) {
-      console.log("props.personId");
-      console.log(personId);
+      const data = await window.fileOps.getPersonDetails(personId);
+      setPersonDetails(data.person);
+      setAddress(data.address);
+      setDonationRecs(data.donations);
+      setReceiptRecs(data.receipts);
+
+      console.log(data);
     }
     getDetails(props.personId);
   }, []);
 
   function closeDetails(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    console.log("back button pressed");
-    console.log(e);
-    console.log("props");
-    console.log(props);
     props.setdetailOpen(false);
     props.setPersonId(-1);
   }
@@ -51,16 +61,19 @@ export default function DetailsPage(props: IDetailsPage) {
       <Button onClick={(e) => closeDetails(e)} variant="contained">
         Back
       </Button>
-      <Grid>
-        <PersonDetails
-          personDetails={personDetails}
-          setPersonDetails={setPersonDetails}
-          personId={props.personId}
-        />
-        <AddressDetails />
-        <ReceiptRecords />
-        <DonationRecords />
-      </Grid>
+      <PersonDetails
+        personDetails={personDetails}
+        setPersonDetails={setPersonDetails}
+      />
+      <AddressDetails address={address} setAddress={setAddress} />
+      <ReceiptRecords
+        receiptRecs={receiptRecs}
+        setReceiptRecs={setReceiptRecs}
+      />
+      <DonationRecords
+        donationRecs={donationRecs}
+        setDonationRecs={setDonationRecs}
+      />
     </>
   );
 }

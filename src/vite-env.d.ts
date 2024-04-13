@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import { IPerson } from "models/Persons";
+import { IPerson, PersonInfo } from "models/Persons";
 
 declare global {
   interface Window {
@@ -9,6 +9,7 @@ declare global {
     fileOps: {
       saveData: (data) => void;
       getAllPersons: () => Promise<IPerson[]>;
+      getPersonDetails: (id) => Promise<PersonInfo>;
     };
   }
 }

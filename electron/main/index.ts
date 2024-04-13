@@ -15,6 +15,9 @@ import {
 import InitDb from "./data/initialize";
 import PersonLogic from "./logic/person-logic";
 import AddressLogic from "./logic/address-logic";
+import { PersonInfo } from "../../models/Persons";
+import DonationRecordLogic from "./logic/donation-record-logic";
+import ReceiptRecordLogic from "./logic/receipt-record-logic";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -145,11 +148,25 @@ ipcMain.on("saveToJSON", (sender, data) => {
   //testSQL();
 });
 const db = getSqlite3(DATABASE_PATH);
+const personLogic = new PersonLogic(db);
+const addressLogic = new AddressLogic(db);
+const donationLogic = new DonationRecordLogic(db);
+const receiptLogic = new ReceiptRecordLogic(db);
 ipcMain.handle("getAllPersons", (sender, data) => {
   console.log("Getting All Persons - electron main");
-  const personLogic = new PersonLogic(db);
   const personData = personLogic.getAllPersons();
   return personData;
+});
+ipcMain.handle("getPersonDetails", (sender, id) => {
+  console.log("Get Person By ID - electron main");
+  let personInfo = new PersonInfo();
+  personInfo.person = personLogic.getPersonById(id);
+  personInfo.address = addressLogic.getAddressByPersonId(id);
+  personInfo.donations = donationLogic.getDonationByPersonId(id);
+  personInfo.receipts = receiptLogic.getReceiptRecordsById(id);
+  console.log("person", personInfo);
+
+  return personInfo;
 });
 //****************Checking and setting first run flag */
 const isFirstRun = () => {

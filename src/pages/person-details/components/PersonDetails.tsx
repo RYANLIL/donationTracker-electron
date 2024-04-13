@@ -5,20 +5,17 @@ import React from "react";
 interface IPersonDetails {
   personDetails: IPerson;
   setPersonDetails: React.Dispatch<React.SetStateAction<IPerson>>;
-  personId?: number;
 }
 
 export default function PersonDetails(props: IPersonDetails) {
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const id = e.target.id;
-    const value = e.target.value;
+    const { id, value } = e.target;
     props.setPersonDetails({ ...props.personDetails, [id]: value });
-    console.log(props.personDetails);
   }
   return (
     <div style={{ border: "solid 2px" }}>
       <span>PERSON DETAILS</span>
-      <Grid>
+      <Grid gap={3}>
         <TextField
           id="firstName"
           label="First Name"

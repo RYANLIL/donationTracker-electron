@@ -14,6 +14,9 @@ export default class DonationRecordLogic {
    *  database (ignoring those caused by trigger programs). If the current
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
+   *
+   *
+   * TODO: INCOMPLETE
    */
   insertDonationRecord(donationRecord: IDonationRecord) {
     const stmnt = this._db.prepare(
@@ -31,6 +34,8 @@ export default class DonationRecordLogic {
    *  database (ignoring those caused by trigger programs). If the current
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
+   *
+   * TODO: INCOMPLETE
    */
   updateDonationRecord(donationRecord: IDonationRecord) {
     const stmnt = this._db.prepare(
@@ -69,10 +74,10 @@ export default class DonationRecordLogic {
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
    */
-  getAllDonationRecords(id: number) {
+  getDonationByPersonId(personId: number) {
     const stmnt = this._db.prepare(
       "SELECT * FROM donation_records where fk_personId = ? "
     );
-    return stmnt.all(id);
+    return stmnt.all(personId) as IDonationRecord[];
   }
 }
