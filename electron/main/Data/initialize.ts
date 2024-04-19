@@ -8,7 +8,6 @@
 import { existsSync, fstat, mkdirSync, readFileSync } from "node:fs";
 import { Database } from "better-sqlite3";
 import {
-  USER_DATA_FOLDER,
   DATABASE_FOLDER,
   DATABASE_PATH,
   ADD_RESOURCES,
