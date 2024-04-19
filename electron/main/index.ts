@@ -147,13 +147,35 @@ ipcMain.on("saveToJSON", (sender, data) => {
   console.log("Data Saved");
   //testSQL();
 });
+
+//****************Checking and setting first run flag */
+const isFirstRun = () => {
+  const flagFilePath = join(USER_DATA_FOLDER, "first_run.flag");
+  // Check if the flag file exists
+  return !fs.existsSync(flagFilePath);
+};
+const markFirstRun = () => {
+  const flagFilePath = join(USER_DATA_FOLDER, "first_run.flag");
+  const initDb = new InitDb();
+  initDb.readyDatabase();
+  //initDb.insertMockData();
+  // Create the flag file
+  fs.writeFileSync(flagFilePath, "");
+};
+
+if (isFirstRun()) {
+  markFirstRun();
+  const initDb = new InitDb();
+  initDb.readyDatabase();
+  initDb.insertMockData();
+}
+
 const db = getSqlite3(DATABASE_PATH);
 const personLogic = new PersonLogic(db);
 const addressLogic = new AddressLogic(db);
 const donationLogic = new DonationRecordLogic(db);
 const receiptLogic = new ReceiptRecordLogic(db);
 ipcMain.handle("getAllPersons", (sender, data) => {
-  console.log("Getting All Persons - electron main");
   const personData = personLogic.getAllPersons();
   return personData;
 });
@@ -168,27 +190,6 @@ ipcMain.handle("getPersonDetails", (sender, id) => {
 
   return personInfo;
 });
-//****************Checking and setting first run flag */
-const isFirstRun = () => {
-  const flagFilePath = join(USER_DATA_FOLDER, "first_run.flag");
-  // Check if the flag file exists
-  return !fs.existsSync(flagFilePath);
-};
-const markFirstRun = () => {
-  const flagFilePath = join(USER_DATA_FOLDER, "first_run.flag");
-  console.log(flagFilePath);
-  const initDb = new InitDb();
-  initDb.readyDatabase();
-  //initDb.insertMockData();
-  // Create the flag file
-  fs.writeFileSync(flagFilePath, "");
-};
-
-if (isFirstRun()) {
-  markFirstRun();
-  const initDb = new InitDb();
-  initDb.readyDatabase();
-}
 
 function testSQL() {
   const root =
