@@ -1,3 +1,4 @@
+import { Grid, TextField } from "@mui/material";
 import { IAddress } from "models/Persons";
 
 interface IAddressDetails {
@@ -9,5 +10,82 @@ export default function AddressDetails(props: IAddressDetails) {
     const { id, value } = e.target;
     props.setAddress({ ...props.address, [id]: value });
   }
-  return <div style={{ border: "solid 2px" }}>ADDRESS DETAILS</div>;
+  return (
+    <div style={{ border: "solid 2px" }}>
+      ADDRESS DETAILS
+      <button onClick={() => console.log(props.address)}>show</button>
+      <Grid container gap={2}>
+        <Grid item>
+          <TextField
+            id="address1"
+            label="Address 1"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleOnChange(e)
+            }
+            value={props.address.address1}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            id="address2"
+            label="Address 2"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleOnChange(e)
+            }
+            value={props.address.address2}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            id="address3"
+            label="Address 3"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleOnChange(e)
+            }
+            value={props.address.address3}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            id="city"
+            label="City"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleOnChange(e)
+            }
+            value={props.address.city}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            id="province"
+            label="Province 1"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleOnChange(e)
+            }
+            value={props.address.province}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            id="country"
+            label="Country"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleOnChange(e)
+            }
+            value={props.address.country}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            id="postalCode"
+            label="Postal Code"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleOnChange(e)
+            }
+            value={props.address.postalCode}
+          />
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
