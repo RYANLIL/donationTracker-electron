@@ -1,10 +1,4 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader
-  Stack,
-} from "@mui/material";
+import { Button, Card, CardContent, CardHeader, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import PersonDetails from "./components/PersonDetails";
 import {
