@@ -1,4 +1,4 @@
-import { Button, Container, Grid } from "@mui/material";
+import { Button, Container, Grid, Paper, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import PersonDetails from "./components/PersonDetails";
 import {
@@ -61,19 +61,29 @@ export default function DetailsPage(props: IDetailsPage) {
       <Button onClick={(e) => closeDetails(e)} variant="contained">
         Back
       </Button>
-      <PersonDetails
-        personDetails={personDetails}
-        setPersonDetails={setPersonDetails}
-      />
-      <AddressDetails address={address} setAddress={setAddress} />
-      <ReceiptRecords
-        receiptRecs={receiptRecs}
-        setReceiptRecs={setReceiptRecs}
-      />
-      <DonationRecords
-        donationRecs={donationRecs}
-        setDonationRecs={setDonationRecs}
-      />
+      <Stack spacing={3}>
+        <Paper elevation={8}>
+          <PersonDetails
+            personDetails={personDetails}
+            setPersonDetails={setPersonDetails}
+          />
+        </Paper>
+        <Paper elevation={8}>
+          <AddressDetails address={address} setAddress={setAddress} />
+        </Paper>
+        <Paper elevation={8}>
+          <DonationRecords
+            donationRecs={donationRecs}
+            setDonationRecs={setDonationRecs}
+          />
+        </Paper>
+        <Paper elevation={8}>
+          <ReceiptRecords
+            receiptRecs={receiptRecs}
+            setReceiptRecs={setReceiptRecs}
+          />
+        </Paper>
+      </Stack>
     </>
   );
 }

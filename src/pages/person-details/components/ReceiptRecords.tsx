@@ -8,17 +8,19 @@ interface IReceiptRecords {
 }
 export default function ReceiptRecords(props: IReceiptRecords) {
   return (
-    <div style={{ border: "solid 2px " }}>
-      RECEIPT RECORD
-      <Grid container gap={2}>
-        {props.receiptRecs.map((receipt) => (
-          <ReceiptItem
-            key={receipt.id}
-            receipt={receipt}
-            receiptRecs={props.receiptRecs}
-            setReceiptRecs={props.setReceiptRecs}
-          />
-        ))}
+    <div>
+      <span>RECEIPT RECORD</span>
+      <Grid container spacing={2}>
+        <Grid item>
+          {props.receiptRecs.map((receipt) => (
+            <ReceiptItem
+              key={receipt.id}
+              receipt={receipt}
+              receiptRecs={props.receiptRecs}
+              setReceiptRecs={props.setReceiptRecs}
+            />
+          ))}
+        </Grid>
       </Grid>
     </div>
   );

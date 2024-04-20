@@ -11,10 +11,10 @@ export default function AddressDetails(props: IAddressDetails) {
     props.setAddress({ ...props.address, [id]: value });
   }
   return (
-    <div style={{ border: "solid 2px" }}>
+    <div>
       ADDRESS DETAILS
       <button onClick={() => console.log(props.address)}>show</button>
-      <Grid container gap={2}>
+      <Grid container spacing={2}>
         <Grid item>
           <TextField
             id="address1"

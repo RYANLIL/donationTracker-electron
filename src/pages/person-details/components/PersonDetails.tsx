@@ -13,7 +13,7 @@ export default function PersonDetails(props: IPersonDetails) {
     props.setPersonDetails({ ...props.personDetails, [id]: value });
   }
   return (
-    <div style={{ border: "solid 2px" }}>
+    <div>
       <span>PERSON DETAILS</span>
       <Grid container gap={2}>
         <Grid item>
