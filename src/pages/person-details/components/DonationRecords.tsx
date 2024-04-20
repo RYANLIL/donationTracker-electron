@@ -5,5 +5,5 @@ interface IDonationRecords {
   setDonationRecs: React.Dispatch<React.SetStateAction<IDonationRecord[]>>;
 }
 export default function DonationRecords(props: IDonationRecords) {
-  return <div style={{ border: "solid 2px" }}>DONATION RECORD</div>;
+  return <div>DONATION RECORD</div>;
 }

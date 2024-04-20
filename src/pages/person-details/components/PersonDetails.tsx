@@ -14,7 +14,6 @@ export default function PersonDetails(props: IPersonDetails) {
   }
   return (
     <div>
-      <span>PERSON DETAILS</span>
       <Grid container gap={2}>
         <Grid item>
           <TextField

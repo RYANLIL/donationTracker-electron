@@ -1,4 +1,10 @@
-import { Button, Container, Grid, Paper, Stack } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader
+  Stack,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import PersonDetails from "./components/PersonDetails";
 import {
@@ -62,27 +68,52 @@ export default function DetailsPage(props: IDetailsPage) {
         Back
       </Button>
       <Stack spacing={3}>
-        <Paper elevation={8}>
-          <PersonDetails
-            personDetails={personDetails}
-            setPersonDetails={setPersonDetails}
+        <Card variant="outlined">
+          <CardHeader
+            title="Details"
+            sx={{ paddingBottom: 0, paddingTop: 1 }}
           />
-        </Paper>
-        <Paper elevation={8}>
-          <AddressDetails address={address} setAddress={setAddress} />
-        </Paper>
-        <Paper elevation={8}>
-          <DonationRecords
-            donationRecs={donationRecs}
-            setDonationRecs={setDonationRecs}
+          <CardContent>
+            <PersonDetails
+              personDetails={personDetails}
+              setPersonDetails={setPersonDetails}
+            />
+          </CardContent>
+        </Card>
+
+        <Card variant="outlined">
+          <CardHeader
+            title="Address"
+            sx={{ paddingBottom: 0, paddingTop: 1 }}
           />
-        </Paper>
-        <Paper elevation={8}>
-          <ReceiptRecords
-            receiptRecs={receiptRecs}
-            setReceiptRecs={setReceiptRecs}
+          <CardContent>
+            <AddressDetails address={address} setAddress={setAddress} />
+          </CardContent>
+        </Card>
+        <Card variant="outlined">
+          <CardHeader
+            title="Donations"
+            sx={{ paddingBottom: 0, paddingTop: 1 }}
           />
-        </Paper>
+          <CardContent>
+            <DonationRecords
+              donationRecs={donationRecs}
+              setDonationRecs={setDonationRecs}
+            />
+          </CardContent>
+        </Card>
+        <Card variant="outlined">
+          <CardHeader
+            title="Receipts"
+            sx={{ paddingBottom: 0, paddingTop: 1 }}
+          />
+          <CardContent>
+            <ReceiptRecords
+              receiptRecs={receiptRecs}
+              setReceiptRecs={setReceiptRecs}
+            />
+          </CardContent>
+        </Card>
       </Stack>
     </>
   );

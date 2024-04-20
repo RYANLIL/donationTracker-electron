@@ -12,8 +12,6 @@ export default function AddressDetails(props: IAddressDetails) {
   }
   return (
     <div>
-      ADDRESS DETAILS
-      <button onClick={() => console.log(props.address)}>show</button>
       <Grid container spacing={2}>
         <Grid item>
           <TextField
@@ -84,6 +82,11 @@ export default function AddressDetails(props: IAddressDetails) {
             }
             value={props.address.postalCode}
           />
+        </Grid>
+        <Grid item>
+          <button onClick={() => console.log(props.address)}>
+            Print to console
+          </button>
         </Grid>
       </Grid>
     </div>
