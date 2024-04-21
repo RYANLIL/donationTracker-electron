@@ -29,7 +29,7 @@ insert into donation_records (id, fk_personId, amount, date) values (28, 99, 351
 insert into donation_records (id, fk_personId, amount, date) values (29, 66, 26.39, '2014/03/29');
 insert into donation_records (id, fk_personId, amount, date) values (30, 92, 919.89, '2017/03/06');
 insert into donation_records (id, fk_personId, amount, date) values (31, 49, 933.55, '2012/10/18');
-insert into donation_records (id, fk_personId, amount, date) values (32, 0, 780.74, '2015/04/20');
+insert into donation_records (id, fk_personId, amount, date) values (32, 1, 780.74, '2015/04/20');
 insert into donation_records (id, fk_personId, amount, date) values (33, 7, 401.25, '2014/03/02');
 insert into donation_records (id, fk_personId, amount, date) values (34, 76, 435.01, '2018/07/07');
 insert into donation_records (id, fk_personId, amount, date) values (35, 57, 44.37, '2013/12/04');
@@ -109,7 +109,7 @@ insert into donation_records (id, fk_personId, amount, date) values (108, 69, 99
 insert into donation_records (id, fk_personId, amount, date) values (109, 58, 308.52, '2014/11/28');
 insert into donation_records (id, fk_personId, amount, date) values (110, 41, 169.45, '2015/09/10');
 insert into donation_records (id, fk_personId, amount, date) values (111, 31, 387.33, '2021/08/26');
-insert into donation_records (id, fk_personId, amount, date) values (112, 0, 428.95, '2023/10/03');
+insert into donation_records (id, fk_personId, amount, date) values (112, 45, 428.95, '2023/10/03');
 insert into donation_records (id, fk_personId, amount, date) values (113, 74, 603.89, '2020/04/08');
 insert into donation_records (id, fk_personId, amount, date) values (114, 81, 491.7, '2019/10/19');
 insert into donation_records (id, fk_personId, amount, date) values (115, 89, 552.34, '2016/09/12');
@@ -264,7 +264,7 @@ insert into donation_records (id, fk_personId, amount, date) values (263, 38, 62
 insert into donation_records (id, fk_personId, amount, date) values (264, 19, 142.91, '2017/05/30');
 insert into donation_records (id, fk_personId, amount, date) values (265, 16, 24.1, '2021/09/30');
 insert into donation_records (id, fk_personId, amount, date) values (266, 31, 825.92, '2013/09/17');
-insert into donation_records (id, fk_personId, amount, date) values (267, 0, 902.49, '2020/02/08');
+insert into donation_records (id, fk_personId, amount, date) values (267, 12, 902.49, '2020/02/08');
 insert into donation_records (id, fk_personId, amount, date) values (268, 55, 987.29, '2012/10/18');
 insert into donation_records (id, fk_personId, amount, date) values (269, 62, 453.75, '2014/10/19');
 insert into donation_records (id, fk_personId, amount, date) values (270, 67, 985.08, '2021/12/22');
@@ -279,7 +279,7 @@ insert into donation_records (id, fk_personId, amount, date) values (278, 93, 97
 insert into donation_records (id, fk_personId, amount, date) values (279, 51, 78.78, '2020/09/21');
 insert into donation_records (id, fk_personId, amount, date) values (280, 9, 201.2, '2013/09/22');
 insert into donation_records (id, fk_personId, amount, date) values (281, 24, 94.84, '2011/03/07');
-insert into donation_records (id, fk_personId, amount, date) values (282, 0, 417.53, '2020/07/03');
+insert into donation_records (id, fk_personId, amount, date) values (282, 67, 417.53, '2020/07/03');
 insert into donation_records (id, fk_personId, amount, date) values (283, 89, 945.6, '2021/04/21');
 insert into donation_records (id, fk_personId, amount, date) values (284, 4, 559.16, '2022/04/09');
 insert into donation_records (id, fk_personId, amount, date) values (285, 51, 664.0, '2022/10/26');
@@ -342,7 +342,7 @@ insert into donation_records (id, fk_personId, amount, date) values (341, 77, 66
 insert into donation_records (id, fk_personId, amount, date) values (342, 58, 779.2, '2015/08/24');
 insert into donation_records (id, fk_personId, amount, date) values (343, 88, 234.37, '2019/12/14');
 insert into donation_records (id, fk_personId, amount, date) values (344, 36, 286.58, '2012/07/20');
-insert into donation_records (id, fk_personId, amount, date) values (345, 0, 886.13, '2019/09/18');
+insert into donation_records (id, fk_personId, amount, date) values (345, 45, 886.13, '2019/09/18');
 insert into donation_records (id, fk_personId, amount, date) values (346, 21, 383.51, '2014/02/16');
 insert into donation_records (id, fk_personId, amount, date) values (347, 76, 791.13, '2011/05/11');
 insert into donation_records (id, fk_personId, amount, date) values (348, 67, 215.14, '2013/11/08');
@@ -357,7 +357,7 @@ insert into donation_records (id, fk_personId, amount, date) values (356, 79, 60
 insert into donation_records (id, fk_personId, amount, date) values (357, 50, 163.71, '2012/05/30');
 insert into donation_records (id, fk_personId, amount, date) values (358, 18, 633.44, '2017/03/02');
 insert into donation_records (id, fk_personId, amount, date) values (359, 96, 406.44, '2016/02/17');
-insert into donation_records (id, fk_personId, amount, date) values (360, 0, 286.44, '2016/06/15');
+insert into donation_records (id, fk_personId, amount, date) values (360, 23, 286.44, '2016/06/15');
 insert into donation_records (id, fk_personId, amount, date) values (361, 39, 310.49, '2010/01/23');
 insert into donation_records (id, fk_personId, amount, date) values (362, 8, 454.79, '2014/04/13');
 insert into donation_records (id, fk_personId, amount, date) values (363, 77, 12.87, '2017/02/01');
@@ -425,7 +425,7 @@ insert into donation_records (id, fk_personId, amount, date) values (424, 18, 42
 insert into donation_records (id, fk_personId, amount, date) values (425, 13, 723.56, '2010/01/26');
 insert into donation_records (id, fk_personId, amount, date) values (426, 67, 118.35, '2019/02/24');
 insert into donation_records (id, fk_personId, amount, date) values (427, 45, 881.73, '2019/08/29');
-insert into donation_records (id, fk_personId, amount, date) values (428, 0, 187.39, '2010/04/04');
+insert into donation_records (id, fk_personId, amount, date) values (428, 78, 187.39, '2010/04/04');
 insert into donation_records (id, fk_personId, amount, date) values (429, 35, 53.82, '2010/11/24');
 insert into donation_records (id, fk_personId, amount, date) values (430, 35, 429.47, '2010/09/02');
 insert into donation_records (id, fk_personId, amount, date) values (431, 94, 156.72, '2014/04/26');
@@ -658,7 +658,7 @@ insert into donation_records (id, fk_personId, amount, date) values (657, 7, 42.
 insert into donation_records (id, fk_personId, amount, date) values (658, 51, 36.73, '2018/03/09');
 insert into donation_records (id, fk_personId, amount, date) values (659, 34, 626.66, '2016/08/17');
 insert into donation_records (id, fk_personId, amount, date) values (660, 89, 980.9, '2012/10/20');
-insert into donation_records (id, fk_personId, amount, date) values (661, 0, 773.59, '2018/02/03');
+insert into donation_records (id, fk_personId, amount, date) values (661, 74, 773.59, '2018/02/03');
 insert into donation_records (id, fk_personId, amount, date) values (662, 62, 640.37, '2022/08/12');
 insert into donation_records (id, fk_personId, amount, date) values (663, 4, 488.84, '2016/07/12');
 insert into donation_records (id, fk_personId, amount, date) values (664, 46, 31.97, '2013/09/24');
@@ -761,7 +761,7 @@ insert into donation_records (id, fk_personId, amount, date) values (760, 55, 82
 insert into donation_records (id, fk_personId, amount, date) values (761, 90, 324.22, '2014/02/06');
 insert into donation_records (id, fk_personId, amount, date) values (762, 72, 878.29, '2023/01/22');
 insert into donation_records (id, fk_personId, amount, date) values (763, 4, 950.17, '2015/06/26');
-insert into donation_records (id, fk_personId, amount, date) values (764, 0, 450.83, '2016/05/16');
+insert into donation_records (id, fk_personId, amount, date) values (764, 98, 450.83, '2016/05/16');
 insert into donation_records (id, fk_personId, amount, date) values (765, 58, 305.94, '2013/02/17');
 insert into donation_records (id, fk_personId, amount, date) values (766, 51, 817.87, '2021/11/23');
 insert into donation_records (id, fk_personId, amount, date) values (767, 63, 195.21, '2017/08/05');
@@ -822,7 +822,7 @@ insert into donation_records (id, fk_personId, amount, date) values (821, 61, 19
 insert into donation_records (id, fk_personId, amount, date) values (822, 1, 776.86, '2020/06/10');
 insert into donation_records (id, fk_personId, amount, date) values (823, 100, 839.91, '2020/10/11');
 insert into donation_records (id, fk_personId, amount, date) values (824, 20, 13.56, '2017/10/23');
-insert into donation_records (id, fk_personId, amount, date) values (825, 0, 114.51, '2023/05/06');
+insert into donation_records (id, fk_personId, amount, date) values (825, 34, 114.51, '2023/05/06');
 insert into donation_records (id, fk_personId, amount, date) values (826, 96, 171.83, '2017/06/02');
 insert into donation_records (id, fk_personId, amount, date) values (827, 84, 811.29, '2017/06/20');
 insert into donation_records (id, fk_personId, amount, date) values (828, 35, 423.31, '2013/07/17');
@@ -839,7 +839,7 @@ insert into donation_records (id, fk_personId, amount, date) values (838, 36, 57
 insert into donation_records (id, fk_personId, amount, date) values (839, 16, 877.1, '2023/05/17');
 insert into donation_records (id, fk_personId, amount, date) values (840, 34, 863.79, '2011/05/28');
 insert into donation_records (id, fk_personId, amount, date) values (841, 92, 501.72, '2018/09/10');
-insert into donation_records (id, fk_personId, amount, date) values (842, 0, 296.82, '2017/11/02');
+insert into donation_records (id, fk_personId, amount, date) values (842, 6, 296.82, '2017/11/02');
 insert into donation_records (id, fk_personId, amount, date) values (843, 85, 254.32, '2023/05/23');
 insert into donation_records (id, fk_personId, amount, date) values (844, 100, 868.54, '2015/04/27');
 insert into donation_records (id, fk_personId, amount, date) values (845, 63, 679.94, '2023/04/25');
@@ -973,10 +973,10 @@ insert into donation_records (id, fk_personId, amount, date) values (972, 71, 64
 insert into donation_records (id, fk_personId, amount, date) values (973, 12, 400.92, '2020/08/06');
 insert into donation_records (id, fk_personId, amount, date) values (974, 73, 498.65, '2015/06/06');
 insert into donation_records (id, fk_personId, amount, date) values (975, 64, 418.48, '2015/09/17');
-insert into donation_records (id, fk_personId, amount, date) values (976, 0, 739.9, '2017/10/26');
+insert into donation_records (id, fk_personId, amount, date) values (976, 68, 739.9, '2017/10/26');
 insert into donation_records (id, fk_personId, amount, date) values (977, 3, 151.86, '2016/08/09');
 insert into donation_records (id, fk_personId, amount, date) values (978, 72, 130.04, '2018/08/22');
-insert into donation_records (id, fk_personId, amount, date) values (979, 0, 702.63, '2019/09/11');
+insert into donation_records (id, fk_personId, amount, date) values (979, 9, 702.63, '2019/09/11');
 insert into donation_records (id, fk_personId, amount, date) values (980, 67, 847.91, '2017/01/04');
 insert into donation_records (id, fk_personId, amount, date) values (981, 68, 763.89, '2014/05/04');
 insert into donation_records (id, fk_personId, amount, date) values (982, 47, 987.1, '2012/05/09');

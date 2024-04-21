@@ -57,10 +57,6 @@ export default function DetailsPage(props: IDetailsPage) {
 
   return (
     <>
-      details page
-      <Button onClick={(e) => closeDetails(e)} variant="contained">
-        Back
-      </Button>
       <Stack spacing={3}>
         <Card variant="outlined">
           <CardHeader
@@ -108,6 +104,9 @@ export default function DetailsPage(props: IDetailsPage) {
             />
           </CardContent>
         </Card>
+        <Button onClick={(e) => closeDetails(e)} variant="contained">
+          Back
+        </Button>
       </Stack>
     </>
   );

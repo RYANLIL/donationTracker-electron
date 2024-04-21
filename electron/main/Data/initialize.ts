@@ -58,9 +58,17 @@ export default class InitDatabase {
       "utf8"
     );
     this._db.exec(mockSQL);
+
     mockSQL = "";
     mockSQL = readFileSync(
       join(ADD_RESOURCES, "/mock-data/Address_MOCK_DATA.sql"),
+      "utf8"
+    );
+    this._db.exec(mockSQL);
+
+    mockSQL = "";
+    mockSQL = readFileSync(
+      join(ADD_RESOURCES, "/mock-data/Donation_Records_MOCK_DATA.sql"),
       "utf8"
     );
     this._db.exec(mockSQL);

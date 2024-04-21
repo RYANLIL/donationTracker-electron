@@ -1,9 +1,8 @@
-import { Stack } from "@mui/material";
+import { Skeleton, Stack } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
   GridRowParams,
-  GridRowsProp,
   GridToolbar,
 } from "@mui/x-data-grid";
 import { IPerson } from "models/Persons";
@@ -40,9 +39,6 @@ export default function Table(props: ITableProps) {
     props.setdetailOpen(true);
   };
 
-  const customToolBar = () => {
-    return;
-  };
   return (
     <Stack height={"90vh"}>
       {dataLoaded ? (
@@ -59,7 +55,7 @@ export default function Table(props: ITableProps) {
           slotProps={{ toolbar: { showQuickFilter: true } }}
         />
       ) : (
-        "Loading..."
+        <Skeleton variant="rectangular" animation="wave" height={"90vh"} />
       )}
     </Stack>
   );
