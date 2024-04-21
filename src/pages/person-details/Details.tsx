@@ -107,6 +107,9 @@ export default function DetailsPage(props: IDetailsPage) {
         <Button onClick={(e) => closeDetails(e)} variant="contained">
           Back
         </Button>
+        <button onClick={() => console.log(donationRecs)}>
+          Print to console
+        </button>
       </Stack>
     </>
   );

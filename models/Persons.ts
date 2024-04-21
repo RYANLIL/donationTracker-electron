@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 export class PersonInfo {
   person: IPerson;
   address: IAddress;
@@ -47,8 +49,8 @@ export interface IAddress extends IMetaData {
 
 export interface IDonationRecord extends IMetaData {
   fk_personId: number;
-  amount: number;
-  date: Date;
+  amount?: number;
+  date: string;
 }
 export interface IReceiptRecord extends IMetaData {
   fk_personId: number;
