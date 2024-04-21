@@ -1,4 +1,11 @@
-import { Button, Card, CardContent, CardHeader, Stack } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  IconButton,
+  Stack,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import PersonDetails from "./components/PersonDetails";
 import {
@@ -11,6 +18,7 @@ import AddressDetails from "./components/AddressDetails";
 import ReceiptRecords from "./components/ReceiptRecords";
 import DonationRecords from "./components/DonationRecords";
 import dayjs from "dayjs";
+import { Add } from "@mui/icons-material";
 
 interface IDetailsPage {
   setdetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,6 +46,7 @@ export default function DetailsPage(props: IDetailsPage) {
   });
   const [donationRecs, setDonationRecs] = useState<IDonationRecord[]>([]);
   const [receiptRecs, setReceiptRecs] = useState<IReceiptRecord[]>([]);
+  const [newDRecId, setNewDRecId] = useState(-1);
   useEffect(() => {
     async function getDetails(personId: number) {
       const data = await window.fileOps.getPersonDetails(personId);
@@ -60,6 +69,20 @@ export default function DetailsPage(props: IDetailsPage) {
   function closeDetails(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     props.setdetailOpen(false);
     props.setPersonId(-1);
+  }
+
+  function createNewDonation() {
+    const newDRec: IDonationRecord = {
+      id: newDRecId,
+      fk_personId: props.personId,
+      amount: 0,
+      date: dayjs().format("YYYY-MM-DD"),
+    };
+    const dRecId = newDRecId - 1;
+    setNewDRecId(dRecId);
+    let updateDonationRecs = [...donationRecs];
+    updateDonationRecs.unshift(newDRec);
+    setDonationRecs(updateDonationRecs);
   }
 
   return (
@@ -91,6 +114,14 @@ export default function DetailsPage(props: IDetailsPage) {
           <CardHeader
             title="Donations"
             sx={{ paddingBottom: 0, paddingTop: 1 }}
+            action={
+              <IconButton
+                aria-label="Create new donation record"
+                onClick={createNewDonation}
+              >
+                <Add />
+              </IconButton>
+            }
           />
           <CardContent>
             <DonationRecords
