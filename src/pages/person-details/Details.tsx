@@ -10,6 +10,7 @@ import {
 import AddressDetails from "./components/AddressDetails";
 import ReceiptRecords from "./components/ReceiptRecords";
 import DonationRecords from "./components/DonationRecords";
+import dayjs from "dayjs";
 
 interface IDetailsPage {
   setdetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,10 +41,16 @@ export default function DetailsPage(props: IDetailsPage) {
   useEffect(() => {
     async function getDetails(personId: number) {
       const data = await window.fileOps.getPersonDetails(personId);
+      const sortedDonations = data.donations.sort((prev, curr) =>
+        dayjs(curr.date).diff(dayjs(prev.date))
+      );
+      const sortedReceipts = data.receipts.sort((prev, curr) =>
+        dayjs(curr.datePrinted).diff(dayjs(prev.datePrinted))
+      );
       setPersonDetails(data.person);
       setAddress(data.address);
-      setDonationRecs(data.donations);
-      setReceiptRecs(data.receipts);
+      setDonationRecs(sortedDonations);
+      setReceiptRecs(sortedReceipts);
 
       console.log(data);
     }
