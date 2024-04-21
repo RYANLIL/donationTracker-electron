@@ -119,7 +119,7 @@ export default function DetailsPage(props: IDetailsPage) {
                 aria-label="Create new donation record"
                 onClick={createNewDonation}
               >
-                <Add />
+                <Add color="success" />
               </IconButton>
             }
           />

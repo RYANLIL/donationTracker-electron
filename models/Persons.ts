@@ -60,7 +60,7 @@ export interface IReceiptRecord extends IMetaData {
 }
 
 interface IMetaData {
-  id?: number;
+  id: number;
   isDeleted?: boolean;
   createdAt?: string;
   deletedAt?: string;

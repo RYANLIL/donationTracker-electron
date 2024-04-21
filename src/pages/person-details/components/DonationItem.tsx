@@ -62,12 +62,23 @@ export default function DonationItem(props: IDonationItem) {
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
         }}
         helperText={helperText}
+        color={props.dRec.id < 0 ? "secondary" : "primary"}
+        focused={props.dRec.id < 0}
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           label="Date"
           onChange={handleDateChange}
           value={dayjs(props.dRec.date)}
+          slotProps={{
+            openPickerButton: {
+              color: props.dRec.id < 0 ? "secondary" : "primary",
+            },
+            textField: {
+              color: props.dRec.id < 0 ? "secondary" : "primary",
+              focused: props.dRec.id < 0,
+            },
+          }}
         />
       </LocalizationProvider>
     </Stack>
