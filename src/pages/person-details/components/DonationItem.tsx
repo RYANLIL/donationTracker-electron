@@ -68,7 +68,8 @@ export default function DonationItem(props: IDonationItem) {
     const recArrayIndex = props.donationRecs.findIndex(
       (rec) => rec.id === dRec.id
     );
-    //Completely remove deleted record form donation Record object
+    //Completely remove deleted record form donation Record object this
+    //is done for newly added records that have not been saved to the database
     if (recArrayIndex > -1 && dRec.id < 0) {
       const reducedArray = props.donationRecs.filter(
         (rec) => rec.id !== dRec.id

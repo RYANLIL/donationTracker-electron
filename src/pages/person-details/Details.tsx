@@ -103,6 +103,18 @@ export default function DetailsPage(props: IDetailsPage) {
     setDonationRecs(updateDonationRecs);
   }
 
+  function createNewReceipt() {
+    const newReceipt: IReceiptRecord = {
+      id: newReceiptIdRef.current,
+      fk_personId: props.personId,
+      amount: 0,
+      datePrinted: "",
+      isPrinted: false,
+    };
+    newReceiptIdRef.current = newReceiptIdRef.current - 1;
+    let updatedReceiptRecs = [...receiptRecs, newReceipt];
+    setReceiptRecs(updatedReceiptRecs);
+  }
   return (
     <>
       <Stack spacing={3}>
@@ -128,38 +140,56 @@ export default function DetailsPage(props: IDetailsPage) {
             <AddressDetails address={address} setAddress={setAddress} />
           </CardContent>
         </Card>
-        <Card variant="outlined">
-          <CardHeader
-            title="Donations"
-            sx={{ paddingBottom: 0, paddingTop: 1 }}
-            action={
-              <IconButton
-                aria-label="Create new donation record"
-                onClick={createNewDonation}
-              >
-                <Add color="success" />
-              </IconButton>
-            }
-          />
-          <CardContent>
-            <DonationRecords
-              donationRecs={donationRecs}
-              setDonationRecs={setDonationRecs}
+        <Stack direction={"row"} spacing={2} justifyContent="flex-start">
+          <Card variant="outlined">
+            <CardHeader
+              title="Donations"
+              sx={{ paddingBottom: 0, paddingTop: 1 }}
+              action={
+                <Button
+                  aria-label="Create new donation record"
+                  onClick={createNewDonation}
+                  startIcon={<Add />}
+                  variant="contained"
+                  color="secondary"
+                >
+                  New Donation
+                </Button>
+              }
             />
-          </CardContent>
-        </Card>
-        <Card variant="outlined">
-          <CardHeader
-            title="Receipts"
-            sx={{ paddingBottom: 0, paddingTop: 1 }}
-          />
-          <CardContent>
-            <ReceiptRecords
-              receiptRecs={receiptRecs}
-              setReceiptRecs={setReceiptRecs}
+            <CardContent>
+              <DonationRecords
+                donationRecs={donationRecs}
+                setDonationRecs={setDonationRecs}
+              />
+            </CardContent>
+          </Card>
+          <Card variant="outlined" sx={{ flex: 1 }}>
+            <CardHeader
+              title="Receipts"
+              sx={{ paddingBottom: 0, paddingTop: 1 }}
+              action={
+                <Button
+                  aria-label="Create new receipt"
+                  onClick={createNewReceipt}
+                  startIcon={<Add />}
+                  variant="contained"
+                  color="secondary"
+                >
+                  New Receipt
+                </Button>
+              }
             />
-          </CardContent>
-        </Card>
+            <CardContent>
+              <ReceiptRecords
+                donationRecs={donationRecs}
+                receiptRecs={receiptRecs}
+                setReceiptRecs={setReceiptRecs}
+              />
+            </CardContent>
+          </Card>
+        </Stack>
+
         <Button onClick={(e) => closeDetails(e)} variant="contained">
           Back
         </Button>
