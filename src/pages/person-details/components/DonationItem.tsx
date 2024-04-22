@@ -89,7 +89,7 @@ export default function DonationItem(props: IDonationItem) {
       <hr
         style={{
           borderColor: "crimson",
-          width: "70%",
+          width: "92%",
           position: "absolute",
           display: props.dRec.isDeleted ? "" : "none",
         }}

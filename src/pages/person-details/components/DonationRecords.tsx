@@ -9,9 +9,7 @@ interface IDonationRecords {
 }
 export default function DonationRecords(props: IDonationRecords) {
   //TODO: Disable editing if the receipt for that year is
-  function createDonationRecord(e) {
-    console.log(e);
-  }
+
   return (
     <Stack spacing={2} maxHeight={"20vh"} overflow={"auto"} paddingTop={1}>
       {/* <IconButton aria-label="Add" onClick={() => createDonationRecord}>

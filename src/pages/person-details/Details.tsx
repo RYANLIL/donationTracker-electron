@@ -6,7 +6,7 @@ import {
   IconButton,
   Stack,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PersonDetails from "./components/PersonDetails";
 import {
   IAddress,
@@ -48,7 +48,8 @@ export default function DetailsPage(props: IDetailsPage) {
   });
   const [donationRecs, setDonationRecs] = useState<IDonationRecord[]>([]);
   const [receiptRecs, setReceiptRecs] = useState<IReceiptRecord[]>([]);
-  const [newDRecId, setNewDRecId] = useState(-1);
+  const newDRecId = useRef(-1);
+  const newReceiptId = useRef(-1);
   useEffect(() => {
     async function getDetails(personId: number) {
       const data = await window.fileOps.getPersonDetails(personId);
@@ -76,13 +77,12 @@ export default function DetailsPage(props: IDetailsPage) {
 
   function createNewDonation() {
     const newDRec: IDonationRecord = {
-      id: newDRecId,
+      id: newDRecId.current,
       fk_personId: props.personId,
       amount: 0,
       date: dayjs().format("YYYY-MM-DD"),
     };
-    const dRecId = newDRecId - 1;
-    setNewDRecId(dRecId);
+    newDRecId.current = newDRecId.current - 1;
     let updateDonationRecs = [newDRec, ...donationRecs];
     //updateDonationRecs.unshift(newDRec);
     setDonationRecs(updateDonationRecs);
