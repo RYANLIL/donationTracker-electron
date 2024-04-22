@@ -8,6 +8,7 @@ export class PersonInfo {
 
   constructor() {
     this.person = {
+      id: -1,
       firstName: "",
       lastName: "",
       phone1: "",
@@ -15,6 +16,7 @@ export class PersonInfo {
       email: "",
     };
     this.address = {
+      id: -1,
       fk_personId: -1,
       address1: "",
       address2: "",

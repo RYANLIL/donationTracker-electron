@@ -28,6 +28,7 @@ interface IDetailsPage {
 
 export default function DetailsPage(props: IDetailsPage) {
   const [personDetails, setPersonDetails] = useState<IPerson>({
+    id: -1,
     firstName: "",
     lastName: "",
     phone1: "",
@@ -35,6 +36,7 @@ export default function DetailsPage(props: IDetailsPage) {
     email: "",
   });
   const [address, setAddress] = useState<IAddress>({
+    id: -1,
     fk_personId: -1,
     address1: "",
     address2: "",
@@ -63,7 +65,8 @@ export default function DetailsPage(props: IDetailsPage) {
 
       console.log(data);
     }
-    getDetails(props.personId);
+    //get details for existing person
+    if (props.personId > 0) getDetails(props.personId);
   }, []);
 
   function closeDetails(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -80,8 +83,8 @@ export default function DetailsPage(props: IDetailsPage) {
     };
     const dRecId = newDRecId - 1;
     setNewDRecId(dRecId);
-    let updateDonationRecs = [...donationRecs];
-    updateDonationRecs.unshift(newDRec);
+    let updateDonationRecs = [newDRec, ...donationRecs];
+    //updateDonationRecs.unshift(newDRec);
     setDonationRecs(updateDonationRecs);
   }
 

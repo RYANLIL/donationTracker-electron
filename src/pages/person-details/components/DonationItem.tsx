@@ -1,10 +1,11 @@
-import { InputAdornment, Stack, TextField } from "@mui/material";
+import { IconButton, InputAdornment, Stack, TextField } from "@mui/material";
 import { IDonationRecord } from "models/Persons";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
+import { DeleteForever } from "@mui/icons-material";
 
 interface IDonationItem {
   setDonationRecs: React.Dispatch<React.SetStateAction<IDonationRecord[]>>;
@@ -51,7 +52,7 @@ export default function DonationItem(props: IDonationItem) {
     }
   }
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack direction="row" spacing={2} alignItems={"center"}>
       <TextField
         label="Amount"
         error={!isValid}
@@ -81,6 +82,9 @@ export default function DonationItem(props: IDonationItem) {
           }}
         />
       </LocalizationProvider>
+      <IconButton>
+        <DeleteForever />
+      </IconButton>
     </Stack>
   );
 }
