@@ -51,6 +51,16 @@ export default function DonationItem(props: IDonationItem) {
       setHelperText("Not a valid dollar amount");
     }
   }
+  function handleDeleteRecord(dRec: IDonationRecord) {
+    console.log(dRec);
+    //If id is negative remove
+    if (dRec.id < 0) {
+      const filteredList = props.donationRecs.filter(
+        (rec) => rec.id !== dRec.id
+      );
+      props.setDonationRecs(filteredList);
+    }
+  }
   return (
     <Stack direction="row" spacing={2} alignItems={"center"}>
       <TextField
@@ -82,7 +92,7 @@ export default function DonationItem(props: IDonationItem) {
           }}
         />
       </LocalizationProvider>
-      <IconButton>
+      <IconButton onClick={() => handleDeleteRecord(props.dRec)}>
         <DeleteForever />
       </IconButton>
     </Stack>
