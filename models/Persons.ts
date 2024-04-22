@@ -53,12 +53,14 @@ export interface IDonationRecord extends IMetaData {
   fk_personId: number;
   amount?: number;
   date: string;
+  [key: string]: any;
 }
 export interface IReceiptRecord extends IMetaData {
   fk_personId: number;
   amount: number;
   datePrinted: string;
   isPrinted: boolean;
+  [key: string]: any;
 }
 
 interface IMetaData {

@@ -48,17 +48,19 @@ export default function DetailsPage(props: IDetailsPage) {
   });
   const [donationRecs, setDonationRecs] = useState<IDonationRecord[]>([]);
   const [receiptRecs, setReceiptRecs] = useState<IReceiptRecord[]>([]);
-  const newDRecId = useRef(-1);
-  const newReceiptId = useRef(-1);
+  const newDRecIdRef = useRef(-1);
+  const newReceiptIdRef = useRef(-1);
   useEffect(() => {
     async function getDetails(personId: number) {
       const data = await window.fileOps.getPersonDetails(personId);
-      const sortedDonations = data.donations.sort((prev, curr) =>
-        dayjs(curr.date).diff(dayjs(prev.date))
-      );
-      const sortedReceipts = data.receipts.sort((prev, curr) =>
-        dayjs(curr.datePrinted).diff(dayjs(prev.datePrinted))
-      );
+      // const sortedDonations = data.donations.sort((prev, curr) =>
+      //   dayjs(curr.date).diff(dayjs(prev.date))
+      // );
+      // const sortedReceipts = data.receipts.sort((prev, curr) =>
+      //   dayjs(curr.datePrinted).diff(dayjs(prev.datePrinted))
+      // );
+      const sortedDonations = sortRecordsByDate(data.donations, "date");
+      const sortedReceipts = sortRecordsByDate(data.receipts, "datePrinted");
       setPersonDetails(data.person);
       setAddress(data.address);
       setDonationRecs(sortedDonations);
@@ -70,6 +72,19 @@ export default function DetailsPage(props: IDetailsPage) {
     if (props.personId > 0) getDetails(props.personId);
   }, []);
 
+  type DonoOrRec<T extends IDonationRecord[] | IReceiptRecord[]> =
+    T extends IDonationRecord[] ? IDonationRecord[] : IReceiptRecord[];
+
+  function sortRecordsByDate<T extends IDonationRecord[] | IReceiptRecord[]>(
+    records: T,
+    sortField: string
+  ): DonoOrRec<T> {
+    const sortedRec = records.sort((prev, curr) =>
+      dayjs(curr[sortField]).diff(dayjs(prev[sortField]))
+    );
+    return sortedRec as DonoOrRec<T>;
+  }
+
   function closeDetails(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     props.setdetailOpen(false);
     props.setPersonId(-1);
@@ -77,12 +92,12 @@ export default function DetailsPage(props: IDetailsPage) {
 
   function createNewDonation() {
     const newDRec: IDonationRecord = {
-      id: newDRecId.current,
+      id: newDRecIdRef.current,
       fk_personId: props.personId,
       amount: 0,
       date: dayjs().format("YYYY-MM-DD"),
     };
-    newDRecId.current = newDRecId.current - 1;
+    newDRecIdRef.current = newDRecIdRef.current - 1;
     let updateDonationRecs = [newDRec, ...donationRecs];
     //updateDonationRecs.unshift(newDRec);
     setDonationRecs(updateDonationRecs);
