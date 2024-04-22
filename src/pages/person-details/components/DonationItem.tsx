@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
-import { DeleteForever } from "@mui/icons-material";
+import { DeleteForever, Restore } from "@mui/icons-material";
 
 interface IDonationItem {
   setDonationRecs: React.Dispatch<React.SetStateAction<IDonationRecord[]>>;
@@ -51,18 +51,49 @@ export default function DonationItem(props: IDonationItem) {
       setHelperText("Not a valid dollar amount");
     }
   }
+  function toggleRecDeletionState(dRec: IDonationRecord) {
+    props.setDonationRecs(
+      props.donationRecs.map((rec) => {
+        if (rec.id === dRec.id) {
+          // Create a *new* object with changes
+          return { ...rec, isDeleted: !rec.isDeleted };
+        } else {
+          //No changes
+          return rec;
+        }
+      })
+    );
+  }
   function handleDeleteRecord(dRec: IDonationRecord) {
-    console.log(dRec);
-    //If id is negative remove
-    if (dRec.id < 0) {
-      const filteredList = props.donationRecs.filter(
+    const recArrayIndex = props.donationRecs.findIndex(
+      (rec) => rec.id === dRec.id
+    );
+    //Completely remove deleted record form donation Record object
+    if (recArrayIndex > -1 && dRec.id < 0) {
+      const reducedArray = props.donationRecs.filter(
         (rec) => rec.id !== dRec.id
       );
-      props.setDonationRecs(filteredList);
+      props.setDonationRecs(reducedArray);
+    } else {
+      toggleRecDeletionState(dRec);
     }
   }
+
   return (
-    <Stack direction="row" spacing={2} alignItems={"center"}>
+    <Stack
+      direction="row"
+      spacing={2}
+      alignItems={"center"}
+      sx={{ position: "relative" }}
+    >
+      <hr
+        style={{
+          borderColor: "crimson",
+          width: "70%",
+          position: "absolute",
+          display: props.dRec.isDeleted ? "" : "none",
+        }}
+      />
       <TextField
         label="Amount"
         error={!isValid}
@@ -92,9 +123,15 @@ export default function DonationItem(props: IDonationItem) {
           }}
         />
       </LocalizationProvider>
-      <IconButton onClick={() => handleDeleteRecord(props.dRec)}>
-        <DeleteForever />
-      </IconButton>
+      {props.dRec.isDeleted ? (
+        <IconButton onClick={() => toggleRecDeletionState(props.dRec)}>
+          <Restore />
+        </IconButton>
+      ) : (
+        <IconButton onClick={() => handleDeleteRecord(props.dRec)}>
+          <DeleteForever />
+        </IconButton>
+      )}
     </Stack>
   );
 }
