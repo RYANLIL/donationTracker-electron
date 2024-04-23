@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 interface IReceiptItem {
   donationRecs: IDonationRecord[];
@@ -19,28 +19,27 @@ interface IReceiptItem {
 
 export default function ReceiptItem(props: IReceiptItem) {
   const [receiptYear, setReceiptYear] = useState(props.receipt.datePrinted);
-  const [rYearTotal, setRYearTotal] = useState(0);
-  const [isPrinted, setIsPrinted] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
-  useEffect(() => {
-    const donationTotal = calcTotalForYear(receiptYear);
-    setRYearTotal(donationTotal);
-    setIsPrinted(props.receipt.isPrinted);
-    setIsDeleted(props.receipt.isDeleted || false);
-  }, []);
+  //cache total between renders
+  const receiptYearTotal = useMemo(
+    () => calcTotalForYear(receiptYear),
+    [receiptYear, props.donationRecs]
+  );
 
-  useEffect(() => {
-    const updatedReceiptRecs = props.receiptRecs.map((rec) => {
+  console.log(`render receipt item ${receiptYear}`);
+
+  //used to update isPrinted/isDeleted properties
+  const updatedReceiptRecs = (attr: string, value: boolean | string) => {
+    const update = props.receiptRecs.map((rec) => {
       if (rec.id === props.receipt.id) {
         // Create a *new* object with changes
-        return { ...rec, isPrinted: isPrinted, isDeleted: isDeleted };
+        return { ...rec, amount: receiptYearTotal, [attr]: value };
       } else {
         //No changes
         return rec;
       }
     });
-    props.setReceiptRecs(updatedReceiptRecs);
-  }, [isPrinted, isDeleted]);
+    props.setReceiptRecs(update);
+  };
 
   function handleDeleteRecord(rRec: IReceiptRecord) {
     //Completely remove deleted record form donation Record object this
@@ -52,11 +51,13 @@ export default function ReceiptItem(props: IReceiptItem) {
       props.setReceiptRecs(filteredReceipts);
     } else {
       console.log("delete existing");
-      setIsDeleted(true);
+      updatedReceiptRecs("isDeleted", true);
     }
   }
 
   function calcTotalForYear(year: string) {
+    if (year.length !== 4) return 0;
+    console.log("calc year total:", year);
     const donations = props.donationRecs.filter((dRec) =>
       dRec.date.includes(year)
     );
@@ -68,30 +69,50 @@ export default function ReceiptItem(props: IReceiptItem) {
   }
 
   return (
-    <Stack direction="row" spacing={2} alignItems={"center"}>
+    <Stack
+      direction="row"
+      spacing={2}
+      alignItems={"center"}
+      sx={{ position: "relative" }}
+    >
+      <hr
+        style={{
+          borderColor: "crimson",
+          width: "92%",
+          position: "absolute",
+          display: props.receipt.isDeleted ? "" : "none",
+        }}
+      />
       <FormControlLabel
-        control={<Checkbox checked={isPrinted} />}
-        onClick={() => setIsPrinted(!isPrinted)}
+        control={
+          <Checkbox
+            checked={props.receipt.isPrinted}
+            onChange={(e) => updatedReceiptRecs("isPrinted", e.target.checked)}
+          />
+        }
         label="Printed"
       />
 
-      <Typography>Year:{receiptYear}</Typography>
-
-      {/* <TextField
+      <TextField
         sx={{ maxWidth: "75px" }}
         label="Year"
         //helperText={helperText}
         color={props.receipt.id < 0 ? "secondary" : "primary"}
         focused={props.receipt.id < 0}
         value={receiptYear}
-        onChange={(e) => setReceiptYear(e.target.value)}
-      /> */}
+        onChange={(e) => {
+          const value = e.target.value;
+          if (value.length === 4 && value !== props.receipt.datePrinted)
+            updatedReceiptRecs("datePrinted", value);
+          return setReceiptYear(e.target.value);
+        }}
+      />
 
-      <Typography>${rYearTotal}</Typography>
+      <Typography>${receiptYearTotal}</Typography>
 
       <div style={{ marginLeft: "auto" }}>
         {props.receipt.isDeleted ? (
-          <IconButton onClick={() => setIsDeleted(false)}>
+          <IconButton onClick={() => updatedReceiptRecs("isDeleted", false)}>
             <Restore />
           </IconButton>
         ) : (
