@@ -1,4 +1,4 @@
-import { Grid, Stack, TextField } from "@mui/material";
+import { Stack } from "@mui/material";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import ReceiptItem from "./ReceiptItem";
 

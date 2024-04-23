@@ -16,10 +16,11 @@ import {
   IReceiptRecord,
 } from "models/Persons";
 import AddressDetails from "./components/AddressDetails";
-import ReceiptRecords from "./components/ReceiptRecords";
+import ReceiptRecords from "./components/receipts/ReceiptRecords";
 import DonationRecords from "./components/DonationRecords";
 import dayjs from "dayjs";
 import { Add } from "@mui/icons-material";
+import ReceiptCard from "./components/receipts/ReceiptCard";
 
 interface IDetailsPage {
   setdetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,10 +49,9 @@ export default function DetailsPage(props: IDetailsPage) {
     postalCode: "",
   });
   const [donationRecs, setDonationRecs] = useState<IDonationRecord[]>([]);
-  const [receiptRecs, setReceiptRecs] = useState<IReceiptRecord[]>([]);
+  const receiptRecsRef = useRef<IReceiptRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const newDRecIdRef = useRef(-1);
-  const newReceiptIdRef = useRef(-1);
 
   useEffect(() => {
     async function getDetails(personId: number) {
@@ -61,7 +61,7 @@ export default function DetailsPage(props: IDetailsPage) {
       setPersonDetails(data.person);
       setAddress(data.address);
       setDonationRecs(sortedDonations);
-      setReceiptRecs(sortedReceipts);
+      receiptRecsRef.current = sortedReceipts;
       setIsLoading(false);
 
       console.log(data);
@@ -101,18 +101,6 @@ export default function DetailsPage(props: IDetailsPage) {
     setDonationRecs(updateDonationRecs);
   }
 
-  function createNewReceipt() {
-    const newReceipt: IReceiptRecord = {
-      id: newReceiptIdRef.current,
-      fk_personId: props.personId,
-      amount: 0,
-      datePrinted: new Date().getFullYear().toString(),
-      isPrinted: false,
-    };
-    newReceiptIdRef.current = newReceiptIdRef.current - 1;
-    let updatedReceiptRecs = [newReceipt, ...receiptRecs];
-    setReceiptRecs(updatedReceiptRecs);
-  }
   return (
     <>
       <Stack spacing={3}>
@@ -123,7 +111,7 @@ export default function DetailsPage(props: IDetailsPage) {
         </Stack>
         <button
           onClick={() => {
-            console.log(receiptRecs);
+            console.log(receiptRecsRef.current);
             console.log(donationRecs);
           }}
         >
@@ -178,30 +166,11 @@ export default function DetailsPage(props: IDetailsPage) {
           {isLoading ? (
             <Skeleton sx={{ flex: 1 }} />
           ) : (
-            <Card variant="outlined" sx={{ flex: 1 }}>
-              <CardHeader
-                title="Receipts"
-                sx={{ paddingBottom: 0, paddingTop: 1 }}
-                action={
-                  <Button
-                    aria-label="Create new receipt"
-                    onClick={createNewReceipt}
-                    startIcon={<Add />}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    New Receipt
-                  </Button>
-                }
-              />
-              <CardContent>
-                <ReceiptRecords
-                  donationRecs={donationRecs}
-                  receiptRecs={receiptRecs}
-                  setReceiptRecs={setReceiptRecs}
-                />
-              </CardContent>
-            </Card>
+            <ReceiptCard
+              personId={props.personId}
+              donationRecs={donationRecs}
+              receiptRecsRef={receiptRecsRef}
+            />
           )}
         </Stack>
         <Button onClick={(e) => console.log(e)} variant="contained">

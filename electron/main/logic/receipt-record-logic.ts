@@ -79,6 +79,7 @@ export default class ReceiptRecordLogic {
     // convert int 0 1 into boolean true false
     data.forEach((rec) => {
       rec.isPrinted = Boolean(rec.isPrinted);
+      rec.isDeleted = Boolean(rec.isDeleted);
     });
     return data;
   }
