@@ -14,13 +14,14 @@ import {
   IPerson,
   IReceiptRecord,
 } from "models/Persons";
-import AddressDetails from "./components/AddressDetails";
+import AddressDetails from "./components/address/AddressDetails";
 import ReceiptRecords from "./components/receipts/ReceiptRecords";
 import DonationRecords from "./components/DonationRecords";
 import dayjs from "dayjs";
 import { Add } from "@mui/icons-material";
 import ReceiptCard from "./components/receipts/ReceiptCard";
 import PersonCard from "./components/person-details/PersonCard";
+import AddressCard from "./components/address/AddressCard";
 
 interface IDetailsPage {
   setdetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -114,7 +115,8 @@ export default function DetailsPage(props: IDetailsPage) {
           onClick={() => {
             //console.log(receiptRecsRef.current);
             //console.log(donationRecs);
-            console.log(personDetailsRef.current);
+            //console.log(personDetailsRef.current);
+            console.log(address);
           }}
         >
           Print to console
@@ -124,15 +126,11 @@ export default function DetailsPage(props: IDetailsPage) {
         ) : (
           <PersonCard personDetailsRef={personDetailsRef} />
         )}
-        <Card variant="outlined">
-          <CardHeader
-            title="Address"
-            sx={{ paddingBottom: 0, paddingTop: 1 }}
-          />
-          <CardContent>
-            <AddressDetails address={address} setAddress={setAddress} />
-          </CardContent>
-        </Card>
+        {isLoading ? (
+          <Skeleton />
+        ) : (
+          <AddressCard address={address} setAddress={setAddress} />
+        )}
         <Stack direction={"row"} spacing={2} justifyContent="flex-start">
           <Card variant="outlined" sx={{ flex: 1 }}>
             <CardHeader

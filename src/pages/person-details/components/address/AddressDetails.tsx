@@ -10,6 +10,7 @@ export default function AddressDetails(props: IAddressDetails) {
     const { id, value } = e.target;
     props.setAddress({ ...props.address, [id]: value });
   }
+  console.log("render address details");
   return (
     <div>
       <Grid container spacing={2}>
