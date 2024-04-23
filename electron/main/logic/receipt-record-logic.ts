@@ -75,6 +75,11 @@ export default class ReceiptRecordLogic {
     const stmnt = this._db.prepare(
       "SELECT * FROM Receipt_records where fk_personId = ? "
     );
-    return stmnt.all(personId) as IReceiptRecord[];
+    const data = stmnt.all(personId) as IReceiptRecord[];
+    // convert int 0 1 into boolean true false
+    data.forEach((rec) => {
+      rec.isPrinted = Boolean(rec.isPrinted);
+    });
+    return data;
   }
 }

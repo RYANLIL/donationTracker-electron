@@ -98,13 +98,13 @@ export default function DonationItem(props: IDonationItem) {
       <TextField
         label="Amount"
         error={!isValid}
+        helperText={helperText}
         id={props.dRec.id?.toString()}
         value={amount || ""}
         onChange={amountChange}
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
         }}
-        helperText={helperText}
         color={props.dRec.id < 0 ? "secondary" : "primary"}
         focused={props.dRec.id < 0}
       />

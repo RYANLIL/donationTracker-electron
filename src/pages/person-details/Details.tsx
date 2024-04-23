@@ -4,6 +4,7 @@ import {
   CardContent,
   CardHeader,
   IconButton,
+  Skeleton,
   Stack,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
@@ -48,23 +49,20 @@ export default function DetailsPage(props: IDetailsPage) {
   });
   const [donationRecs, setDonationRecs] = useState<IDonationRecord[]>([]);
   const [receiptRecs, setReceiptRecs] = useState<IReceiptRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const newDRecIdRef = useRef(-1);
   const newReceiptIdRef = useRef(-1);
+
   useEffect(() => {
     async function getDetails(personId: number) {
       const data = await window.fileOps.getPersonDetails(personId);
-      // const sortedDonations = data.donations.sort((prev, curr) =>
-      //   dayjs(curr.date).diff(dayjs(prev.date))
-      // );
-      // const sortedReceipts = data.receipts.sort((prev, curr) =>
-      //   dayjs(curr.datePrinted).diff(dayjs(prev.datePrinted))
-      // );
       const sortedDonations = sortRecordsByDate(data.donations, "date");
       const sortedReceipts = sortRecordsByDate(data.receipts, "datePrinted");
       setPersonDetails(data.person);
       setAddress(data.address);
       setDonationRecs(sortedDonations);
       setReceiptRecs(sortedReceipts);
+      setIsLoading(false);
 
       console.log(data);
     }
@@ -108,16 +106,29 @@ export default function DetailsPage(props: IDetailsPage) {
       id: newReceiptIdRef.current,
       fk_personId: props.personId,
       amount: 0,
-      datePrinted: "",
+      datePrinted: new Date().getFullYear().toString(),
       isPrinted: false,
     };
     newReceiptIdRef.current = newReceiptIdRef.current - 1;
-    let updatedReceiptRecs = [...receiptRecs, newReceipt];
+    let updatedReceiptRecs = [newReceipt, ...receiptRecs];
     setReceiptRecs(updatedReceiptRecs);
   }
   return (
     <>
       <Stack spacing={3}>
+        <Stack direction="row" justifyContent="space-between">
+          <Button onClick={(e) => closeDetails(e)} variant="contained">
+            Back
+          </Button>
+        </Stack>
+        <button
+          onClick={() => {
+            console.log(receiptRecs);
+            console.log(donationRecs);
+          }}
+        >
+          Print to console
+        </button>
         <Card variant="outlined">
           <CardHeader
             title="Details"
@@ -141,7 +152,7 @@ export default function DetailsPage(props: IDetailsPage) {
           </CardContent>
         </Card>
         <Stack direction={"row"} spacing={2} justifyContent="flex-start">
-          <Card variant="outlined">
+          <Card variant="outlined" sx={{ flex: 1 }}>
             <CardHeader
               title="Donations"
               sx={{ paddingBottom: 0, paddingTop: 1 }}
@@ -164,38 +175,38 @@ export default function DetailsPage(props: IDetailsPage) {
               />
             </CardContent>
           </Card>
-          <Card variant="outlined" sx={{ flex: 1 }}>
-            <CardHeader
-              title="Receipts"
-              sx={{ paddingBottom: 0, paddingTop: 1 }}
-              action={
-                <Button
-                  aria-label="Create new receipt"
-                  onClick={createNewReceipt}
-                  startIcon={<Add />}
-                  variant="contained"
-                  color="secondary"
-                >
-                  New Receipt
-                </Button>
-              }
-            />
-            <CardContent>
-              <ReceiptRecords
-                donationRecs={donationRecs}
-                receiptRecs={receiptRecs}
-                setReceiptRecs={setReceiptRecs}
+          {isLoading ? (
+            <Skeleton sx={{ flex: 1 }} />
+          ) : (
+            <Card variant="outlined" sx={{ flex: 1 }}>
+              <CardHeader
+                title="Receipts"
+                sx={{ paddingBottom: 0, paddingTop: 1 }}
+                action={
+                  <Button
+                    aria-label="Create new receipt"
+                    onClick={createNewReceipt}
+                    startIcon={<Add />}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    New Receipt
+                  </Button>
+                }
               />
-            </CardContent>
-          </Card>
+              <CardContent>
+                <ReceiptRecords
+                  donationRecs={donationRecs}
+                  receiptRecs={receiptRecs}
+                  setReceiptRecs={setReceiptRecs}
+                />
+              </CardContent>
+            </Card>
+          )}
         </Stack>
-
-        <Button onClick={(e) => closeDetails(e)} variant="contained">
-          Back
+        <Button onClick={(e) => console.log(e)} variant="contained">
+          Save
         </Button>
-        <button onClick={() => console.log(donationRecs)}>
-          Print to console
-        </button>
       </Stack>
     </>
   );

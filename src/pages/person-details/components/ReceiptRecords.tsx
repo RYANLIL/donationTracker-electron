@@ -9,13 +9,14 @@ interface IReceiptRecords {
 }
 export default function ReceiptRecords(props: IReceiptRecords) {
   return (
-    <Stack spacing={2} maxHeight={"20vh"} overflow={"auto"} paddingTop={1}>
+    <Stack spacing={2} overflow={"auto"} paddingTop={1}>
       {props.receiptRecs.map((receipt) => (
         <ReceiptItem
           key={receipt.id}
           receipt={receipt}
           receiptRecs={props.receiptRecs}
           setReceiptRecs={props.setReceiptRecs}
+          donationRecs={props.donationRecs}
         />
       ))}
     </Stack>
