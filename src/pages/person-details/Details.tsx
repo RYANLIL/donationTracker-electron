@@ -8,7 +8,6 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import PersonDetails from "./components/PersonDetails";
 import {
   IAddress,
   IDonationRecord,
@@ -21,6 +20,7 @@ import DonationRecords from "./components/DonationRecords";
 import dayjs from "dayjs";
 import { Add } from "@mui/icons-material";
 import ReceiptCard from "./components/receipts/ReceiptCard";
+import PersonCard from "./components/person-details/PersonCard";
 
 interface IDetailsPage {
   setdetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,7 +29,7 @@ interface IDetailsPage {
 }
 
 export default function DetailsPage(props: IDetailsPage) {
-  const [personDetails, setPersonDetails] = useState<IPerson>({
+  const personDetailsRef = useRef<IPerson>({
     id: -1,
     firstName: "",
     lastName: "",
@@ -58,7 +58,8 @@ export default function DetailsPage(props: IDetailsPage) {
       const data = await window.fileOps.getPersonDetails(personId);
       const sortedDonations = sortRecordsByDate(data.donations, "date");
       const sortedReceipts = sortRecordsByDate(data.receipts, "datePrinted");
-      setPersonDetails(data.person);
+
+      personDetailsRef.current = data.person;
       setAddress(data.address);
       setDonationRecs(sortedDonations);
       receiptRecsRef.current = sortedReceipts;
@@ -111,25 +112,18 @@ export default function DetailsPage(props: IDetailsPage) {
         </Stack>
         <button
           onClick={() => {
-            console.log(receiptRecsRef.current);
-            console.log(donationRecs);
+            //console.log(receiptRecsRef.current);
+            //console.log(donationRecs);
+            console.log(personDetailsRef.current);
           }}
         >
           Print to console
         </button>
-        <Card variant="outlined">
-          <CardHeader
-            title="Details"
-            sx={{ paddingBottom: 0, paddingTop: 1 }}
-          />
-          <CardContent>
-            <PersonDetails
-              personDetails={personDetails}
-              setPersonDetails={setPersonDetails}
-            />
-          </CardContent>
-        </Card>
-
+        {isLoading ? (
+          <Skeleton />
+        ) : (
+          <PersonCard personDetailsRef={personDetailsRef} />
+        )}
         <Card variant="outlined">
           <CardHeader
             title="Address"

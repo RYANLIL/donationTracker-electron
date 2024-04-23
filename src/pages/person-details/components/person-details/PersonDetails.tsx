@@ -1,17 +1,22 @@
 import { Grid, TextField } from "@mui/material";
 import { IPerson } from "models/Persons";
-import React from "react";
+import React, { useState } from "react";
 
 interface IPersonDetails {
-  personDetails: IPerson;
-  setPersonDetails: React.Dispatch<React.SetStateAction<IPerson>>;
+  personDetailsRef: React.MutableRefObject<IPerson>;
 }
 
 export default function PersonDetails(props: IPersonDetails) {
+  const [personDetails, setPersonDetails] = useState(
+    props.personDetailsRef.current
+  );
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { id, value } = e.target;
-    props.setPersonDetails({ ...props.personDetails, [id]: value });
+    const updatedDetails = { ...personDetails, [id]: value };
+    setPersonDetails(updatedDetails);
+    props.personDetailsRef.current = updatedDetails;
   }
+  console.log("render person details");
   return (
     <div>
       <Grid container gap={2}>
@@ -22,7 +27,7 @@ export default function PersonDetails(props: IPersonDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.personDetails.firstName}
+            value={personDetails.firstName}
           />
         </Grid>
         <Grid item>
@@ -32,7 +37,7 @@ export default function PersonDetails(props: IPersonDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.personDetails.lastName}
+            value={personDetails.lastName}
           />
         </Grid>
         <Grid item>
@@ -42,7 +47,7 @@ export default function PersonDetails(props: IPersonDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.personDetails.phone1}
+            value={personDetails.phone1}
           />
         </Grid>
         <Grid item>
@@ -52,7 +57,7 @@ export default function PersonDetails(props: IPersonDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.personDetails.phone2}
+            value={personDetails.phone2}
           />
         </Grid>
         <Grid item>
@@ -62,7 +67,7 @@ export default function PersonDetails(props: IPersonDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.personDetails.email}
+            value={personDetails.email}
           />
         </Grid>
       </Grid>
