@@ -42,9 +42,6 @@ export default function ReceiptItem(props: IReceiptItem) {
     props.setReceiptRecs(updatedReceiptRecs);
   }, [isPrinted, isDeleted]);
 
-  function toggleDeletionState() {
-    setIsDeleted(!isDeleted);
-  }
   function handleDeleteRecord(rRec: IReceiptRecord) {
     //Completely remove deleted record form donation Record object this
     //is done for newly added records that have not been saved to the database
@@ -55,7 +52,7 @@ export default function ReceiptItem(props: IReceiptItem) {
       props.setReceiptRecs(filteredReceipts);
     } else {
       console.log("delete existing");
-      toggleDeletionState();
+      setIsDeleted(true);
     }
   }
 
@@ -94,7 +91,7 @@ export default function ReceiptItem(props: IReceiptItem) {
 
       <div style={{ marginLeft: "auto" }}>
         {props.receipt.isDeleted ? (
-          <IconButton onClick={() => toggleDeletionState()}>
+          <IconButton onClick={() => setIsDeleted(false)}>
             <Restore />
           </IconButton>
         ) : (
