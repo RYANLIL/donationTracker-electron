@@ -23,12 +23,6 @@ export default function DonationRecords(props: IDonationRecords) {
           donationRecs={props.donationRecs}
         />
       ))}
-      <Button
-        onClick={() => console.log(props.donationRecs)}
-        variant="contained"
-      >
-        Print To Console
-      </Button>
     </Stack>
   );
 }
