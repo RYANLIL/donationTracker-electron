@@ -11,7 +11,7 @@ import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import React, { useEffect, useMemo, useState } from "react";
 
 interface IReceiptItem {
-  donationRecs: IDonationRecord[];
+  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
   receipt: IReceiptRecord;
   receiptRecs: IReceiptRecord[];
   setReceiptRecs: React.Dispatch<React.SetStateAction<IReceiptRecord[]>>;
@@ -22,7 +22,7 @@ export default function ReceiptItem(props: IReceiptItem) {
   //cache total between renders
   const receiptYearTotal = useMemo(
     () => calcTotalForYear(receiptYear),
-    [receiptYear, props.donationRecs]
+    [receiptYear, props.donationRecsRef]
   );
 
   console.log(`render receipt item ${receiptYear}`);
@@ -58,7 +58,7 @@ export default function ReceiptItem(props: IReceiptItem) {
   function calcTotalForYear(year: string) {
     if (year.length !== 4) return 0;
     console.log("calc year total:", year);
-    const donations = props.donationRecs.filter((dRec) =>
+    const donations = props.donationRecsRef.current.filter((dRec) =>
       dRec.date.includes(year)
     );
     const donationTotal = donations.reduce((acc, currObj) => {

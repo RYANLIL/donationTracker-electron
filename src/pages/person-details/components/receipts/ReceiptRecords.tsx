@@ -3,7 +3,7 @@ import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import ReceiptItem from "./ReceiptItem";
 
 interface IReceiptRecords {
-  donationRecs: IDonationRecord[];
+  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
   receiptRecs: IReceiptRecord[];
   setReceiptRecs: React.Dispatch<React.SetStateAction<IReceiptRecord[]>>;
 }
@@ -16,7 +16,7 @@ export default function ReceiptRecords(props: IReceiptRecords) {
           receipt={receipt}
           receiptRecs={props.receiptRecs}
           setReceiptRecs={props.setReceiptRecs}
-          donationRecs={props.donationRecs}
+          donationRecsRef={props.donationRecsRef}
         />
       ))}
     </Stack>

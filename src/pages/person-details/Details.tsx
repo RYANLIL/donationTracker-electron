@@ -13,12 +13,11 @@ import {
   IPerson,
   IReceiptRecord,
 } from "models/Persons";
-import DonationRecords from "./components/DonationRecords";
 import dayjs from "dayjs";
-import { Add } from "@mui/icons-material";
 import ReceiptCard from "./components/receipts/ReceiptCard";
 import PersonCard from "./components/person-details/PersonCard";
 import AddressCard from "./components/address/AddressCard";
+import DonationCard from "./components/donations/DonationCard";
 
 interface IDetailsPage {
   setdetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,7 +46,7 @@ export default function DetailsPage(props: IDetailsPage) {
     country: "",
     postalCode: "",
   });
-  const [donationRecs, setDonationRecs] = useState<IDonationRecord[]>([]);
+  const donationRecsRef = useRef<IDonationRecord[]>([]);
   const receiptRecsRef = useRef<IReceiptRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const newDRecIdRef = useRef(-1);
@@ -61,11 +60,9 @@ export default function DetailsPage(props: IDetailsPage) {
 
       personDetailsRef.current = data.person;
       addressDetailsRef.current = data.address;
-      setDonationRecs(sortedDonations);
+      donationRecsRef.current = sortedDonations;
       receiptRecsRef.current = sortedReceipts;
       setIsLoading(false);
-
-      console.log(data);
     }
     //get details for existing person
     if (props.personId > 0) getDetails(props.personId);
@@ -89,19 +86,6 @@ export default function DetailsPage(props: IDetailsPage) {
     props.setPersonId(-1);
   }
 
-  function createNewDonation() {
-    const newDRec: IDonationRecord = {
-      id: newDRecIdRef.current,
-      fk_personId: props.personId,
-      amount: 0,
-      date: dayjs().format("YYYY-MM-DD"),
-    };
-    newDRecIdRef.current = newDRecIdRef.current - 1;
-    let updateDonationRecs = [newDRec, ...donationRecs];
-    //updateDonationRecs.unshift(newDRec);
-    setDonationRecs(updateDonationRecs);
-  }
-
   return (
     <>
       <Stack spacing={3}>
@@ -112,10 +96,10 @@ export default function DetailsPage(props: IDetailsPage) {
         </Stack>
         <button
           onClick={() => {
-            //console.log(receiptRecsRef.current);
-            //console.log(donationRecs);
             //console.log(personDetailsRef.current);
-            console.log(addressDetailsRef.current);
+            //console.log(addressDetailsRef.current);
+            //console.log(receiptRecsRef.current);
+            console.log(donationRecsRef.current);
           }}
         >
           Print to console
@@ -132,35 +116,20 @@ export default function DetailsPage(props: IDetailsPage) {
         )}
 
         <Stack direction={"row"} spacing={2} justifyContent="flex-start">
-          <Card variant="outlined" sx={{ flex: 1 }}>
-            <CardHeader
-              title="Donations"
-              sx={{ paddingBottom: 0, paddingTop: 1 }}
-              action={
-                <Button
-                  aria-label="Create new donation record"
-                  onClick={createNewDonation}
-                  startIcon={<Add />}
-                  variant="contained"
-                  color="secondary"
-                >
-                  New Donation
-                </Button>
-              }
+          {isLoading ? (
+            <Skeleton sx={{ flex: 1 }} />
+          ) : (
+            <DonationCard
+              personId={props.personId}
+              donationRecsRef={donationRecsRef}
             />
-            <CardContent>
-              <DonationRecords
-                donationRecs={donationRecs}
-                setDonationRecs={setDonationRecs}
-              />
-            </CardContent>
-          </Card>
+          )}
           {isLoading ? (
             <Skeleton sx={{ flex: 1 }} />
           ) : (
             <ReceiptCard
               personId={props.personId}
-              donationRecs={donationRecs}
+              donationRecsRef={donationRecsRef}
               receiptRecsRef={receiptRecsRef}
             />
           )}

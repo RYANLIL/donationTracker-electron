@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 interface IReceiptCard {
   personId: number;
-  donationRecs: IDonationRecord[];
+  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
   receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
 }
 
@@ -49,7 +49,7 @@ export default function ReceiptCard(props: IReceiptCard) {
       />
       <CardContent>
         <ReceiptRecords
-          donationRecs={props.donationRecs}
+          donationRecsRef={props.donationRecsRef}
           receiptRecs={receiptRecs}
           setReceiptRecs={setReceiptRecs}
         />

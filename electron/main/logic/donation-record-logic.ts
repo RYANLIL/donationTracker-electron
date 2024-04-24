@@ -78,6 +78,10 @@ export default class DonationRecordLogic {
     const stmnt = this._db.prepare(
       "SELECT * FROM donation_records where fk_personId = ? "
     );
-    return stmnt.all(personId) as IDonationRecord[];
+    const data = stmnt.all(personId) as IDonationRecord[];
+    data.forEach((rec) => {
+      rec.isDeleted = Boolean(rec.isDeleted);
+    });
+    return data;
   }
 }

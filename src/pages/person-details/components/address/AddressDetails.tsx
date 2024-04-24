@@ -89,11 +89,6 @@ export default function AddressDetails(props: IAddressDetails) {
             value={addressDetails.postalCode}
           />
         </Grid>
-        <Grid item>
-          <button onClick={() => console.log(addressDetails)}>
-            Print to console
-          </button>
-        </Grid>
       </Grid>
     </div>
   );
