@@ -3,8 +3,7 @@ import { IAddress } from "models/Persons";
 import AddressDetails from "./AddressDetails";
 
 interface IAddressCard {
-  address: IAddress;
-  setAddress: React.Dispatch<React.SetStateAction<IAddress>>;
+  addressDetailsRef: React.MutableRefObject<IAddress>;
 }
 
 export default function AddressCard(props: IAddressCard) {
@@ -12,7 +11,7 @@ export default function AddressCard(props: IAddressCard) {
     <Card variant="outlined">
       <CardHeader title="Details" sx={{ paddingBottom: 0, paddingTop: 1 }} />
       <CardContent>
-        <AddressDetails address={props.address} setAddress={props.setAddress} />
+        <AddressDetails addressDetailsRef={props.addressDetailsRef} />
       </CardContent>
     </Card>
   );

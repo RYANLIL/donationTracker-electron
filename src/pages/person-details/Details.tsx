@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  IconButton,
   Skeleton,
   Stack,
 } from "@mui/material";
@@ -14,8 +13,6 @@ import {
   IPerson,
   IReceiptRecord,
 } from "models/Persons";
-import AddressDetails from "./components/address/AddressDetails";
-import ReceiptRecords from "./components/receipts/ReceiptRecords";
 import DonationRecords from "./components/DonationRecords";
 import dayjs from "dayjs";
 import { Add } from "@mui/icons-material";
@@ -30,6 +27,7 @@ interface IDetailsPage {
 }
 
 export default function DetailsPage(props: IDetailsPage) {
+  console.warn("Details Page Render");
   const personDetailsRef = useRef<IPerson>({
     id: -1,
     firstName: "",
@@ -38,7 +36,7 @@ export default function DetailsPage(props: IDetailsPage) {
     phone2: "",
     email: "",
   });
-  const [address, setAddress] = useState<IAddress>({
+  const addressDetailsRef = useRef<IAddress>({
     id: -1,
     fk_personId: -1,
     address1: "",
@@ -57,11 +55,12 @@ export default function DetailsPage(props: IDetailsPage) {
   useEffect(() => {
     async function getDetails(personId: number) {
       const data = await window.fileOps.getPersonDetails(personId);
+
       const sortedDonations = sortRecordsByDate(data.donations, "date");
       const sortedReceipts = sortRecordsByDate(data.receipts, "datePrinted");
 
       personDetailsRef.current = data.person;
-      setAddress(data.address);
+      addressDetailsRef.current = data.address;
       setDonationRecs(sortedDonations);
       receiptRecsRef.current = sortedReceipts;
       setIsLoading(false);
@@ -116,7 +115,7 @@ export default function DetailsPage(props: IDetailsPage) {
             //console.log(receiptRecsRef.current);
             //console.log(donationRecs);
             //console.log(personDetailsRef.current);
-            console.log(address);
+            console.log(addressDetailsRef.current);
           }}
         >
           Print to console
@@ -129,8 +128,9 @@ export default function DetailsPage(props: IDetailsPage) {
         {isLoading ? (
           <Skeleton />
         ) : (
-          <AddressCard address={address} setAddress={setAddress} />
+          <AddressCard addressDetailsRef={addressDetailsRef} />
         )}
+
         <Stack direction={"row"} spacing={2} justifyContent="flex-start">
           <Card variant="outlined" sx={{ flex: 1 }}>
             <CardHeader

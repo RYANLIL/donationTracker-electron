@@ -1,14 +1,19 @@
 import { Grid, TextField } from "@mui/material";
 import { IAddress } from "models/Persons";
+import { useState } from "react";
 
 interface IAddressDetails {
-  address: IAddress;
-  setAddress: React.Dispatch<React.SetStateAction<IAddress>>;
+  addressDetailsRef: React.MutableRefObject<IAddress>;
 }
 export default function AddressDetails(props: IAddressDetails) {
+  const [addressDetails, setAddressDetails] = useState(
+    props.addressDetailsRef.current
+  );
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { id, value } = e.target;
-    props.setAddress({ ...props.address, [id]: value });
+    const updatedDetails = { ...addressDetails, [id]: value };
+    setAddressDetails(updatedDetails);
+    props.addressDetailsRef.current = updatedDetails;
   }
   console.log("render address details");
   return (
@@ -21,7 +26,7 @@ export default function AddressDetails(props: IAddressDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.address.address1}
+            value={addressDetails.address1}
           />
         </Grid>
         <Grid item>
@@ -31,7 +36,7 @@ export default function AddressDetails(props: IAddressDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.address.address2}
+            value={addressDetails.address2}
           />
         </Grid>
         <Grid item>
@@ -41,7 +46,7 @@ export default function AddressDetails(props: IAddressDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.address.address3}
+            value={addressDetails.address3}
           />
         </Grid>
         <Grid item>
@@ -51,7 +56,7 @@ export default function AddressDetails(props: IAddressDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.address.city}
+            value={addressDetails.city}
           />
         </Grid>
         <Grid item>
@@ -61,7 +66,7 @@ export default function AddressDetails(props: IAddressDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.address.province}
+            value={addressDetails.province}
           />
         </Grid>
         <Grid item>
@@ -71,7 +76,7 @@ export default function AddressDetails(props: IAddressDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.address.country}
+            value={addressDetails.country}
           />
         </Grid>
         <Grid item>
@@ -81,11 +86,11 @@ export default function AddressDetails(props: IAddressDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
-            value={props.address.postalCode}
+            value={addressDetails.postalCode}
           />
         </Grid>
         <Grid item>
-          <button onClick={() => console.log(props.address)}>
+          <button onClick={() => console.log(addressDetails)}>
             Print to console
           </button>
         </Grid>
