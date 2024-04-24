@@ -6,6 +6,7 @@ interface IAddressDetails {
   addressDetailsRef: React.MutableRefObject<IAddress>;
 }
 export default function AddressDetails(props: IAddressDetails) {
+  console.log("render Address Details");
   const [addressDetails, setAddressDetails] = useState(
     props.addressDetailsRef.current
   );
@@ -15,7 +16,6 @@ export default function AddressDetails(props: IAddressDetails) {
     setAddressDetails(updatedDetails);
     props.addressDetailsRef.current = updatedDetails;
   }
-  console.log("render address details");
   return (
     <div>
       <Grid container spacing={2}>

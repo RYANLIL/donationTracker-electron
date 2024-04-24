@@ -8,13 +8,11 @@ interface IDonationRecords {
   setDonationRecs: React.Dispatch<React.SetStateAction<IDonationRecord[]>>;
 }
 export default function DonationRecords(props: IDonationRecords) {
-  //TODO: Disable editing if the receipt for that year is
+  console.log(`render Donation Records`);
+  //TODO: Disable editing if the receipt for that year is printed
 
   return (
     <Stack spacing={2} overflow={"auto"} paddingTop={1}>
-      {/* <IconButton aria-label="Add" onClick={() => createDonationRecord}>
-        <Add />
-      </IconButton> */}
       {props.donationRecs.map((dRec) => (
         <DonationItem
           key={dRec.id}

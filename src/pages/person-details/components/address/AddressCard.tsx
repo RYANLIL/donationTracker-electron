@@ -7,6 +7,7 @@ interface IAddressCard {
 }
 
 export default function AddressCard(props: IAddressCard) {
+  console.log(`render Address Card`);
   return (
     <Card variant="outlined">
       <CardHeader title="Details" sx={{ paddingBottom: 0, paddingTop: 1 }} />

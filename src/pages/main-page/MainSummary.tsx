@@ -1,5 +1,4 @@
 import { Container, Typography } from "@mui/material";
-import Header from "./components/Header";
 import Table from "./components/Table";
 import { useState } from "react";
 import Details from "../person-details/Details";
@@ -10,7 +9,9 @@ export default function MainSummary() {
     <div>
       {!detailOpen ? (
         <Container>
-          <Header />
+          <Typography variant="h4" gutterBottom>
+            People
+          </Typography>
           <Table setdetailOpen={setdetailOpen} setPersonId={setPersonId} />
         </Container>
       ) : (

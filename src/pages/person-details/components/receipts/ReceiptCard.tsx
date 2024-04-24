@@ -11,6 +11,7 @@ interface IReceiptCard {
 }
 
 export default function ReceiptCard(props: IReceiptCard) {
+  console.log(`render Receipt Card`);
   const [receiptRecs, setReceiptRecs] = useState(props.receiptRecsRef.current);
   const newReceiptIdRef = useRef(-1);
   //Update Receipt ref on Details.tsx

@@ -96,10 +96,10 @@ export default function DetailsPage(props: IDetailsPage) {
         </Stack>
         <button
           onClick={() => {
-            //console.log(personDetailsRef.current);
-            //console.log(addressDetailsRef.current);
-            //console.log(receiptRecsRef.current);
-            console.log(donationRecsRef.current);
+            console.log("Person", personDetailsRef.current);
+            console.log("Address", addressDetailsRef.current);
+            console.log("Receipts", receiptRecsRef.current);
+            console.log("Donations", donationRecsRef.current);
           }}
         >
           Print to console

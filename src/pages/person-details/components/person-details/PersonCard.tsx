@@ -7,6 +7,7 @@ interface IPersonCard {
 }
 
 export default function PersonCard(props: IPersonCard) {
+  console.log(`render Person Card`);
   return (
     <Card variant="outlined">
       <CardHeader title="Details" sx={{ paddingBottom: 0, paddingTop: 1 }} />

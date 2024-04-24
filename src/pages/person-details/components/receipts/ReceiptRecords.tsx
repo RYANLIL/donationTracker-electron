@@ -8,6 +8,7 @@ interface IReceiptRecords {
   setReceiptRecs: React.Dispatch<React.SetStateAction<IReceiptRecord[]>>;
 }
 export default function ReceiptRecords(props: IReceiptRecords) {
+  console.log(`render Receipt Records`);
   return (
     <Stack spacing={2} overflow={"auto"} paddingTop={1}>
       {props.receiptRecs.map((receipt) => (

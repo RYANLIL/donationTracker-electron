@@ -13,13 +13,15 @@ interface IDonationItem {
   donationRecs: IDonationRecord[];
 }
 export default function DonationItem(props: IDonationItem) {
+  console.log(
+    `render Donation Item Date:${props.dRec.date} Amount:${props.dRec.amount}`
+  );
   const [amount, setAmount] = useState(props.dRec.amount?.toString());
   const [isValid, setIsValid] = useState(true);
   const [helperText, setHelperText] = useState("");
 
   function handleDateChange(e: Dayjs | any) {
     const date = e.format("YYYY-MM-DD");
-    console.log(date);
     const updatedDonations = props.donationRecs.map((rec) => {
       if (rec.id === props.dRec.id) {
         return { ...rec, date: date }; // gets everything that was already in rec and updates the date
@@ -30,8 +32,7 @@ export default function DonationItem(props: IDonationItem) {
   }
 
   function amountChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { id, value } = e.target;
-    console.log(`id:${id}`, `value:${value}`);
+    const { value } = e.target;
     setAmount(value);
 
     //Validate if value is a dollar amount

@@ -18,14 +18,15 @@ interface IReceiptItem {
 }
 
 export default function ReceiptItem(props: IReceiptItem) {
+  console.log(
+    `render Receipt Item ${props.receipt.datePrinted} id:${props.receipt.id}`
+  );
   const [receiptYear, setReceiptYear] = useState(props.receipt.datePrinted);
   //cache total between renders
   const receiptYearTotal = useMemo(
     () => calcTotalForYear(receiptYear),
     [receiptYear, props.donationRecsRef]
   );
-
-  console.log(`render receipt item ${receiptYear}`);
 
   //used to update isPrinted/isDeleted properties
   const updatedReceiptRecs = (attr: string, value: boolean | string) => {
@@ -50,21 +51,18 @@ export default function ReceiptItem(props: IReceiptItem) {
       );
       props.setReceiptRecs(filteredReceipts);
     } else {
-      console.log("delete existing");
       updatedReceiptRecs("isDeleted", true);
     }
   }
 
   function calcTotalForYear(year: string) {
     if (year.length !== 4) return 0;
-    console.log("calc year total:", year);
     const donations = props.donationRecsRef.current.filter((dRec) =>
       dRec.date.includes(year)
     );
     const donationTotal = donations.reduce((acc, currObj) => {
       return acc + (currObj.amount || 0);
     }, 0);
-    console.log("donation total", donationTotal);
     return donationTotal;
   }
 

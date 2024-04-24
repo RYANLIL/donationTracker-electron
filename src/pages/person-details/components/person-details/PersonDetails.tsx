@@ -7,6 +7,8 @@ interface IPersonDetails {
 }
 
 export default function PersonDetails(props: IPersonDetails) {
+  console.log("render Person Details");
+
   const [personDetails, setPersonDetails] = useState(
     props.personDetailsRef.current
   );
@@ -16,7 +18,6 @@ export default function PersonDetails(props: IPersonDetails) {
     setPersonDetails(updatedDetails);
     props.personDetailsRef.current = updatedDetails;
   }
-  console.log("render person details");
   return (
     <div>
       <Grid container gap={2}>

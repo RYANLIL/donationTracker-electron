@@ -34,7 +34,6 @@ export default function Table(props: ITableProps) {
   }, []);
 
   const handleRowClick = (e: GridRowParams) => {
-    console.log(e);
     props.setPersonId(e.row.id);
     props.setdetailOpen(true);
   };

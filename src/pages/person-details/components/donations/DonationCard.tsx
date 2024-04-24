@@ -11,6 +11,7 @@ interface IDonationCard {
 }
 
 export default function DonationCard(props: IDonationCard) {
+  console.log(`render Donation Card`);
   const [donationRecs, setDonationRecs] = useState(
     props.donationRecsRef.current
   );
