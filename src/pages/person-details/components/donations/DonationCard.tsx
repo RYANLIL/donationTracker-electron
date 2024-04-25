@@ -15,10 +15,8 @@ export default function DonationCard(props: IDonationCard) {
   const [donationRecs, setDonationRecs] = useState(
     props.donationRecsRef.current
   );
-  useEffect(() => {
-    props.donationRecsRef.current = [...donationRecs];
-  });
   const newDonationIdRef = useRef(-1);
+
   function createNewDonation() {
     const newDRec: IDonationRecord = {
       id: newDonationIdRef.current,
@@ -28,9 +26,10 @@ export default function DonationCard(props: IDonationCard) {
     };
     newDonationIdRef.current = newDonationIdRef.current - 1;
     let updateDonationRecs = [newDRec, ...donationRecs];
-    newDonationIdRef.current = newDonationIdRef.current - 1;
 
+    //need to update state to rerender UI
     setDonationRecs(updateDonationRecs);
+    props.donationRecsRef.current = updateDonationRecs;
   }
   return (
     <Card variant="outlined" sx={{ flex: 1 }}>
@@ -51,7 +50,7 @@ export default function DonationCard(props: IDonationCard) {
       />
       <CardContent>
         <DonationRecords
-          donationRecs={donationRecs}
+          donationRecsRef={props.donationRecsRef}
           setDonationRecs={setDonationRecs}
         />
       </CardContent>

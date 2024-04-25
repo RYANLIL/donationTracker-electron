@@ -4,7 +4,7 @@ import DonationItem from "./DonationItem";
 import { Add } from "@mui/icons-material";
 
 interface IDonationRecords {
-  donationRecs: IDonationRecord[];
+  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
   setDonationRecs: React.Dispatch<React.SetStateAction<IDonationRecord[]>>;
 }
 export default function DonationRecords(props: IDonationRecords) {
@@ -13,12 +13,12 @@ export default function DonationRecords(props: IDonationRecords) {
 
   return (
     <Stack spacing={2} overflow={"auto"} paddingTop={1}>
-      {props.donationRecs.map((dRec) => (
+      {props.donationRecsRef.current.map((dRec) => (
         <DonationItem
           key={dRec.id}
           dRec={dRec}
+          donationRecsRef={props.donationRecsRef}
           setDonationRecs={props.setDonationRecs}
-          donationRecs={props.donationRecs}
         />
       ))}
     </Stack>

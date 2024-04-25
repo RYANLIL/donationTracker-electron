@@ -8,27 +8,28 @@ import { useState } from "react";
 import { DeleteForever, Restore } from "@mui/icons-material";
 
 interface IDonationItem {
-  setDonationRecs: React.Dispatch<React.SetStateAction<IDonationRecord[]>>;
   dRec: IDonationRecord;
-  donationRecs: IDonationRecord[];
+  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
+  setDonationRecs: React.Dispatch<React.SetStateAction<IDonationRecord[]>>;
 }
 export default function DonationItem(props: IDonationItem) {
   console.log(
     `render Donation Item Date:${props.dRec.donationDate} Amount:${props.dRec.amount}`
   );
   const [amount, setAmount] = useState(props.dRec.amount?.toString());
+  const [isDeleted, setIsDeleted] = useState(props.dRec.isDeleted);
   const [isValid, setIsValid] = useState(true);
   const [helperText, setHelperText] = useState("");
 
   function handleDateChange(e: Dayjs | any) {
     const date = e.format("YYYY-MM-DD");
-    const updatedDonations = props.donationRecs.map((rec) => {
+    const updatedDonations = props.donationRecsRef.current.map((rec) => {
       if (rec.id === props.dRec.id) {
         return { ...rec, donationDate: date }; // gets everything that was already in rec and updates the date
       }
       return rec; //returns un modified item
     });
-    props.setDonationRecs(updatedDonations);
+    props.donationRecsRef.current = updatedDonations;
   }
 
   function amountChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -40,45 +41,52 @@ export default function DonationItem(props: IDonationItem) {
     if (re.test(value)) {
       setIsValid(true);
       setHelperText("");
-      const updatedDonations = props.donationRecs.map((rec) => {
+      const updatedDonations = props.donationRecsRef.current.map((rec) => {
         if (rec.id === props.dRec.id) {
           return { ...rec, amount: +value }; // gets everything that was already in rec and casts value to number and updates amount
         }
         return rec; //returns un modified item
       });
-      props.setDonationRecs(updatedDonations);
+      props.donationRecsRef.current = updatedDonations;
     } else {
       setIsValid(false);
       setHelperText("Not a valid dollar amount");
     }
   }
-  function toggleRecDeletionState(dRec: IDonationRecord) {
-    props.setDonationRecs(
-      props.donationRecs.map((rec) => {
-        if (rec.id === dRec.id) {
-          // Create a *new* object with changes
-          return { ...rec, isDeleted: !rec.isDeleted };
-        } else {
-          //No changes
-          return rec;
-        }
-      })
-    );
+  /**
+   * @param attr The object property to be updated
+   * @param value The value to update the prop with
+   */
+  function updateDonationRecs(attr: string, value: boolean | number) {
+    const update = props.donationRecsRef.current.map((rec) => {
+      if (rec.id === props.dRec.id) {
+        // Create a *new* object with changes
+        return { ...rec, [attr]: value };
+      } else {
+        //No changes
+        return rec;
+      }
+    });
+    props.donationRecsRef.current = update;
   }
-  function handleDeleteRecord(dRec: IDonationRecord) {
-    const recArrayIndex = props.donationRecs.findIndex(
-      (rec) => rec.id === dRec.id
-    );
+  function handleDeleteRecord() {
     //Completely remove deleted record form donation Record object this
     //is done for newly added records that have not been saved to the database
-    if (recArrayIndex > -1 && dRec.id < 0) {
-      const reducedArray = props.donationRecs.filter(
-        (rec) => rec.id !== dRec.id
+    if (props.dRec.id < 0) {
+      const reducedArray = props.donationRecsRef.current.filter(
+        (rec) => rec.id !== props.dRec.id
       );
+      props.donationRecsRef.current = reducedArray;
       props.setDonationRecs(reducedArray);
     } else {
-      toggleRecDeletionState(dRec);
+      updateDonationRecs("isDeleted", true);
+      setIsDeleted(true);
     }
+  }
+
+  function handleRestoreRecord() {
+    updateDonationRecs("isDeleted", false);
+    setIsDeleted(false);
   }
 
   return (
@@ -93,7 +101,7 @@ export default function DonationItem(props: IDonationItem) {
           borderColor: "crimson",
           width: "92%",
           position: "absolute",
-          display: props.dRec.isDeleted ? "" : "none",
+          display: isDeleted ? "" : "none",
         }}
       />
       <TextField
@@ -125,12 +133,12 @@ export default function DonationItem(props: IDonationItem) {
           }}
         />
       </LocalizationProvider>
-      {props.dRec.isDeleted ? (
-        <IconButton onClick={() => toggleRecDeletionState(props.dRec)}>
+      {isDeleted ? (
+        <IconButton onClick={handleRestoreRecord}>
           <Restore />
         </IconButton>
       ) : (
-        <IconButton onClick={() => handleDeleteRecord(props.dRec)}>
+        <IconButton onClick={handleDeleteRecord}>
           <DeleteForever />
         </IconButton>
       )}

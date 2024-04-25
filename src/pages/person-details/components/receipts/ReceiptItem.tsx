@@ -9,8 +9,6 @@ import {
 } from "@mui/material";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import React, { useEffect, useMemo, useState } from "react";
-import { isPromise } from "util/types";
-
 interface IReceiptItem {
   donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
   receipt: IReceiptRecord;
