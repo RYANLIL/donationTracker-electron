@@ -49,7 +49,6 @@ export default function DetailsPage(props: IDetailsPage) {
   const donationRecsRef = useRef<IDonationRecord[]>([]);
   const receiptRecsRef = useRef<IReceiptRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const newDRecIdRef = useRef(-1);
 
   useEffect(() => {
     async function getDetails(personId: number) {
