@@ -1,4 +1,4 @@
-import { IReceiptRecord } from "models/Persons";
+import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import { Database } from "better-sqlite3";
 
 export default class ReceiptRecordLogic {
@@ -17,10 +17,27 @@ export default class ReceiptRecordLogic {
    */
   insertReceiptRecord(receiptRecord: IReceiptRecord) {
     const stmnt = this._db.prepare(
-      `INSERT INTO receipt_record (fk_personId,amount,receiptYear,isPrinted)
+      `INSERT INTO receipt_records (fk_personId,amount,receiptYear,isPrinted)
         VALUES(@fk_personId,@amount,@receiptYear,@isPrinted);`
     );
     return stmnt.run(receiptRecord);
+  }
+
+  insertManyReceiptRecords(receiptRecords: IReceiptRecord[]) {
+    const stmnt = this._db.prepare(
+      `INSERT INTO receipt_records (fk_personId,amount,receiptYear)
+        VALUES(@fk_personId,@amount,@receiptYear);`
+    );
+
+    try {
+      const insertManyReceipts = this._db.transaction((receipts) => {
+        for (const receipt of receipts) stmnt.run(receipt);
+      });
+
+      insertManyReceipts(receiptRecords);
+    } catch (err) {
+      if (!this._db.inTransaction) throw err; // (transaction was forcefully rolled back)
+    }
   }
 
   /**
@@ -35,7 +52,7 @@ export default class ReceiptRecordLogic {
    */
   updateReceiptRecord(ReceiptRecord: IReceiptRecord) {
     const stmnt = this._db.prepare(
-      `UPDATE receipt_record SET 
+      `UPDATE receipt_records SET 
         fk_personId = @fk_personId,
         amount = @amount,
         receiptYear = @receiptYear        
@@ -57,7 +74,7 @@ export default class ReceiptRecordLogic {
    * completely ignored.
    */
   deleteReceiptRecord(id: number) {
-    const stmnt = this._db.prepare("DELETE FROM Receipt_record WHERE id = ?");
+    const stmnt = this._db.prepare("DELETE FROM Receipt_records WHERE id = ?");
     return stmnt.run(id);
   }
 
@@ -82,5 +99,62 @@ export default class ReceiptRecordLogic {
       rec.isDeleted = Boolean(rec.isDeleted);
     });
     return data;
+  }
+
+  /**
+   * Checks to see if there are any missing receipt records based on the
+   * donation records if there is it creates the receipt record inserts in the
+   * database
+   * @param personId
+   */
+
+  validateReceiptRecords(
+    personId: number,
+    receiptRecs: IReceiptRecord[],
+    donationRecs: IDonationRecord[]
+  ) {
+    let isValid = true;
+    const donationYears = donationRecs.map((dRec) =>
+      dRec.donationDate.substring(0, 4)
+    );
+
+    //https://github.com/Microsoft/TypeScript/issues/8856
+    //https://github.com/microsoft/TypeScript/pull/31166
+    //let distinctDonationYears = [...new Set(donationYears)];
+
+    const distinctDonationYears = Array.from(new Set(donationYears));
+    const receiptYears = receiptRecs.map((rRec) => rRec.receiptYear);
+    let receiptsToInsert: IReceiptRecord[] = [];
+    distinctDonationYears.forEach((dYear) => {
+      if (!receiptYears.includes(dYear)) {
+        isValid = false;
+        console.log("missing receipts", dYear);
+        const donationAmount = donationRecs.reduce((acc, curr) => {
+          if (curr.donationDate.substring(0, 4) === dYear) {
+            console.log(
+              curr.donationDate.substring(0, 4),
+              curr.donationDate.substring(0, 4) === dYear
+            );
+            return acc + curr.amount;
+          } else return acc;
+        }, 0);
+        const newReceipt: IReceiptRecord = {
+          id: -1,
+          fk_personId: personId,
+          amount: +(Math.round(donationAmount * 100) / 100).toFixed(2),
+          receiptYear: dYear,
+          isPrinted: false,
+        };
+
+        receiptsToInsert.push(newReceipt);
+      }
+    });
+
+    if (!isValid) {
+      console.log(receiptsToInsert);
+      this.insertManyReceiptRecords(receiptsToInsert);
+    }
+
+    return isValid;
   }
 }

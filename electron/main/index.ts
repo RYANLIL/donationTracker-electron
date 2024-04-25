@@ -186,7 +186,17 @@ ipcMain.handle("getPersonDetails", (sender, id) => {
   personInfo.address = addressLogic.getAddressByPersonId(id);
   personInfo.donations = donationLogic.getDonationByPersonId(id);
   personInfo.receipts = receiptLogic.getReceiptRecordsById(id);
-  console.log("person", personInfo);
+
+  const receiptsValid = receiptLogic.validateReceiptRecords(
+    id,
+    personInfo.receipts,
+    personInfo.donations
+  );
+
+  if (!receiptsValid) {
+    console.log("NEW RECEIPTS CREATED");
+    personInfo.receipts = receiptLogic.getReceiptRecordsById(id);
+  }
 
   return personInfo;
 });

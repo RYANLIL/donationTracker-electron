@@ -22,14 +22,15 @@ export default function ReceiptItem(props: IReceiptItem) {
     `render Receipt Item ${props.receipt.receiptYear} id:${props.receipt.id}`
   );
   const [isPrinted, setIsPrinted] = useState(props.receipt.isPrinted);
-  const [isDeleted, setIsDeleted] = useState(props.receipt.isDeleted);
   const receiptYear = props.receipt.receiptYear;
 
   //cache total between renders
-  const receiptYearTotal = useMemo(
-    () => calcTotalForYear(receiptYear),
-    [props.donationRecsRef]
-  );
+  // const receiptYearTotal = useMemo(
+  //   () => calcTotalForYear(receiptYear),
+  //   [props.donationRecsRef.current]
+  // );
+
+  const receiptYearTotal = calcTotalForYear(receiptYear);
 
   //used to update isPrinted/isDeleted properties
   const updatedReceiptRecs = (attr: string, value: boolean | string) => {
@@ -46,21 +47,13 @@ export default function ReceiptItem(props: IReceiptItem) {
     props.receiptRecsRef.current = update;
   };
 
-  function handleDelete(rRec: IReceiptRecord) {
-    updatedReceiptRecs("isDeleted", true);
-    setIsDeleted(true);
-  }
-  function restoreDeleted() {
-    updatedReceiptRecs("isDeleted", false);
-    setIsDeleted(false);
-  }
-
   function togglePrintStatus() {
     updatedReceiptRecs("isPrinted", !isPrinted);
     setIsPrinted((curr) => !curr);
   }
 
   function calcTotalForYear(year: string) {
+    console.log("CalcTotal", receiptYear);
     if (year.length !== 4) return 0;
     const donations = props.donationRecsRef.current.filter((dRec) =>
       dRec.donationDate.includes(year)
@@ -78,36 +71,15 @@ export default function ReceiptItem(props: IReceiptItem) {
       alignItems={"center"}
       sx={{ position: "relative" }}
     >
-      <hr
-        style={{
-          borderColor: "crimson",
-          width: "92%",
-          position: "absolute",
-          display: isDeleted ? "" : "none",
-        }}
-      />
       <FormControlLabel
         control={<Checkbox checked={isPrinted} onChange={togglePrintStatus} />}
-        label="Printed"
+        label={<Typography variant="h6">Printed</Typography>}
       />
 
       <Typography variant="h6">Year: {receiptYear}</Typography>
-      <Typography variant="h6">Total: ${receiptYearTotal}</Typography>
-
-      <div style={{ marginLeft: "auto" }}>
-        {isDeleted ? (
-          <IconButton onClick={restoreDeleted}>
-            <Restore />
-          </IconButton>
-        ) : (
-          <IconButton
-            onClick={() => handleDelete(props.receipt)}
-            sx={{ marginLeft: "auto" }}
-          >
-            <DeleteForever />
-          </IconButton>
-        )}
-      </div>
+      <Typography variant="h6">
+        Total: ${receiptYearTotal.toFixed(2)}
+      </Typography>
     </Stack>
   );
 }
