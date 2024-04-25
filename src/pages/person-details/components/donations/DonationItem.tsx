@@ -14,7 +14,7 @@ interface IDonationItem {
 }
 export default function DonationItem(props: IDonationItem) {
   console.log(
-    `render Donation Item Date:${props.dRec.date} Amount:${props.dRec.amount}`
+    `render Donation Item Date:${props.dRec.donationDate} Amount:${props.dRec.amount}`
   );
   const [amount, setAmount] = useState(props.dRec.amount?.toString());
   const [isValid, setIsValid] = useState(true);
@@ -24,7 +24,7 @@ export default function DonationItem(props: IDonationItem) {
     const date = e.format("YYYY-MM-DD");
     const updatedDonations = props.donationRecs.map((rec) => {
       if (rec.id === props.dRec.id) {
-        return { ...rec, date: date }; // gets everything that was already in rec and updates the date
+        return { ...rec, donationDate: date }; // gets everything that was already in rec and updates the date
       }
       return rec; //returns un modified item
     });
@@ -113,7 +113,7 @@ export default function DonationItem(props: IDonationItem) {
         <DatePicker
           label="Date"
           onChange={handleDateChange}
-          value={dayjs(props.dRec.date)}
+          value={dayjs(props.dRec.donationDate)}
           slotProps={{
             openPickerButton: {
               color: props.dRec.id < 0 ? "secondary" : "primary",

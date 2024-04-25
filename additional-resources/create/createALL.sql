@@ -32,7 +32,7 @@ CREATE TABLE "donation_records" (
 	"id"			INTEGER PRIMARY KEY,
 	"fk_personId"	INTEGER NOT NULL, --foreign key
 	"amount"		REAL DEFAULT 0 NOT NULL,
-	"date"			TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"donationDate"	TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
 
 	"isDeleted"		INTEGER DEFAULT 0 NOT NULL,
 	"createdAt" 	TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE "receipt_records" (
 	"id"			INTEGER PRIMARY KEY,
 	"fk_personId" 	INTEGER NOT NULL,
 	"amount" 		REAL DEFAULT 0 NOT NULL ,
-	"datePrinted"	TEXT DEFAULT '' NOT NULL,
+	"receiptYear"	TEXT DEFAULT '' NOT NULL,
 	"isPrinted" 	INTEGER DEFAULT 0 NOT NULL,
 
 	"isDeleted"		INTEGER DEFAULT 0 NOT NULL,

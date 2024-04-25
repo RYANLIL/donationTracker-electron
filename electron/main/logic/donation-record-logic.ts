@@ -20,7 +20,7 @@ export default class DonationRecordLogic {
    */
   insertDonationRecord(donationRecord: IDonationRecord) {
     const stmnt = this._db.prepare(
-      `INSERT INTO donation_records (fk_personId,amount,date) VALUES(@fk_personId,@amount,@date);`
+      `INSERT INTO donation_records (fk_personId,amount,donationDate) VALUES(@fk_personId,@amount,@donationDate);`
     );
     return stmnt.run(donationRecord);
   }
@@ -42,7 +42,7 @@ export default class DonationRecordLogic {
       `UPDATE donation_record SET 
         fk_personId = @fk_personId,
         amount = @amount,
-        date = @date        
+        donationDate = @donationDate        
       WHERE id = @id`
     );
 

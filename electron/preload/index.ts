@@ -1,6 +1,4 @@
 import { ipcRenderer, contextBridge } from "electron";
-import { Friend } from "@/db/db";
-
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld("ipcRenderer", {
   on(...args: Parameters<typeof ipcRenderer.on>) {
@@ -28,7 +26,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
  * Called in render receives data and passes it to the main process*
  * @param friends list of all friends from indexedDB
  */
-function saveData(friends: Friend[]) {
+function saveData(friends: unknown) {
   // Sends data to main Process
   ipcRenderer.send("saveToJSON", friends);
 }
@@ -142,4 +140,4 @@ window.onmessage = (ev) => {
   ev.data.payload === "removeLoading" && removeLoading();
 };
 
-setTimeout(removeLoading, 4999);
+setTimeout(removeLoading, 3000);

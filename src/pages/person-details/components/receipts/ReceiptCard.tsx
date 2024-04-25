@@ -12,47 +12,16 @@ interface IReceiptCard {
 
 export default function ReceiptCard(props: IReceiptCard) {
   console.log(`render Receipt Card`);
-  const [receiptRecs, setReceiptRecs] = useState(props.receiptRecsRef.current);
-  const newReceiptIdRef = useRef(-1);
-  //Update Receipt ref on Details.tsx
-  useEffect(() => {
-    props.receiptRecsRef.current = [...receiptRecs];
-  }, [receiptRecs]);
 
-  function createNewReceipt() {
-    const newReceipt: IReceiptRecord = {
-      id: newReceiptIdRef.current,
-      fk_personId: props.personId,
-      amount: 0,
-      datePrinted: new Date().getFullYear().toString(),
-      isPrinted: false,
-    };
-    newReceiptIdRef.current = newReceiptIdRef.current - 1;
-    setReceiptRecs([newReceipt, ...receiptRecs]);
-  }
+  const newReceiptIdRef = useRef(-1);
 
   return (
     <Card variant="outlined" sx={{ flex: 1 }}>
-      <CardHeader
-        title="Receipts"
-        sx={{ paddingBottom: 0, paddingTop: 1 }}
-        action={
-          <Button
-            aria-label="Create new receipt"
-            onClick={createNewReceipt}
-            startIcon={<Add />}
-            variant="contained"
-            color="secondary"
-          >
-            New Receipt
-          </Button>
-        }
-      />
+      <CardHeader title="Receipts" sx={{ paddingBottom: 0, paddingTop: 1 }} />
       <CardContent>
         <ReceiptRecords
           donationRecsRef={props.donationRecsRef}
-          receiptRecs={receiptRecs}
-          setReceiptRecs={setReceiptRecs}
+          receiptRecsRef={props.receiptRecsRef}
         />
       </CardContent>
     </Card>

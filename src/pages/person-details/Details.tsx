@@ -55,8 +55,8 @@ export default function DetailsPage(props: IDetailsPage) {
     async function getDetails(personId: number) {
       const data = await window.fileOps.getPersonDetails(personId);
 
-      const sortedDonations = sortRecordsByDate(data.donations, "date");
-      const sortedReceipts = sortRecordsByDate(data.receipts, "datePrinted");
+      const sortedDonations = sortRecordsByDate(data.donations, "donationDate");
+      const sortedReceipts = sortRecordsByDate(data.receipts, "receiptYear");
 
       personDetailsRef.current = data.person;
       addressDetailsRef.current = data.address;

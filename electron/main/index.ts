@@ -144,7 +144,7 @@ ipcMain.handle("open-win", (_, arg) => {
 
 // Waits for the renderer process to emit `saveToJSON` IPC event *
 ipcMain.on("saveToJSON", (sender, data) => {
-  console.log("Data Saved");
+  console.log("ipc.on saveToJSON electron main ");
   //testSQL();
 });
 

@@ -9,28 +9,32 @@ import {
 } from "@mui/material";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import React, { useEffect, useMemo, useState } from "react";
+import { isPromise } from "util/types";
 
 interface IReceiptItem {
   donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
   receipt: IReceiptRecord;
-  receiptRecs: IReceiptRecord[];
-  setReceiptRecs: React.Dispatch<React.SetStateAction<IReceiptRecord[]>>;
+  receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
 }
 
 export default function ReceiptItem(props: IReceiptItem) {
   console.log(
-    `render Receipt Item ${props.receipt.datePrinted} id:${props.receipt.id}`
+    `render Receipt Item ${props.receipt.receiptYear} id:${props.receipt.id}`
   );
-  const [receiptYear, setReceiptYear] = useState(props.receipt.datePrinted);
+  const [isPrinted, setIsPrinted] = useState(props.receipt.isPrinted);
+  const [isDeleted, setIsDeleted] = useState(props.receipt.isDeleted);
+  const receiptYear = props.receipt.receiptYear;
+
   //cache total between renders
   const receiptYearTotal = useMemo(
     () => calcTotalForYear(receiptYear),
-    [receiptYear, props.donationRecsRef]
+    [props.donationRecsRef]
   );
 
   //used to update isPrinted/isDeleted properties
   const updatedReceiptRecs = (attr: string, value: boolean | string) => {
-    const update = props.receiptRecs.map((rec) => {
+    console.log(attr, value);
+    const update = props.receiptRecsRef.current.map((rec) => {
       if (rec.id === props.receipt.id) {
         // Create a *new* object with changes
         return { ...rec, amount: receiptYearTotal, [attr]: value };
@@ -39,26 +43,27 @@ export default function ReceiptItem(props: IReceiptItem) {
         return rec;
       }
     });
-    props.setReceiptRecs(update);
+    props.receiptRecsRef.current = update;
   };
 
-  function handleDeleteRecord(rRec: IReceiptRecord) {
-    //Completely remove deleted record form donation Record object this
-    //is done for newly added records that have not been saved to the database
-    if (rRec.id < 0) {
-      const filteredReceipts = props.receiptRecs.filter(
-        (rec) => rec.id !== rRec.id
-      );
-      props.setReceiptRecs(filteredReceipts);
-    } else {
-      updatedReceiptRecs("isDeleted", true);
-    }
+  function handleDelete(rRec: IReceiptRecord) {
+    updatedReceiptRecs("isDeleted", true);
+    setIsDeleted(true);
+  }
+  function restoreDeleted() {
+    updatedReceiptRecs("isDeleted", false);
+    setIsDeleted(false);
+  }
+
+  function togglePrintStatus() {
+    updatedReceiptRecs("isPrinted", !isPrinted);
+    setIsPrinted((curr) => !curr);
   }
 
   function calcTotalForYear(year: string) {
     if (year.length !== 4) return 0;
     const donations = props.donationRecsRef.current.filter((dRec) =>
-      dRec.date.includes(year)
+      dRec.donationDate.includes(year)
     );
     const donationTotal = donations.reduce((acc, currObj) => {
       return acc + (currObj.amount || 0);
@@ -78,44 +83,25 @@ export default function ReceiptItem(props: IReceiptItem) {
           borderColor: "crimson",
           width: "92%",
           position: "absolute",
-          display: props.receipt.isDeleted ? "" : "none",
+          display: isDeleted ? "" : "none",
         }}
       />
       <FormControlLabel
-        control={
-          <Checkbox
-            checked={props.receipt.isPrinted}
-            onChange={(e) => updatedReceiptRecs("isPrinted", e.target.checked)}
-          />
-        }
+        control={<Checkbox checked={isPrinted} onChange={togglePrintStatus} />}
         label="Printed"
       />
 
-      <TextField
-        sx={{ maxWidth: "75px" }}
-        label="Year"
-        //helperText={helperText}
-        color={props.receipt.id < 0 ? "secondary" : "primary"}
-        focused={props.receipt.id < 0}
-        value={receiptYear}
-        onChange={(e) => {
-          const value = e.target.value;
-          if (value.length === 4 && value !== props.receipt.datePrinted)
-            updatedReceiptRecs("datePrinted", value);
-          return setReceiptYear(e.target.value);
-        }}
-      />
-
-      <Typography>${receiptYearTotal}</Typography>
+      <Typography variant="h6">Year: {receiptYear}</Typography>
+      <Typography variant="h6">Total: ${receiptYearTotal}</Typography>
 
       <div style={{ marginLeft: "auto" }}>
-        {props.receipt.isDeleted ? (
-          <IconButton onClick={() => updatedReceiptRecs("isDeleted", false)}>
+        {isDeleted ? (
+          <IconButton onClick={restoreDeleted}>
             <Restore />
           </IconButton>
         ) : (
           <IconButton
-            onClick={() => handleDeleteRecord(props.receipt)}
+            onClick={() => handleDelete(props.receipt)}
             sx={{ marginLeft: "auto" }}
           >
             <DeleteForever />

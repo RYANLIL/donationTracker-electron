@@ -24,7 +24,7 @@ export default function DonationCard(props: IDonationCard) {
       id: newDonationIdRef.current,
       fk_personId: props.personId,
       amount: 0,
-      date: dayjs().format("YYYY-MM-DD"),
+      donationDate: dayjs().format("YYYY-MM-DD"),
     };
     newDonationIdRef.current = newDonationIdRef.current - 1;
     let updateDonationRecs = [newDRec, ...donationRecs];

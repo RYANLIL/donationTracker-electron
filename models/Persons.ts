@@ -51,14 +51,14 @@ export interface IAddress extends IMetaData {
 
 export interface IDonationRecord extends IMetaData {
   fk_personId: number;
-  amount?: number;
-  date: string;
+  amount: number;
+  donationDate: string;
   [key: string]: any;
 }
 export interface IReceiptRecord extends IMetaData {
   fk_personId: number;
   amount: number;
-  datePrinted: string;
+  receiptYear: string;
   isPrinted: boolean;
   [key: string]: any;
 }

@@ -17,8 +17,8 @@ export default class ReceiptRecordLogic {
    */
   insertReceiptRecord(receiptRecord: IReceiptRecord) {
     const stmnt = this._db.prepare(
-      `INSERT INTO receipt_record (fk_personId,amount,datePrinted,isPrinted)
-        VALUES(@fk_personId,@amount,@datePrinted,@isPrinted);`
+      `INSERT INTO receipt_record (fk_personId,amount,receiptYear,isPrinted)
+        VALUES(@fk_personId,@amount,@receiptYear,@isPrinted);`
     );
     return stmnt.run(receiptRecord);
   }
@@ -38,7 +38,7 @@ export default class ReceiptRecordLogic {
       `UPDATE receipt_record SET 
         fk_personId = @fk_personId,
         amount = @amount,
-        datePrinted = @datePrinted        
+        receiptYear = @receiptYear        
         isPrinted = @isPrinted        
       WHERE id = @id`
     );
