@@ -13,6 +13,7 @@ interface IReceiptItem {
   donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
   receipt: IReceiptRecord;
   receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
+  SetDRComboDonationRecs: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function ReceiptItem(props: IReceiptItem) {
@@ -21,12 +22,6 @@ export default function ReceiptItem(props: IReceiptItem) {
   );
   const [isPrinted, setIsPrinted] = useState(props.receipt.isPrinted);
   const receiptYear = props.receipt.receiptYear;
-
-  //cache total between renders
-  // const receiptYearTotal = useMemo(
-  //   () => calcTotalForYear(receiptYear),
-  //   [props.donationRecsRef.current]
-  // );
 
   const receiptYearTotal = calcTotalForYear(receiptYear);
 
@@ -48,6 +43,7 @@ export default function ReceiptItem(props: IReceiptItem) {
   function togglePrintStatus() {
     updatedReceiptRecs("isPrinted", !isPrinted);
     setIsPrinted((curr) => !curr);
+    props.SetDRComboDonationRecs((c) => c + 1);
   }
 
   function calcTotalForYear(year: string) {

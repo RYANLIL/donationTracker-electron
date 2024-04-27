@@ -8,6 +8,7 @@ interface IReceiptCard {
   personId: number;
   donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
   receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
+  SetDRComboDonationRecs: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function ReceiptCard(props: IReceiptCard) {
@@ -22,6 +23,7 @@ export default function ReceiptCard(props: IReceiptCard) {
         <ReceiptRecords
           donationRecsRef={props.donationRecsRef}
           receiptRecsRef={props.receiptRecsRef}
+          SetDRComboDonationRecs={props.SetDRComboDonationRecs}
         />
       </CardContent>
     </Card>

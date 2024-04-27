@@ -152,6 +152,7 @@ function DonationReceiptCombo(props: IDonationReceiptCombo) {
         personId={props.personId}
         donationRecsRef={props.donationRecsRef}
         receiptRecsRef={props.receiptRecsRef}
+        SetDRComboDonationRecs={SetDRComboDonationRecs}
       />
     </Stack>
   );
