@@ -64,7 +64,12 @@ export default function DetailsPage(props: IDetailsPage) {
       setIsLoading(false);
     }
     //get details for existing person
-    if (props.personId > 0) getDetails(props.personId);
+    if (props.personId > 0) {
+      getDetails(props.personId);
+    } else {
+      console.log("Create New", props.personId);
+      setIsLoading(false);
+    }
   }, []);
 
   type DonoOrRec<T extends IDonationRecord[] | IReceiptRecord[]> =
