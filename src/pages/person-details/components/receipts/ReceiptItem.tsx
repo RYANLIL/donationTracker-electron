@@ -53,8 +53,8 @@ export default function ReceiptItem(props: IReceiptItem) {
   function calcTotalForYear(year: string) {
     console.log("CalcTotal", receiptYear);
     if (year.length !== 4) return 0;
-    const donations = props.donationRecsRef.current.filter((dRec) =>
-      dRec.donationDate.includes(year)
+    const donations = props.donationRecsRef.current.filter(
+      (dRec) => dRec.donationDate.includes(year) && !dRec.isDeleted
     );
     const donationTotal = donations.reduce((acc, currObj) => {
       return acc + (currObj.amount || 0);

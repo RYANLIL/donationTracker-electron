@@ -83,6 +83,7 @@ export default function DonationItem(props: IDonationItem) {
       props.SetDRComboDonationRecs(reducedArray);
     } else {
       updateDonationRecs("isDeleted", true);
+      props.SetDRComboDonationRecs(props.donationRecsRef.current);
       setIsDeleted(true);
     }
   }
@@ -90,6 +91,7 @@ export default function DonationItem(props: IDonationItem) {
   function handleRestoreRecord() {
     updateDonationRecs("isDeleted", false);
     setIsDeleted(false);
+    props.SetDRComboDonationRecs(props.donationRecsRef.current);
   }
 
   return (
