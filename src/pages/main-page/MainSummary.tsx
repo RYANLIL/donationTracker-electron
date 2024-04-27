@@ -13,7 +13,11 @@ export default function MainSummary() {
             <Typography variant="h4" gutterBottom>
               People
             </Typography>
-            <Button variant="contained" sx={{ maxHeight: "36.5px" }}>
+            <Button
+              variant="contained"
+              sx={{ maxHeight: "36.5px" }}
+              onClick={() => setdetailOpen(true)}
+            >
               Create
             </Button>
           </Stack>

@@ -110,20 +110,24 @@ export default function DetailsPage(props: IDetailsPage) {
           Print to console
         </button>
         {isLoading ? (
-          <Skeleton />
+          <Skeleton height={200} />
         ) : (
           <PersonCard personDetailsRef={personDetailsRef} />
         )}
         {isLoading ? (
-          <Skeleton />
+          <Skeleton height={200} />
         ) : (
           <AddressCard addressDetailsRef={addressDetailsRef} />
         )}
-        <DonationReceiptCombo
-          personId={props.personId}
-          donationRecsRef={donationRecsRef}
-          receiptRecsRef={receiptRecsRef}
-        />
+        {isLoading ? (
+          <Skeleton height={200} />
+        ) : (
+          <DonationReceiptCombo
+            personId={props.personId}
+            donationRecsRef={donationRecsRef}
+            receiptRecsRef={receiptRecsRef}
+          />
+        )}
 
         <Button onClick={(e) => console.log(e)} variant="contained">
           Save
