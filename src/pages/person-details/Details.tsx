@@ -139,16 +139,14 @@ interface IDonationReceiptCombo {
   receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
 }
 function DonationReceiptCombo(props: IDonationReceiptCombo) {
-  const [DRComboDonationRecs, SetDRComboDonationRecs] = useState<
-    IDonationRecord[]
-  >(props.donationRecsRef.current);
+  const [DRComboDonationRecs, SetDRComboDonationRecs] = useState(0);
   return (
     <Stack direction={"row"} spacing={2} justifyContent="flex-start">
       <DonationCard
+        receiptRecsRef={props.receiptRecsRef}
         personId={props.personId}
         donationRecsRef={props.donationRecsRef}
         SetDRComboDonationRecs={SetDRComboDonationRecs}
-        DRComboDonationRecs={DRComboDonationRecs}
       />
       <ReceiptCard
         personId={props.personId}

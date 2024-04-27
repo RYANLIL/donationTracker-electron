@@ -1,17 +1,16 @@
 import { Add } from "@mui/icons-material";
 import { Button, Card, CardContent, CardHeader } from "@mui/material";
 import dayjs from "dayjs";
-import { IDonationRecord } from "models/Persons";
+import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import { useEffect, useRef, useState } from "react";
 import DonationRecords from "./DonationRecords";
 
 interface IDonationCard {
+  receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
   personId: number;
   donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
-  DRComboDonationRecs: IDonationRecord[];
-  SetDRComboDonationRecs: React.Dispatch<
-    React.SetStateAction<IDonationRecord[]>
-  >;
+
+  SetDRComboDonationRecs: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function DonationCard(props: IDonationCard) {
@@ -27,10 +26,10 @@ export default function DonationCard(props: IDonationCard) {
       donationDate: dayjs().format("YYYY-MM-DD"),
     };
     newDonationIdRef.current = newDonationIdRef.current - 1;
-    let updateDonationRecs = [newDRec, ...props.DRComboDonationRecs];
+    let updateDonationRecs = [newDRec, ...props.donationRecsRef.current];
 
     //need to update state to rerender UI
-    props.SetDRComboDonationRecs(updateDonationRecs);
+    props.SetDRComboDonationRecs((c) => c + 1);
     props.donationRecsRef.current = updateDonationRecs;
   }
   return (
@@ -52,6 +51,7 @@ export default function DonationCard(props: IDonationCard) {
       />
       <CardContent>
         <DonationRecords
+          receiptRecsRef={props.receiptRecsRef}
           donationRecsRef={props.donationRecsRef}
           SetDRComboDonationRecs={props.SetDRComboDonationRecs}
         />

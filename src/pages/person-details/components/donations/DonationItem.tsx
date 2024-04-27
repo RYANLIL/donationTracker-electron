@@ -1,5 +1,5 @@
 import { IconButton, InputAdornment, Stack, TextField } from "@mui/material";
-import { IDonationRecord } from "models/Persons";
+import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -8,11 +8,10 @@ import { useState } from "react";
 import { DeleteForever, Restore } from "@mui/icons-material";
 
 interface IDonationItem {
+  receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
   dRec: IDonationRecord;
   donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
-  SetDRComboDonationRecs: React.Dispatch<
-    React.SetStateAction<IDonationRecord[]>
-  >;
+  SetDRComboDonationRecs: React.Dispatch<React.SetStateAction<number>>;
 }
 export default function DonationItem(props: IDonationItem) {
   console.log(
@@ -23,6 +22,13 @@ export default function DonationItem(props: IDonationItem) {
   const [isValid, setIsValid] = useState(true);
   const [helperText, setHelperText] = useState("");
 
+  //Check if receipt is printed
+  const year = props.dRec.donationDate.substring(0, 4);
+  const receipt = props.receiptRecsRef.current.find((element) => {
+    element.receiptYear === year;
+  });
+  const isReceiptPrinted = receipt ? receipt.isPrinted : false;
+
   function handleDateChange(e: Dayjs | any) {
     const date = e.format("YYYY-MM-DD");
     const updatedDonations = props.donationRecsRef.current.map((rec) => {
@@ -32,6 +38,7 @@ export default function DonationItem(props: IDonationItem) {
       return rec; //returns un modified item
     });
     props.donationRecsRef.current = updatedDonations;
+    props.SetDRComboDonationRecs((c) => c + 1);
   }
 
   function amountChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -50,7 +57,7 @@ export default function DonationItem(props: IDonationItem) {
         return rec; //returns un modified item
       });
       props.donationRecsRef.current = updatedDonations;
-      props.SetDRComboDonationRecs(updatedDonations);
+      props.SetDRComboDonationRecs((c) => c + 1);
     } else {
       setIsValid(false);
       setHelperText("Not a valid dollar amount");
@@ -80,10 +87,10 @@ export default function DonationItem(props: IDonationItem) {
         (rec) => rec.id !== props.dRec.id
       );
       props.donationRecsRef.current = reducedArray;
-      props.SetDRComboDonationRecs(reducedArray);
+      props.SetDRComboDonationRecs((c) => c + 1);
     } else {
       updateDonationRecs("isDeleted", true);
-      props.SetDRComboDonationRecs(props.donationRecsRef.current);
+      props.SetDRComboDonationRecs((c) => c + 1);
       setIsDeleted(true);
     }
   }
@@ -91,7 +98,7 @@ export default function DonationItem(props: IDonationItem) {
   function handleRestoreRecord() {
     updateDonationRecs("isDeleted", false);
     setIsDeleted(false);
-    props.SetDRComboDonationRecs(props.donationRecsRef.current);
+    props.SetDRComboDonationRecs((c) => c + 1);
   }
 
   return (
@@ -121,6 +128,7 @@ export default function DonationItem(props: IDonationItem) {
         }}
         color={props.dRec.id < 0 ? "secondary" : "primary"}
         focused={props.dRec.id < 0}
+        disabled={isReceiptPrinted}
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
@@ -136,14 +144,15 @@ export default function DonationItem(props: IDonationItem) {
               focused: props.dRec.id < 0,
             },
           }}
+          disabled={isReceiptPrinted}
         />
       </LocalizationProvider>
       {isDeleted ? (
-        <IconButton onClick={handleRestoreRecord}>
+        <IconButton onClick={handleRestoreRecord} disabled={isReceiptPrinted}>
           <Restore />
         </IconButton>
       ) : (
-        <IconButton onClick={handleDeleteRecord}>
+        <IconButton onClick={handleDeleteRecord} disabled={isReceiptPrinted}>
           <DeleteForever />
         </IconButton>
       )}
