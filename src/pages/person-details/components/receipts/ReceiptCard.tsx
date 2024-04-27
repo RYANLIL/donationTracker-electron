@@ -2,7 +2,7 @@ import { Button, Card, CardContent, CardHeader } from "@mui/material";
 import ReceiptRecords from "./ReceiptRecords";
 import { Add } from "@mui/icons-material";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface IReceiptCard {
   personId: number;

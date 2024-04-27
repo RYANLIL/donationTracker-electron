@@ -10,7 +10,9 @@ import { DeleteForever, Restore } from "@mui/icons-material";
 interface IDonationItem {
   dRec: IDonationRecord;
   donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
-  setDonationRecs: React.Dispatch<React.SetStateAction<IDonationRecord[]>>;
+  SetDRComboDonationRecs: React.Dispatch<
+    React.SetStateAction<IDonationRecord[]>
+  >;
 }
 export default function DonationItem(props: IDonationItem) {
   console.log(
@@ -48,6 +50,7 @@ export default function DonationItem(props: IDonationItem) {
         return rec; //returns un modified item
       });
       props.donationRecsRef.current = updatedDonations;
+      props.SetDRComboDonationRecs(updatedDonations);
     } else {
       setIsValid(false);
       setHelperText("Not a valid dollar amount");
@@ -77,7 +80,7 @@ export default function DonationItem(props: IDonationItem) {
         (rec) => rec.id !== props.dRec.id
       );
       props.donationRecsRef.current = reducedArray;
-      props.setDonationRecs(reducedArray);
+      props.SetDRComboDonationRecs(reducedArray);
     } else {
       updateDonationRecs("isDeleted", true);
       setIsDeleted(true);

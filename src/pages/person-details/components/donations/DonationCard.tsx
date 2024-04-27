@@ -8,13 +8,15 @@ import DonationRecords from "./DonationRecords";
 interface IDonationCard {
   personId: number;
   donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
+  DRComboDonationRecs: IDonationRecord[];
+  SetDRComboDonationRecs: React.Dispatch<
+    React.SetStateAction<IDonationRecord[]>
+  >;
 }
 
 export default function DonationCard(props: IDonationCard) {
   console.log(`render Donation Card`);
-  const [donationRecs, setDonationRecs] = useState(
-    props.donationRecsRef.current
-  );
+
   const newDonationIdRef = useRef(-1);
 
   function createNewDonation() {
@@ -25,10 +27,10 @@ export default function DonationCard(props: IDonationCard) {
       donationDate: dayjs().format("YYYY-MM-DD"),
     };
     newDonationIdRef.current = newDonationIdRef.current - 1;
-    let updateDonationRecs = [newDRec, ...donationRecs];
+    let updateDonationRecs = [newDRec, ...props.DRComboDonationRecs];
 
     //need to update state to rerender UI
-    setDonationRecs(updateDonationRecs);
+    props.SetDRComboDonationRecs(updateDonationRecs);
     props.donationRecsRef.current = updateDonationRecs;
   }
   return (
@@ -51,7 +53,7 @@ export default function DonationCard(props: IDonationCard) {
       <CardContent>
         <DonationRecords
           donationRecsRef={props.donationRecsRef}
-          setDonationRecs={setDonationRecs}
+          SetDRComboDonationRecs={props.SetDRComboDonationRecs}
         />
       </CardContent>
     </Card>

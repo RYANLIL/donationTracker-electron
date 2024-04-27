@@ -70,6 +70,12 @@ export default function DetailsPage(props: IDetailsPage) {
   type DonoOrRec<T extends IDonationRecord[] | IReceiptRecord[]> =
     T extends IDonationRecord[] ? IDonationRecord[] : IReceiptRecord[];
 
+  /**
+   * Sorts Donation/Receipts records by date
+   * @param records Records to be sorted by date in descending order
+   * @param sortField name of the date filed to be sorted by
+   * @returns
+   */
   function sortRecordsByDate<T extends IDonationRecord[] | IReceiptRecord[]>(
     records: T,
     sortField: string
@@ -113,30 +119,42 @@ export default function DetailsPage(props: IDetailsPage) {
         ) : (
           <AddressCard addressDetailsRef={addressDetailsRef} />
         )}
+        <DonationReceiptCombo
+          personId={props.personId}
+          donationRecsRef={donationRecsRef}
+          receiptRecsRef={receiptRecsRef}
+        />
 
-        <Stack direction={"row"} spacing={2} justifyContent="flex-start">
-          {isLoading ? (
-            <Skeleton sx={{ flex: 1 }} />
-          ) : (
-            <DonationCard
-              personId={props.personId}
-              donationRecsRef={donationRecsRef}
-            />
-          )}
-          {isLoading ? (
-            <Skeleton sx={{ flex: 1 }} />
-          ) : (
-            <ReceiptCard
-              personId={props.personId}
-              donationRecsRef={donationRecsRef}
-              receiptRecsRef={receiptRecsRef}
-            />
-          )}
-        </Stack>
         <Button onClick={(e) => console.log(e)} variant="contained">
           Save
         </Button>
       </Stack>
     </>
+  );
+}
+
+interface IDonationReceiptCombo {
+  personId: number;
+  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
+  receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
+}
+function DonationReceiptCombo(props: IDonationReceiptCombo) {
+  const [DRComboDonationRecs, SetDRComboDonationRecs] = useState<
+    IDonationRecord[]
+  >(props.donationRecsRef.current);
+  return (
+    <Stack direction={"row"} spacing={2} justifyContent="flex-start">
+      <DonationCard
+        personId={props.personId}
+        donationRecsRef={props.donationRecsRef}
+        SetDRComboDonationRecs={SetDRComboDonationRecs}
+        DRComboDonationRecs={DRComboDonationRecs}
+      />
+      <ReceiptCard
+        personId={props.personId}
+        donationRecsRef={props.donationRecsRef}
+        receiptRecsRef={props.receiptRecsRef}
+      />
+    </Stack>
   );
 }
