@@ -27,7 +27,6 @@ export default function ReceiptItem(props: IReceiptItem) {
 
   //used to update isPrinted/isDeleted properties
   const updatedReceiptRecs = (attr: string, value: boolean | string) => {
-    console.log(attr, value);
     const update = props.receiptRecsRef.current.map((rec) => {
       if (rec.id === props.receipt.id) {
         // Create a *new* object with changes
@@ -49,7 +48,6 @@ export default function ReceiptItem(props: IReceiptItem) {
   function calcTotalForYear(year: string) {
     if (year.length !== 4) return 0;
     if (props.receipt.isPrinted) return props.receipt.amount;
-    console.log("CalcTotal", receiptYear);
     const donations = props.donationRecsRef.current.filter(
       (dRec) => dRec.donationDate.includes(year) && !dRec.isDeleted
     );

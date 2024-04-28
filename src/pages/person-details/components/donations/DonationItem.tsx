@@ -27,10 +27,7 @@ export default function DonationItem(props: IDonationItem) {
   const receipt = props.receiptRecsRef.current.find((element) => {
     return element.receiptYear === year;
   });
-
   const isReceiptPrinted = receipt ? receipt.isPrinted : false;
-  console.log("Receipt", receipt);
-  console.log("is Receipt printed", isReceiptPrinted);
 
   function handleDateChange(e: Dayjs | any) {
     const date = e.format("YYYY-MM-DD");
