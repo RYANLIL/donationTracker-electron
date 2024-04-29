@@ -1,5 +1,3 @@
-import { Dayjs } from "dayjs";
-
 export class PersonInfo {
   person: IPerson;
   address: IAddress;

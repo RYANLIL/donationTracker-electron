@@ -1,23 +1,18 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Skeleton,
-  Stack,
-} from "@mui/material";
+import { Button, Skeleton, Stack } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import {
   IAddress,
   IDonationRecord,
   IPerson,
   IReceiptRecord,
-} from "models/Persons";
+  PersonInfo,
+} from "../../../models/Persons";
 import dayjs from "dayjs";
 import ReceiptCard from "./components/receipts/ReceiptCard";
 import PersonCard from "./components/person-details/PersonCard";
 import AddressCard from "./components/address/AddressCard";
 import DonationCard from "./components/donations/DonationCard";
+import LoadingButton from "@/components/LoadingButton";
 
 interface IDetailsPage {
   setdetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,7 +43,11 @@ export default function DetailsPage(props: IDetailsPage) {
   });
   const donationRecsRef = useRef<IDonationRecord[]>([]);
   const receiptRecsRef = useRef<IReceiptRecord[]>([]);
+  // Used when loading details page skeletons while
+  // waiting for data from main process
   const [isLoading, setIsLoading] = useState(true);
+
+  // Used for save button
 
   useEffect(() => {
     async function getDetails(personId: number) {
@@ -96,36 +95,47 @@ export default function DetailsPage(props: IDetailsPage) {
     props.setPersonId(-1);
   }
 
+  async function saveToDatabase() {
+    let personToSave = new PersonInfo();
+
+    personToSave.person = personDetailsRef.current;
+    personToSave.address = addressDetailsRef.current;
+    personToSave.donations = donationRecsRef.current;
+    personToSave.receipts = receiptRecsRef.current;
+
+    console.log("To Save", personToSave);
+
+    const res = await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve("resolved");
+      }, 2000);
+    });
+    console.log(res);
+  }
   return (
     <>
       <Stack spacing={3}>
         <Stack direction="row" justifyContent="space-between">
-          <Button onClick={(e) => closeDetails(e)} variant="contained">
+          <Button
+            variant="contained"
+            color={"error"}
+            onClick={(e) => closeDetails(e)}
+          >
             Back
           </Button>
         </Stack>
-        <button
-          onClick={() => {
-            console.log("Person", personDetailsRef.current);
-            console.log("Address", addressDetailsRef.current);
-            console.log("Receipts", receiptRecsRef.current);
-            console.log("Donations", donationRecsRef.current);
-          }}
-        >
-          Print to console
-        </button>
         {isLoading ? (
-          <Skeleton height={200} />
+          <Skeleton height={"30vh"} />
         ) : (
           <PersonCard personDetailsRef={personDetailsRef} />
         )}
         {isLoading ? (
-          <Skeleton height={200} />
+          <Skeleton height={"30vh"} />
         ) : (
           <AddressCard addressDetailsRef={addressDetailsRef} />
         )}
         {isLoading ? (
-          <Skeleton height={200} />
+          <Skeleton height={"30vh"} />
         ) : (
           <DonationReceiptCombo
             personId={props.personId}
@@ -133,10 +143,7 @@ export default function DetailsPage(props: IDetailsPage) {
             receiptRecsRef={receiptRecsRef}
           />
         )}
-
-        <Button onClick={(e) => console.log(e)} variant="contained">
-          Save
-        </Button>
+        <LoadingButton onClick={saveToDatabase} />
       </Stack>
     </>
   );
