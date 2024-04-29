@@ -9,7 +9,8 @@ declare global {
     fileOps: {
       saveData: (data) => void;
       getAllPersons: () => Promise<IPerson[]>;
-      getPersonDetails: (id) => Promise<PersonInfo>;
+      getPersonDetails: (id: number) => Promise<PersonInfo>;
+      savePersonDetails: (person: PersonInfo) => Promise<PersonInfo>;
     };
   }
 }

@@ -1,4 +1,6 @@
 import { ipcRenderer, contextBridge } from "electron";
+import { PersonInfo } from "../../models/Persons";
+
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld("ipcRenderer", {
   on(...args: Parameters<typeof ipcRenderer.on>) {
@@ -39,11 +41,17 @@ const getPersonDetails = (id: number) => {
   console.log("getting person details electron preload");
   return ipcRenderer.invoke("getPersonDetails", id);
 };
+
+const savePersonDetails = (person: PersonInfo) => {
+  console.log("ipc-preload - Saving Person");
+  return ipcRenderer.invoke("savePersonDetails", person);
+};
 //Exposing saveData function from preload to renderer process
 contextBridge.exposeInMainWorld("fileOps", {
   saveData,
   getAllPersons,
   getPersonDetails,
+  savePersonDetails,
 });
 
 // --------- Preload scripts loading ---------

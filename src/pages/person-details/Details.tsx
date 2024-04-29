@@ -105,12 +105,15 @@ export default function DetailsPage(props: IDetailsPage) {
 
     console.log("To Save", personToSave);
 
-    const res = await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve("resolved");
-      }, 2000);
-    });
-    console.log(res);
+    const res = await window.fileOps.savePersonDetails(personToSave);
+    console.log("res", res);
+
+    // const res = await new Promise((resolve) => {
+    //   setTimeout(() => {
+    //     resolve("resolved");
+    //   }, 2000);
+    // });
+    // console.log(res);
   }
   return (
     <>

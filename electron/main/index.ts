@@ -175,10 +175,12 @@ const personLogic = new PersonLogic(db);
 const addressLogic = new AddressLogic(db);
 const donationLogic = new DonationRecordLogic(db);
 const receiptLogic = new ReceiptRecordLogic(db);
+
 ipcMain.handle("getAllPersons", (sender, data) => {
   const personData = personLogic.getAllPersons();
   return personData;
 });
+
 ipcMain.handle("getPersonDetails", (sender, id) => {
   console.log("Get Person By ID - electron main");
   let personInfo = new PersonInfo();
@@ -199,6 +201,12 @@ ipcMain.handle("getPersonDetails", (sender, id) => {
   }
 
   return personInfo;
+});
+
+ipcMain.handle("savePersonDetails", (sender, data) => {
+  console.log("ipcMain = savePersonDetails");
+
+  return data;
 });
 
 function testSQL() {
