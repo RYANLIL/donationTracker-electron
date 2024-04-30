@@ -207,7 +207,7 @@ ipcMain.handle("savePersonDetails", (sender, person: PersonInfo) => {
   console.log("ipcMain = savePersonDetails");
   //check if new person or update negative id is new person
   if (person.person.id > 0) {
-    console.log("Updateing Person");
+    console.log("Updating Person");
     const updatePersonInfo = db.transaction((person: PersonInfo) => {
       console.log("Transaction Start");
       personLogic.updatePerson(person.person);

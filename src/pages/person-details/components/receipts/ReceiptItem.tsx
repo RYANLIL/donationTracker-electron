@@ -54,6 +54,16 @@ export default function ReceiptItem(props: IReceiptItem) {
     const donationTotal = donations.reduce((acc, currObj) => {
       return acc + (currObj.amount || 0);
     }, 0);
+    //Update total in receipt Ref
+    props.receiptRecsRef.current = props.receiptRecsRef.current.map((rec) => {
+      if (rec.id === props.receipt.id) {
+        // Create a *new* object with changes
+        return { ...rec, amount: donationTotal };
+      } else {
+        //No changes
+        return rec;
+      }
+    });
     return donationTotal;
   }
 
