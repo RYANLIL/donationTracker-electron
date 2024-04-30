@@ -53,10 +53,9 @@ export default class ReceiptRecordLogic {
   updateReceiptRecord(ReceiptRecord: IReceiptRecord) {
     const stmnt = this._db.prepare(
       `UPDATE receipt_records SET 
-        fk_personId = @fk_personId,
         amount = @amount,
-        receiptYear = @receiptYear        
-        isPrinted = @isPrinted        
+        receiptYear = @receiptYear,
+        isPrinted = @isPrinted
       WHERE id = @id`
     );
 
@@ -74,8 +73,10 @@ export default class ReceiptRecordLogic {
    * completely ignored.
    */
   deleteReceiptRecord(id: number) {
-    const stmnt = this._db.prepare("DELETE FROM Receipt_records WHERE id = ?");
-    return stmnt.run(id);
+    const stmnt = this._db.prepare(
+      `DELETE FROM receipt_records WHERE id = @id`
+    );
+    return stmnt.run({ id: id });
   }
 
   /**
@@ -90,7 +91,7 @@ export default class ReceiptRecordLogic {
    */
   getReceiptRecordsById(personId: number) {
     const stmnt = this._db.prepare(
-      "SELECT * FROM Receipt_records where fk_personId = ? "
+      "SELECT * FROM receipt_records WHERE isDeleted = 0 AND fk_personId = ? "
     );
     const data = stmnt.all(personId) as IReceiptRecord[];
     // convert int 0 1 into boolean true false

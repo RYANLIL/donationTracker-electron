@@ -80,7 +80,7 @@ export default class DonationRecordLogic {
    */
   getDonationByPersonId(personId: number) {
     const stmnt = this._db.prepare(
-      "SELECT * FROM donation_records where isDeleted = 0 AND fk_personId = ? "
+      "SELECT * FROM donation_records WHERE isDeleted = 0 AND fk_personId = ? "
     );
     const data = stmnt.all(personId) as IDonationRecord[];
     data.forEach((rec) => {
