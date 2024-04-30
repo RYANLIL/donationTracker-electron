@@ -1,4 +1,3 @@
-import { IpcMain } from "electron";
 import { IPerson } from "../../../models/Persons";
 import { Database } from "better-sqlite3";
 
@@ -13,8 +12,8 @@ export default class PersonLogic {
    */
   insertPerson(person: IPerson) {
     const stmnt = this._db.prepare(
-      `INSERT INTO person (firstName, lastName, phone1,phone2) 
-        VALUES (@firstName, @lastName, @phone1, @phone2)`
+      `INSERT INTO person (firstName, lastName, phone1,phone2,email) 
+        VALUES (@firstName, @lastName, @phone1, @phone2, @email)`
     );
 
     return stmnt.run(person);
@@ -32,7 +31,8 @@ export default class PersonLogic {
         firstName = @firstName, 
         lastName = @lastName, 
         phone1 = @phone1, 
-        phone2 = @phone2 
+        phone2 = @phone2, 
+        email = @email
       WHERE id = @id`
     );
 

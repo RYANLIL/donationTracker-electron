@@ -15,7 +15,7 @@ import {
 import InitDb from "./data/initialize";
 import PersonLogic from "./logic/person-logic";
 import AddressLogic from "./logic/address-logic";
-import { PersonInfo } from "../../models/Persons";
+import { IPerson, PersonInfo } from "../../models/Persons";
 import DonationRecordLogic from "./logic/donation-record-logic";
 import ReceiptRecordLogic from "./logic/receipt-record-logic";
 
@@ -203,12 +203,30 @@ ipcMain.handle("getPersonDetails", (sender, id) => {
   return personInfo;
 });
 
-ipcMain.handle("savePersonDetails", (sender, data) => {
+ipcMain.handle("savePersonDetails", (sender, person: PersonInfo) => {
   console.log("ipcMain = savePersonDetails");
 
-  return data;
+  console.log(person.person);
+  //check if new person or update negative id is new person
+  if (person.person.id > 0) {
+    console.log("Saving Person");
+    const updatePersonInfo = db.transaction((person: PersonInfo) => {
+      console.log("Trans Start", person.person);
+      const stm = personLogic.updatePerson(person.person);
+      console.log("Stm", stm);
+    });
+
+    updatePersonInfo(person);
+  } else {
+    console.log("Create new Person");
+  }
+
+  return "Saved";
 });
 
+//************************************************************************************************************************
+//************************************************************************************************************************
+//************************************************************************************************************************
 function testSQL() {
   const root =
     process.env.NODE_ENV === "development"
