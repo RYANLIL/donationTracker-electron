@@ -36,7 +36,6 @@ export default class AddressLogic {
   updateAddress(address: IAddress) {
     const stmnt = this._db.prepare(
       `UPDATE address SET 
-        fk_personId = @fk_personId, 
         address1 = @address1,
         address2 = @address2,
         address3 = @address3,

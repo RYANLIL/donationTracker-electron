@@ -39,10 +39,9 @@ export default class DonationRecordLogic {
    */
   updateDonationRecord(donationRecord: IDonationRecord) {
     const stmnt = this._db.prepare(
-      `UPDATE donation_record SET 
-        fk_personId = @fk_personId,
+      `UPDATE donation_records SET 
         amount = @amount,
-        donationDate = @donationDate        
+        donationDate = @donationDate
       WHERE id = @id`
     );
 
@@ -60,8 +59,13 @@ export default class DonationRecordLogic {
    * completely ignored.
    */
   deleteDonationRecord(id: number) {
-    const stmnt = this._db.prepare("DELETE FROM donation_record WHERE id = ?");
-    return stmnt.run(id);
+    const stmnt = this._db.prepare(
+      `UPDATE donation_records SET
+        isDeleted = 1,
+        deletedAt = CURRENT_TIMESTAMP
+      WHERE id = @id`
+    );
+    return stmnt.run({ id: id });
   }
 
   /**
@@ -76,7 +80,7 @@ export default class DonationRecordLogic {
    */
   getDonationByPersonId(personId: number) {
     const stmnt = this._db.prepare(
-      "SELECT * FROM donation_records where fk_personId = ? "
+      "SELECT * FROM donation_records where isDeleted = 0 AND fk_personId = ? "
     );
     const data = stmnt.all(personId) as IDonationRecord[];
     data.forEach((rec) => {

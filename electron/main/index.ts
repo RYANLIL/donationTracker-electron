@@ -205,15 +205,25 @@ ipcMain.handle("getPersonDetails", (sender, id) => {
 
 ipcMain.handle("savePersonDetails", (sender, person: PersonInfo) => {
   console.log("ipcMain = savePersonDetails");
-
-  console.log(person.person);
   //check if new person or update negative id is new person
   if (person.person.id > 0) {
     console.log("Saving Person");
     const updatePersonInfo = db.transaction((person: PersonInfo) => {
-      console.log("Trans Start", person.person);
-      const stm = personLogic.updatePerson(person.person);
-      console.log("Stm", stm);
+      console.log("Trans Start");
+      personLogic.updatePerson(person.person);
+      addressLogic.updateAddress(person.address);
+
+      for (const donation of person.donations) {
+        donationLogic.updateDonationRecord(donation);
+        //delete Donation
+        if (donation.isDeleted) {
+          donationLogic.deleteDonationRecord(donation.id);
+        }
+      }
+
+      for (const receipt of person.receipts) {
+        console.log(receipt);
+      }
     });
 
     updatePersonInfo(person);

@@ -57,13 +57,13 @@ export interface IReceiptRecord extends IMetaData {
   fk_personId: number;
   amount: number;
   receiptYear: string;
-  isPrinted: boolean;
+  isPrinted: boolean | number;
   [key: string]: any;
 }
 
 interface IMetaData {
   id: number;
-  isDeleted?: boolean;
+  isDeleted?: boolean | number;
   createdAt?: string;
   deletedAt?: string;
 }
