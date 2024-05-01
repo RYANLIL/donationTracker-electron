@@ -1,14 +1,24 @@
 import { Button, Container, Stack, Typography } from "@mui/material";
 import Table from "./components/Table";
 import { useState } from "react";
-import Details from "../person-details/Details";
+import Details, { Logg } from "../person-details/Details";
+import { useAtomValue } from "jotai";
+import {
+  donationsAtom,
+  printedReceiptsAtom,
+  receiptsAtom,
+} from "../../atoms/atoms";
 export default function MainSummary() {
   const [detailOpen, setdetailOpen] = useState(false);
   const [personId, setPersonId] = useState(-1);
+
   return (
     <div>
       {!detailOpen ? (
         <Stack>
+          <Stack direction="row" justifyContent="space-between">
+            <Logg />
+          </Stack>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h4" gutterBottom>
               People

@@ -13,6 +13,12 @@ import PersonCard from "./components/person-details/PersonCard";
 import AddressCard from "./components/address/AddressCard";
 import DonationCard from "./components/donations/DonationCard";
 import LoadingButton from "@/components/LoadingButton";
+import {
+  donationsAtom,
+  receiptsAtom,
+  printedReceiptsAtom,
+} from "@/atoms/atoms";
+import { getDefaultStore, useAtomValue, useSetAtom } from "jotai";
 
 interface IDetailsPage {
   setdetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,8 +47,10 @@ export default function DetailsPage(props: IDetailsPage) {
     country: "",
     postalCode: "",
   });
-  const donationRecsRef = useRef<IDonationRecord[]>([]);
   const receiptRecsRef = useRef<IReceiptRecord[]>([]);
+  const setDonations = useSetAtom(donationsAtom);
+  const setReceipt = useSetAtom(receiptsAtom);
+
   // Used when loading details page skeletons while
   // waiting for data from main process
   const [isLoading, setIsLoading] = useState(true);
@@ -58,8 +66,10 @@ export default function DetailsPage(props: IDetailsPage) {
 
       personDetailsRef.current = data.person;
       addressDetailsRef.current = data.address;
-      donationRecsRef.current = sortedDonations;
-      receiptRecsRef.current = sortedReceipts;
+
+      setDonations(sortedDonations);
+      setReceipt(sortedReceipts);
+
       setIsLoading(false);
     }
     //get details for existing person
@@ -93,6 +103,8 @@ export default function DetailsPage(props: IDetailsPage) {
   function closeDetails(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     props.setdetailOpen(false);
     props.setPersonId(-1);
+    setDonations([]);
+    setReceipt([]);
   }
 
   async function saveToDatabase() {
@@ -100,13 +112,14 @@ export default function DetailsPage(props: IDetailsPage) {
 
     personToSave.person = personDetailsRef.current;
     personToSave.address = addressDetailsRef.current;
-    personToSave.donations = donationRecsRef.current;
-    personToSave.receipts = receiptRecsRef.current;
+    const defaultStore = getDefaultStore();
+    personToSave.donations = defaultStore.get(donationsAtom);
+    personToSave.receipts = defaultStore.get(receiptsAtom);
 
     console.log("To Save", personToSave);
 
-    const res = await window.fileOps.savePersonDetails(personToSave);
-    console.log("res", res);
+    //const res = await window.fileOps.savePersonDetails(personToSave);
+    //console.log("res", res);
   }
 
   return (
@@ -120,21 +133,15 @@ export default function DetailsPage(props: IDetailsPage) {
       ) : (
         <Stack spacing={3}>
           <Stack direction="row" justifyContent="space-between">
-            <Button
-              variant="contained"
-              color={"error"}
-              onClick={(e) => closeDetails(e)}
-            >
+            <Button variant="contained" onClick={(e) => closeDetails(e)}>
               Back
             </Button>
           </Stack>
+          <Logg />
           <PersonCard personDetailsRef={personDetailsRef} />
           <AddressCard addressDetailsRef={addressDetailsRef} />
-          <DonationReceiptCombo
-            personId={props.personId}
-            donationRecsRef={donationRecsRef}
-            receiptRecsRef={receiptRecsRef}
-          />
+          <DonationReceiptCombo personId={props.personId} />
+
           <LoadingButton onClick={saveToDatabase} />
         </Stack>
       )}
@@ -144,25 +151,35 @@ export default function DetailsPage(props: IDetailsPage) {
 
 interface IDonationReceiptCombo {
   personId: number;
-  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
-  receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
 }
+//const donationsAtom = atom()
 function DonationReceiptCombo(props: IDonationReceiptCombo) {
-  const [DRComboDonationRecs, SetDRComboDonationRecs] = useState(0);
   return (
     <Stack direction={"row"} spacing={2} justifyContent="flex-start">
-      <DonationCard
-        receiptRecsRef={props.receiptRecsRef}
-        personId={props.personId}
-        donationRecsRef={props.donationRecsRef}
-        SetDRComboDonationRecs={SetDRComboDonationRecs}
-      />
-      <ReceiptCard
-        personId={props.personId}
-        donationRecsRef={props.donationRecsRef}
-        receiptRecsRef={props.receiptRecsRef}
-        SetDRComboDonationRecs={SetDRComboDonationRecs}
-      />
+      <DonationCard personId={props.personId} />
+      <ReceiptCard />
     </Stack>
+  );
+}
+
+export function Logg() {
+  const donations = useAtomValue(donationsAtom);
+  const receipts = useAtomValue(receiptsAtom);
+  const printed = useAtomValue(printedReceiptsAtom);
+  const store = getDefaultStore();
+
+  return (
+    <>
+      <button
+        onClick={() => {
+          console.log("Donation", donations);
+          console.log("receipt", receipts);
+          console.log("printed", printed);
+          console.log("store", store.get(printedReceiptsAtom));
+        }}
+      >
+        console log
+      </button>
+    </>
   );
 }

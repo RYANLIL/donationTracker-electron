@@ -1,19 +1,10 @@
-import { DeleteForever, Restore } from "@mui/icons-material";
-import {
-  Checkbox,
-  FormControlLabel,
-  IconButton,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { donationsAtom, receiptsAtom } from "@/atoms/atoms";
+import { Checkbox, FormControlLabel, Stack, Typography } from "@mui/material";
+import { useAtom, useAtomValue } from "jotai";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 interface IReceiptItem {
-  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
   receipt: IReceiptRecord;
-  receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
-  SetDRComboDonationRecs: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function ReceiptItem(props: IReceiptItem) {
@@ -22,48 +13,48 @@ export default function ReceiptItem(props: IReceiptItem) {
   );
   const [isPrinted, setIsPrinted] = useState(props.receipt.isPrinted);
   const receiptYear = props.receipt.receiptYear;
+  const [receipts, setReceipts] = useAtom(receiptsAtom);
+  const donations = useAtomValue(donationsAtom);
 
   const receiptYearTotal = calcTotalForYear(receiptYear);
+  useEffect(() => {
+    updatedReceiptRecs("amount", receiptYearTotal);
+  }, [receiptYearTotal]);
 
   //used to update isPrinted/isDeleted properties
-  const updatedReceiptRecs = (attr: string, value: boolean | string) => {
-    const update = props.receiptRecsRef.current.map((rec) => {
+  const updatedReceiptRecs = (
+    attr: string,
+    value: boolean | string | number
+  ) => {
+    const update = receipts.map((rec) => {
       if (rec.id === props.receipt.id) {
         // Create a *new* object with changes
-        return { ...rec, amount: receiptYearTotal, [attr]: value };
+        return { ...rec, [attr]: value };
       } else {
         //No changes
         return rec;
       }
     });
-    props.receiptRecsRef.current = update;
+    setReceipts(update);
   };
 
   function togglePrintStatus() {
     updatedReceiptRecs("isPrinted", !isPrinted);
     setIsPrinted((curr) => !curr);
-    props.SetDRComboDonationRecs((c) => c + 1);
   }
 
   function calcTotalForYear(year: string) {
     if (year.length !== 4) return 0;
     if (props.receipt.isPrinted) return props.receipt.amount;
-    const donations = props.donationRecsRef.current.filter(
+
+    const donationsRecs = donations.filter(
       (dRec) => dRec.donationDate.includes(year) && !dRec.isDeleted
     );
-    const donationTotal = donations.reduce((acc, currObj) => {
+
+    const donationTotal = donationsRecs.reduce((acc, currObj) => {
       return acc + (currObj.amount || 0);
     }, 0);
-    //Update total in receipt Ref
-    props.receiptRecsRef.current = props.receiptRecsRef.current.map((rec) => {
-      if (rec.id === props.receipt.id) {
-        // Create a *new* object with changes
-        return { ...rec, amount: donationTotal };
-      } else {
-        //No changes
-        return rec;
-      }
-    });
+
     return donationTotal;
   }
 

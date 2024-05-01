@@ -4,18 +4,16 @@ import dayjs from "dayjs";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import { useEffect, useRef, useState } from "react";
 import DonationRecords from "./DonationRecords";
+import { getDefaultStore, useSetAtom } from "jotai";
+import { donationsAtom } from "@/atoms/atoms";
 
 interface IDonationCard {
-  receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
   personId: number;
-  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
-
-  SetDRComboDonationRecs: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function DonationCard(props: IDonationCard) {
   console.log(`render Donation Card`);
-
+  const setDonations = useSetAtom(donationsAtom);
   const newDonationIdRef = useRef(-1);
 
   function createNewDonation() {
@@ -26,11 +24,8 @@ export default function DonationCard(props: IDonationCard) {
       donationDate: dayjs().format("YYYY-MM-DD"),
     };
     newDonationIdRef.current = newDonationIdRef.current - 1;
-    let updateDonationRecs = [newDRec, ...props.donationRecsRef.current];
-
-    //need to update state to rerender UI
-    props.SetDRComboDonationRecs((c) => c + 1);
-    props.donationRecsRef.current = updateDonationRecs;
+    let updateDonationRecs = [newDRec, ...getDefaultStore().get(donationsAtom)];
+    setDonations(updateDonationRecs);
   }
   return (
     <Card variant="outlined" sx={{ flex: 1 }}>
@@ -50,11 +45,7 @@ export default function DonationCard(props: IDonationCard) {
         }
       />
       <CardContent>
-        <DonationRecords
-          receiptRecsRef={props.receiptRecsRef}
-          donationRecsRef={props.donationRecsRef}
-          SetDRComboDonationRecs={props.SetDRComboDonationRecs}
-        />
+        <DonationRecords />
       </CardContent>
     </Card>
   );

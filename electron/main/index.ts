@@ -225,6 +225,9 @@ ipcMain.handle("savePersonDetails", (sender, person: PersonInfo) => {
         if (receipt.isDeleted) {
           receiptLogic.deleteReceiptRecord(receipt.id);
         } else {
+          // Used to save to SQLite int as there is now bool type in
+          // SQLite
+          // @ts-ignore
           receipt.isPrinted = Number(receipt.isPrinted);
           receiptLogic.updateReceiptRecord(receipt);
         }

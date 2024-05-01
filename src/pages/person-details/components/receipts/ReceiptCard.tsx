@@ -4,12 +4,7 @@ import { Add } from "@mui/icons-material";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import React, { useEffect, useRef, useState } from "react";
 
-interface IReceiptCard {
-  personId: number;
-  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
-  receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
-  SetDRComboDonationRecs: React.Dispatch<React.SetStateAction<number>>;
-}
+interface IReceiptCard {}
 
 export default function ReceiptCard(props: IReceiptCard) {
   console.log(`render Receipt Card`);
@@ -20,11 +15,7 @@ export default function ReceiptCard(props: IReceiptCard) {
     <Card variant="outlined" sx={{ flex: 1 }}>
       <CardHeader title="Receipts" sx={{ paddingBottom: 0, paddingTop: 1 }} />
       <CardContent>
-        <ReceiptRecords
-          donationRecsRef={props.donationRecsRef}
-          receiptRecsRef={props.receiptRecsRef}
-          SetDRComboDonationRecs={props.SetDRComboDonationRecs}
-        />
+        <ReceiptRecords />
       </CardContent>
     </Card>
   );

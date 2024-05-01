@@ -6,39 +6,43 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { DeleteForever, Restore } from "@mui/icons-material";
+import { useAtom, useAtomValue } from "jotai";
+import { donationsAtom, printedReceiptsAtom } from "@/atoms/atoms";
 
 interface IDonationItem {
-  receiptRecsRef: React.MutableRefObject<IReceiptRecord[]>;
   dRec: IDonationRecord;
-  donationRecsRef: React.MutableRefObject<IDonationRecord[]>;
-  SetDRComboDonationRecs: React.Dispatch<React.SetStateAction<number>>;
 }
 export default function DonationItem(props: IDonationItem) {
   console.log(
     `render Donation Item Date:${props.dRec.donationDate} Amount:${props.dRec.amount}`
   );
+
+  const [donations, setDonations] = useAtom(donationsAtom);
+  ///const dd = getDefaultStore().get(donationsAtom)
+
   const [amount, setAmount] = useState(props.dRec.amount?.toString());
   const [isDeleted, setIsDeleted] = useState(props.dRec.isDeleted);
   const [isValid, setIsValid] = useState(true);
   const [helperText, setHelperText] = useState("");
+  const printedReceipts = useAtomValue(printedReceiptsAtom);
 
   //Check if receipt is printed
   const year = props.dRec.donationDate.substring(0, 4);
-  const receipt = props.receiptRecsRef.current.find((element) => {
+  const receipt = printedReceipts.find((element) => {
     return element.receiptYear === year;
   });
   const isReceiptPrinted = receipt ? receipt.isPrinted : false;
 
   function handleDateChange(e: Dayjs | any) {
     const date = e.format("YYYY-MM-DD");
-    const updatedDonations = props.donationRecsRef.current.map((rec) => {
+    const updatedDonations = donations.map((rec) => {
       if (rec.id === props.dRec.id) {
         return { ...rec, donationDate: date }; // gets everything that was already in rec and updates the date
       }
       return rec; //returns un modified item
     });
-    props.donationRecsRef.current = updatedDonations;
-    props.SetDRComboDonationRecs((c) => c + 1);
+
+    setDonations(updatedDonations);
   }
 
   function amountChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -50,14 +54,13 @@ export default function DonationItem(props: IDonationItem) {
     if (re.test(value)) {
       setIsValid(true);
       setHelperText("");
-      const updatedDonations = props.donationRecsRef.current.map((rec) => {
+      const updatedDonations = donations.map((rec) => {
         if (rec.id === props.dRec.id) {
           return { ...rec, amount: +value }; // gets everything that was already in rec and casts value to number and updates amount
         }
         return rec; //returns un modified item
       });
-      props.donationRecsRef.current = updatedDonations;
-      props.SetDRComboDonationRecs((c) => c + 1);
+      setDonations(updatedDonations);
     } else {
       setIsValid(false);
       setHelperText("Not a valid dollar amount");
@@ -68,7 +71,7 @@ export default function DonationItem(props: IDonationItem) {
    * @param value The value to update the prop with
    */
   function updateDonationRecs(attr: string, value: boolean | number) {
-    const update = props.donationRecsRef.current.map((rec) => {
+    const update = donations.map((rec) => {
       if (rec.id === props.dRec.id) {
         // Create a *new* object with changes
         return { ...rec, [attr]: value };
@@ -77,20 +80,16 @@ export default function DonationItem(props: IDonationItem) {
         return rec;
       }
     });
-    props.donationRecsRef.current = update;
+    setDonations(update);
   }
   function handleDeleteRecord() {
     //Completely remove deleted record form donation Record object this
     //is done for newly added records that have not been saved to the database
     if (props.dRec.id < 0) {
-      const reducedArray = props.donationRecsRef.current.filter(
-        (rec) => rec.id !== props.dRec.id
-      );
-      props.donationRecsRef.current = reducedArray;
-      props.SetDRComboDonationRecs((c) => c + 1);
+      const reducedArray = donations.filter((rec) => rec.id !== props.dRec.id);
+      setDonations(reducedArray);
     } else {
       updateDonationRecs("isDeleted", true);
-      props.SetDRComboDonationRecs((c) => c + 1);
       setIsDeleted(true);
     }
   }
@@ -98,7 +97,6 @@ export default function DonationItem(props: IDonationItem) {
   function handleRestoreRecord() {
     updateDonationRecs("isDeleted", false);
     setIsDeleted(false);
-    props.SetDRComboDonationRecs((c) => c + 1);
   }
 
   return (
