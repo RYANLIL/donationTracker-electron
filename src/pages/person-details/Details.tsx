@@ -100,7 +100,7 @@ export default function DetailsPage(props: IDetailsPage) {
     return sortedRec as DonoOrRec<T>;
   }
 
-  function closeDetails(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function closeDetails() {
     props.setdetailOpen(false);
     props.setPersonId(-1);
     setDonations([]);
@@ -118,7 +118,8 @@ export default function DetailsPage(props: IDetailsPage) {
 
     console.log("To Save", personToSave);
 
-    //const res = await window.fileOps.savePersonDetails(personToSave);
+    const res = await window.fileOps.savePersonDetails(personToSave);
+    closeDetails();
     //console.log("res", res);
   }
 

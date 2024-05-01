@@ -25,18 +25,18 @@ export default class ReceiptRecordLogic {
 
   insertManyReceiptRecords(receiptRecords: IReceiptRecord[]) {
     const stmnt = this._db.prepare(
-      `INSERT INTO receipt_records (fk_personId,amount,receiptYear)
-        VALUES(@fk_personId,@amount,@receiptYear);`
+      `INSERT INTO receipt_records (fk_personId,amount,receiptYear,isPrinted)
+        VALUES(@fk_personId,@amount,@receiptYear,@isPrinted);`
     );
+    const insertManyReceipts = this._db.transaction((receipts) => {
+      for (const receipt of receipts) stmnt.run(receipt);
+    });
 
     try {
-      const insertManyReceipts = this._db.transaction((receipts) => {
-        for (const receipt of receipts) stmnt.run(receipt);
-      });
-
       insertManyReceipts(receiptRecords);
     } catch (err) {
-      if (!this._db.inTransaction) throw err; // (transaction was forcefully rolled back)
+      //if (!this._db.inTransaction) throw err; // (transaction was forcefully rolled back)
+      throw err;
     }
   }
 

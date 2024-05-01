@@ -214,7 +214,11 @@ ipcMain.handle("savePersonDetails", (sender, person: PersonInfo) => {
       addressLogic.updateAddress(person.address);
 
       for (const donation of person.donations) {
-        donationLogic.updateDonationRecord(donation);
+        if (donation.id > 0) {
+          donationLogic.updateDonationRecord(donation);
+        } else {
+          donationLogic.insertDonationRecord(donation);
+        }
         //delete Donation
         if (donation.isDeleted) {
           donationLogic.deleteDonationRecord(donation.id);
@@ -222,14 +226,17 @@ ipcMain.handle("savePersonDetails", (sender, person: PersonInfo) => {
       }
 
       for (const receipt of person.receipts) {
+        // @ts-ignore
+        // Used to save to SQLite int as there is now bool type in SQLite
+        receipt.isPrinted = Number(receipt.isPrinted);
+
+        if (receipt.id > 0) {
+          receiptLogic.updateReceiptRecord(receipt);
+        } else {
+          receiptLogic.insertReceiptRecord(receipt);
+        }
         if (receipt.isDeleted) {
           receiptLogic.deleteReceiptRecord(receipt.id);
-        } else {
-          // Used to save to SQLite int as there is now bool type in
-          // SQLite
-          // @ts-ignore
-          receipt.isPrinted = Number(receipt.isPrinted);
-          receiptLogic.updateReceiptRecord(receipt);
         }
       }
       console.log("Transaction END");
