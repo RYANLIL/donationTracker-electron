@@ -107,47 +107,37 @@ export default function DetailsPage(props: IDetailsPage) {
 
     const res = await window.fileOps.savePersonDetails(personToSave);
     console.log("res", res);
-
-    // const res = await new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     resolve("resolved");
-    //   }, 2000);
-    // });
-    // console.log(res);
   }
+
   return (
     <>
-      <Stack spacing={3}>
-        <Stack direction="row" justifyContent="space-between">
-          <Button
-            variant="contained"
-            color={"error"}
-            onClick={(e) => closeDetails(e)}
-          >
-            Back
-          </Button>
+      {isLoading ? (
+        <Stack spacing={1}>
+          <Skeleton variant="rounded" height={100} />
+          <Skeleton variant="rounded" height={300} />
+          <Skeleton variant="rounded" height={300} />
         </Stack>
-        {isLoading ? (
-          <Skeleton height={"30vh"} />
-        ) : (
+      ) : (
+        <Stack spacing={3}>
+          <Stack direction="row" justifyContent="space-between">
+            <Button
+              variant="contained"
+              color={"error"}
+              onClick={(e) => closeDetails(e)}
+            >
+              Back
+            </Button>
+          </Stack>
           <PersonCard personDetailsRef={personDetailsRef} />
-        )}
-        {isLoading ? (
-          <Skeleton height={"30vh"} />
-        ) : (
           <AddressCard addressDetailsRef={addressDetailsRef} />
-        )}
-        {isLoading ? (
-          <Skeleton height={"30vh"} />
-        ) : (
           <DonationReceiptCombo
             personId={props.personId}
             donationRecsRef={donationRecsRef}
             receiptRecsRef={receiptRecsRef}
           />
-        )}
-        <LoadingButton onClick={saveToDatabase} />
-      </Stack>
+          <LoadingButton onClick={saveToDatabase} />
+        </Stack>
+      )}
     </>
   );
 }
