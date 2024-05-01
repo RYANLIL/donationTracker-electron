@@ -35,9 +35,16 @@ export async function showSaveDialogBox(browserWindow: BrowserWindow) {
     db.backup(file.filePath || fileName)
       .then((e) => {
         console.log("backup complete!", e);
+        dialog.showMessageBox(browserWindow, {
+          message: "Backup Complete",
+          type: "info",
+          title: "Backup Status",
+          detail: ``,
+        });
       })
       .catch((err) => {
         console.log("backup failed:", err);
+        dialog.showErrorBox("Backup Failed", JSON.stringify(err));
       });
   }
 }
