@@ -18,7 +18,7 @@ import AddressLogic from "./logic/address-logic";
 import { IDonationRecord, IPerson, PersonInfo } from "../../models/Persons";
 import DonationRecordLogic from "./logic/donation-record-logic";
 import ReceiptRecordLogic from "./logic/receipt-record-logic";
-import { contextMenu, mainMenu } from "./menu-maker";
+import { setMainMenu, setContextMenu } from "./utils/menu-maker";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -87,9 +87,11 @@ async function createWindow() {
     win.loadFile(indexHtml);
   }
 
+  // Set Main Application Menu
+  Menu.setApplicationMenu(setMainMenu(win));
   //Set Context Menu
   win.webContents.on("context-menu", () => {
-    contextMenu.popup();
+    setContextMenu().popup();
   });
 
   // Test actively push message to the Electron-Renderer
@@ -108,7 +110,6 @@ async function createWindow() {
 }
 
 // Setting the Application Menu
-Menu.setApplicationMenu(mainMenu);
 
 app.whenReady().then(createWindow);
 
