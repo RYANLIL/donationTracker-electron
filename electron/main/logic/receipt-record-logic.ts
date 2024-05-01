@@ -72,7 +72,7 @@ export default class ReceiptRecordLogic {
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
    */
-  deleteReceiptRecord(id: number) {
+  deleteReceiptRecord(id: number | bigint) {
     const stmnt = this._db.prepare(
       `DELETE FROM receipt_records WHERE id = @id`
     );
@@ -89,7 +89,7 @@ export default class ReceiptRecordLogic {
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
    */
-  getReceiptRecordsById(personId: number) {
+  getReceiptRecordsById(personId: number | bigint) {
     const stmnt = this._db.prepare(
       "SELECT * FROM receipt_records WHERE isDeleted = 0 AND fk_personId = ? "
     );
@@ -144,7 +144,8 @@ export default class ReceiptRecordLogic {
           fk_personId: personId,
           amount: +(Math.round(donationAmount * 100) / 100).toFixed(2),
           receiptYear: dYear,
-          isPrinted: false,
+          //@ts-ignore
+          isPrinted: 0,
         };
 
         receiptsToInsert.push(newReceipt);
@@ -152,8 +153,9 @@ export default class ReceiptRecordLogic {
     });
 
     if (!isValid) {
-      console.log(receiptsToInsert);
+      console.log("Receipts To Insert", receiptsToInsert);
       this.insertManyReceiptRecords(receiptsToInsert);
+      console.log("Receipts Have been inserted");
     }
 
     return isValid;

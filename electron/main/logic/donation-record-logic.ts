@@ -58,7 +58,7 @@ export default class DonationRecordLogic {
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
    */
-  deleteDonationRecord(id: number) {
+  deleteDonationRecord(id: number | bigint) {
     const stmnt = this._db.prepare(
       `UPDATE donation_records SET
         isDeleted = 1,
@@ -78,7 +78,7 @@ export default class DonationRecordLogic {
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
    */
-  getDonationByPersonId(personId: number) {
+  getDonationByPersonId(personId: number | bigint) {
     const stmnt = this._db.prepare(
       "SELECT * FROM donation_records WHERE isDeleted = 0 AND fk_personId = ? "
     );

@@ -15,7 +15,7 @@ import {
 import InitDb from "./data/initialize";
 import PersonLogic from "./logic/person-logic";
 import AddressLogic from "./logic/address-logic";
-import { IPerson, PersonInfo } from "../../models/Persons";
+import { IDonationRecord, IPerson, PersonInfo } from "../../models/Persons";
 import DonationRecordLogic from "./logic/donation-record-logic";
 import ReceiptRecordLogic from "./logic/receipt-record-logic";
 
@@ -181,35 +181,35 @@ ipcMain.handle("getAllPersons", (sender, data) => {
   return personData;
 });
 
-ipcMain.handle("getPersonDetails", (sender, id) => {
+ipcMain.handle("getPersonDetails", (sender, personId) => {
   console.log("Get Person By ID - electron main");
   let personInfo = new PersonInfo();
-  personInfo.person = personLogic.getPersonById(id);
-  personInfo.address = addressLogic.getAddressByPersonId(id);
-  personInfo.donations = donationLogic.getDonationByPersonId(id);
-  personInfo.receipts = receiptLogic.getReceiptRecordsById(id);
+  personInfo.person = personLogic.getPersonById(personId);
+  personInfo.address = addressLogic.getAddressByPersonId(personId);
+  personInfo.donations = donationLogic.getDonationByPersonId(personId);
+  personInfo.receipts = receiptLogic.getReceiptRecordsById(personId);
 
   const receiptsValid = receiptLogic.validateReceiptRecords(
-    id,
+    personId,
     personInfo.receipts,
     personInfo.donations
   );
 
   if (!receiptsValid) {
     console.log("NEW RECEIPTS CREATED");
-    personInfo.receipts = receiptLogic.getReceiptRecordsById(id);
+    personInfo.receipts = receiptLogic.getReceiptRecordsById(personId);
   }
 
   return personInfo;
 });
 
-ipcMain.handle("savePersonDetails", (sender, person: PersonInfo) => {
+ipcMain.handle("savePersonDetails", (sender, personInfo: PersonInfo) => {
   console.log("ipcMain = savePersonDetails");
   //check if new person or update negative id is new person
-  if (person.person.id > 0) {
+  if (personInfo.person.id > 0) {
     console.log("Updating Person");
     const updatePersonInfo = db.transaction((person: PersonInfo) => {
-      console.log("Transaction Start");
+      console.log("Transaction Start Update Person");
       personLogic.updatePerson(person.person);
       addressLogic.updateAddress(person.address);
 
@@ -239,12 +239,41 @@ ipcMain.handle("savePersonDetails", (sender, person: PersonInfo) => {
           receiptLogic.deleteReceiptRecord(receipt.id);
         }
       }
-      console.log("Transaction END");
+      console.log("Transaction END Update Person");
     });
-
-    updatePersonInfo(person);
+    updatePersonInfo(personInfo);
   } else {
     console.log("Create new Person");
+    const insertNewPerson = db.transaction((person: PersonInfo) => {
+      console.log("Transaction Start Insert Person");
+
+      const rowInfo = personLogic.insertPerson(person.person);
+      console.log("RowInfo", rowInfo);
+      person.address.fk_personId = rowInfo.lastInsertRowid;
+      const donationsToInsert = person.donations.map((donation) => {
+        return { ...donation, fk_personId: rowInfo.lastInsertRowid };
+      });
+      const receiptsToInsert = person.receipts.map((receipt) => {
+        return { ...receipt, fk_personId: rowInfo.lastInsertRowid };
+      });
+
+      addressLogic.insertAddress(person.address);
+      console.log("Address Inserted");
+
+      for (const donation of donationsToInsert) {
+        donationLogic.insertDonationRecord(donation);
+        console.log(donation);
+      }
+
+      for (const receipt of receiptsToInsert) {
+        receiptLogic.insertReceiptRecord(receipt);
+        console.log(receipt);
+      }
+
+      console.log("Transaction end Insert Person");
+    });
+
+    insertNewPerson(personInfo);
   }
 
   return "Saved";

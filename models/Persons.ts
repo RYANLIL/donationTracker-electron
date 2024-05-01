@@ -37,7 +37,7 @@ export interface IPerson extends IMetaData {
   email: string;
 }
 export interface IAddress extends IMetaData {
-  fk_personId: number;
+  fk_personId: number | bigint;
   address1: string;
   address2: string;
   address3: string;
@@ -48,13 +48,13 @@ export interface IAddress extends IMetaData {
 }
 
 export interface IDonationRecord extends IMetaData {
-  fk_personId: number;
+  fk_personId: number | bigint;
   amount: number;
   donationDate: string;
   [key: string]: any;
 }
 export interface IReceiptRecord extends IMetaData {
-  fk_personId: number;
+  fk_personId: number | bigint;
   amount: number;
   receiptYear: string;
   isPrinted: boolean;
@@ -62,7 +62,7 @@ export interface IReceiptRecord extends IMetaData {
 }
 
 interface IMetaData {
-  id: number;
+  id: number | bigint;
   isDeleted?: boolean;
   createdAt?: string;
   deletedAt?: string;
