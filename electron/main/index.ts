@@ -2,7 +2,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
 import { release } from "node:os";
-import { app, BrowserWindow, shell, ipcMain } from "electron";
+import { app, BrowserWindow, shell, ipcMain, Menu } from "electron";
 import savetoJSON from "./data/saveToFile";
 import { getSqlite3 } from "./data/better-sqlite3";
 import {
@@ -18,6 +18,7 @@ import AddressLogic from "./logic/address-logic";
 import { IDonationRecord, IPerson, PersonInfo } from "../../models/Persons";
 import DonationRecordLogic from "./logic/donation-record-logic";
 import ReceiptRecordLogic from "./logic/receipt-record-logic";
+import { contextMenu, mainMenu } from "./menu-maker";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -86,6 +87,11 @@ async function createWindow() {
     win.loadFile(indexHtml);
   }
 
+  //Set Context Menu
+  win.webContents.on("context-menu", () => {
+    contextMenu.popup();
+  });
+
   // Test actively push message to the Electron-Renderer
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", new Date().toLocaleString());
@@ -100,6 +106,9 @@ async function createWindow() {
   // Apply electron-updater
   //update(win)
 }
+
+// Setting the Application Menu
+Menu.setApplicationMenu(mainMenu);
 
 app.whenReady().then(createWindow);
 
