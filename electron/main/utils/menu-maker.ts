@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
-import { showOpenDialogBox } from "./dialogs";
+import { showOpenDialogBox, showSaveDialogBox } from "./dialogs";
 
 const isMac = process.platform === "darwin";
 
@@ -16,10 +16,10 @@ export function setMainMenu(browserWindow: BrowserWindow) {
       label: "File",
       submenu: [
         {
-          label: "Open FIle",
+          label: "BackUp Database",
           click: () => {
             console.log("Open menu");
-            showOpenDialogBox(browserWindow);
+            showSaveDialogBox(browserWindow);
           },
         },
         { label: "exit", role: "close" },
