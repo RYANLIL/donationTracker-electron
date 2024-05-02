@@ -35,6 +35,8 @@ export interface IPerson extends IMetaData {
   phone1: string;
   phone2: string;
   email: string;
+  //used for main page summary table
+  currYearPrintStatus?: boolean;
 }
 export interface IAddress extends IMetaData {
   fk_personId: number | bigint;

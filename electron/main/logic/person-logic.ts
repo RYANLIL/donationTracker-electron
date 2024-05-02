@@ -56,7 +56,16 @@ export default class PersonLogic {
    *
    */
   getAllPersons(): IPerson[] {
-    const stmnt = this._db.prepare("SELECT * FROM person");
+    const stmnt = this._db.prepare(`
+      SELECT ifnull(rr.isPrinted,0) AS currYearPrintStatus, p.*
+        FROM 
+          person AS p 
+        LEFT JOIN 
+          (SELECT fk_personId, isPrinted FROM receipt_records where receiptYear ='${new Date().getFullYear()}') as rr
+        ON
+          p.id = rr.fk_PersonId
+        WHERE isDeleted = 0`);
+
     return stmnt.all() as IPerson[];
   }
 

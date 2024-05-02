@@ -17,11 +17,19 @@ export default function Table(props: ITableProps) {
   const [persons, setPersons] = useState<IPerson[]>();
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  const currYear = new Date().getFullYear();
+
   const columns: GridColDef[] = [
     { field: "firstName", headerName: "Name", flex: 1 },
     { field: "lastName", headerName: "Last Name", flex: 1 },
     { field: "phone1", headerName: "Phone", flex: 1 },
     { field: "email", headerName: "Email", flex: 1 },
+    {
+      field: "currYearPrintStatus",
+      type: "boolean",
+      headerName: `${currYear} Printed`,
+      flex: 1,
+    },
   ];
 
   useEffect(() => {
@@ -51,7 +59,12 @@ export default function Table(props: ITableProps) {
             },
           }}
           slots={{ toolbar: GridToolbar }}
-          slotProps={{ toolbar: { showQuickFilter: true } }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+              printOptions: { disableToolbarButton: true },
+            },
+          }}
         />
       ) : (
         <Skeleton variant="rectangular" animation="wave" height={"90vh"} />
