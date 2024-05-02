@@ -24,14 +24,6 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   // ...
 });
 
-/**
- * Called in render receives data and passes it to the main process*
- * @param friends list of all friends from indexedDB
- */
-function saveData(friends: unknown) {
-  // Sends data to main Process
-  ipcRenderer.send("saveToJSON", friends);
-}
 //Async function
 const getAllPersons = () => {
   console.log("getting all people electron preload");
@@ -48,7 +40,6 @@ const savePersonDetails = (person: PersonInfo) => {
 };
 //Exposing saveData function from preload to renderer process
 contextBridge.exposeInMainWorld("fileOps", {
-  saveData,
   getAllPersons,
   getPersonDetails,
   savePersonDetails,

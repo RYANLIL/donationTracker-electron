@@ -12,6 +12,7 @@ export default function AddressDetails(props: IAddressDetails) {
   );
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { id, value } = e.target;
+    //if(id ==="postalCode") value = id.toUpperCase();
     const updatedDetails = { ...addressDetails, [id]: value };
     setAddressDetails(updatedDetails);
     props.addressDetailsRef.current = updatedDetails;
@@ -86,6 +87,7 @@ export default function AddressDetails(props: IAddressDetails) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleOnChange(e)
             }
+            inputProps={{ style: { textTransform: "uppercase" } }}
             value={addressDetails.postalCode}
           />
         </Grid>

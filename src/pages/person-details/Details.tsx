@@ -77,6 +77,7 @@ export default function DetailsPage(props: IDetailsPage) {
       getDetails(props.personId);
     } else {
       console.log("Create New", props.personId);
+      personDetailsRef.current.firstName = "NEW";
       setIsLoading(false);
     }
   }, []);
@@ -134,7 +135,7 @@ export default function DetailsPage(props: IDetailsPage) {
       ) : (
         <Stack spacing={3}>
           <Stack direction="row" justifyContent="space-between">
-            <Button variant="contained" onClick={(e) => closeDetails(e)}>
+            <Button variant="contained" onClick={closeDetails}>
               Back
             </Button>
           </Stack>
@@ -142,7 +143,6 @@ export default function DetailsPage(props: IDetailsPage) {
           <PersonCard personDetailsRef={personDetailsRef} />
           <AddressCard addressDetailsRef={addressDetailsRef} />
           <DonationReceiptCombo personId={props.personId} />
-
           <LoadingButton onClick={saveToDatabase} />
         </Stack>
       )}

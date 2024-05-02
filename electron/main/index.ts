@@ -1,21 +1,14 @@
-import { dirname, join, resolve } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
 import { release } from "node:os";
 import { app, BrowserWindow, shell, ipcMain, Menu } from "electron";
-import savetoJSON from "./data/saveToFile";
 import { getSqlite3 } from "./data/better-sqlite3";
-import {
-  DATABASE_FOLDER,
-  DATABASE_PATH,
-  ADD_RESOURCES,
-  USER_CONFIG_PATH,
-  USER_DATA_FOLDER,
-} from "../../constants";
+import { DATABASE_PATH, USER_DATA_FOLDER } from "../../constants";
 import InitDb from "./data/initialize";
 import PersonLogic from "./logic/person-logic";
 import AddressLogic from "./logic/address-logic";
-import { IDonationRecord, IPerson, PersonInfo } from "../../models/Persons";
+import { PersonInfo } from "../../models/Persons";
 import DonationRecordLogic from "./logic/donation-record-logic";
 import ReceiptRecordLogic from "./logic/receipt-record-logic";
 import { setMainMenu, setContextMenu } from "./utils/menu-maker";
@@ -57,6 +50,7 @@ if (!app.requestSingleInstanceLock()) {
 
 let win: BrowserWindow | null = null;
 // Here, you can also use other preload
+const isDev = !app.isPackaged;
 const preload = join(__dirname, "../preload/index.mjs");
 const url = process.env.VITE_DEV_SERVER_URL;
 const indexHtml = join(process.env.DIST, "index.html");
@@ -135,28 +129,22 @@ app.on("activate", () => {
   }
 });
 
-// New window example arg: new windows url
-ipcMain.handle("open-win", (_, arg) => {
-  const childWindow = new BrowserWindow({
-    webPreferences: {
-      preload,
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
-  });
+// // New window example arg: new windows url
+// ipcMain.handle("open-win", (_, arg) => {
+//   const childWindow = new BrowserWindow({
+//     webPreferences: {
+//       preload,
+//       nodeIntegration: true,
+//       contextIsolation: false,
+//     },
+//   });
 
-  if (process.env.VITE_DEV_SERVER_URL) {
-    childWindow.loadURL(`${url}#${arg}`);
-  } else {
-    childWindow.loadFile(indexHtml, { hash: arg });
-  }
-});
-
-// Waits for the renderer process to emit `saveToJSON` IPC event *
-ipcMain.on("saveToJSON", (sender, data) => {
-  console.log("ipc.on saveToJSON electron main ");
-  //testSQL();
-});
+//   if (process.env.VITE_DEV_SERVER_URL) {
+//     childWindow.loadURL(`${url}#${arg}`);
+//   } else {
+//     childWindow.loadFile(indexHtml, { hash: arg });
+//   }
+// });
 
 //****************Checking and setting first run flag */
 const isFirstRun = () => {
@@ -177,7 +165,7 @@ if (isFirstRun()) {
   markFirstRun();
   const initDb = new InitDb();
   initDb.readyDatabase();
-  initDb.insertMockData();
+  if (isDev) initDb.insertMockData();
 }
 
 const db = getSqlite3(DATABASE_PATH);
@@ -288,48 +276,3 @@ ipcMain.handle("savePersonDetails", (sender, personInfo: PersonInfo) => {
 
   return "Saved";
 });
-
-//************************************************************************************************************************
-//************************************************************************************************************************
-//************************************************************************************************************************
-function testSQL() {
-  const root =
-    process.env.NODE_ENV === "development"
-      ? "./donation-tracker.sqlite"
-      : join(process.resourcesPath, "./donation-tracker.sqlite");
-  //: join(app.getPath("userData"), "./donation-tracker.sqlite");
-
-  db.pragma("journal_mode = WAL");
-
-  let tableExist = db
-    .prepare(
-      "SELECT name FROM sqlite_master WHERE type='table' AND name='cats'"
-    )
-    .get();
-  if (tableExist === undefined) {
-    console.log("CATS DON'T EXISTS");
-    console.log(tableExist);
-    let createTable = db.prepare("CREATE TABLE cats (name text, age integer)");
-    let info = createTable.run();
-    console.log(info.changes);
-    console.log(info.lastInsertRowid);
-  }
-
-  const insert = db.prepare(
-    "INSERT INTO cats (name, age) VALUES (@name, @age)"
-  );
-
-  const insertMany = db.transaction((cats: object[]) => {
-    for (const cat of cats) insert.run(cat);
-  });
-
-  try {
-    insertMany([
-      { name: "Joey", age: 2 },
-      { name: "Sally", age: 4 },
-      { name: "Junior", age: 1 },
-    ]);
-  } catch (err) {
-    if (!db.inTransaction) throw err; // (transaction was forcefully rolled back)
-  }
-}

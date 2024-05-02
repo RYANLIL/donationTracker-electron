@@ -1,7 +1,6 @@
-import { Button, IconButton, Stack } from "@mui/material";
-import { IDonationRecord, IReceiptRecord } from "models/Persons";
+import { Stack } from "@mui/material";
+
 import DonationItem from "./DonationItem";
-import { Add } from "@mui/icons-material";
 import { useAtomValue } from "jotai";
 import { donationsAtom } from "@/atoms/atoms";
 

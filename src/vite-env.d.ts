@@ -7,7 +7,6 @@ declare global {
     // expose in the `electron/preload/index.ts`
     ipcRenderer: import("electron").IpcRenderer;
     fileOps: {
-      saveData: (data) => void;
       getAllPersons: () => Promise<IPerson[]>;
       getPersonDetails: (id: number) => Promise<PersonInfo>;
       savePersonDetails: (person: PersonInfo) => Promise<PersonInfo>;

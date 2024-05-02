@@ -2,7 +2,7 @@ import { Add } from "@mui/icons-material";
 import { Button, Card, CardContent, CardHeader } from "@mui/material";
 import dayjs from "dayjs";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import DonationRecords from "./DonationRecords";
 import { getDefaultStore, useSetAtom } from "jotai";
 import { donationsAtom } from "@/atoms/atoms";

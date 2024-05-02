@@ -10,7 +10,7 @@ export default function AddressCard(props: IAddressCard) {
   console.log(`render Address Card`);
   return (
     <Card variant="outlined">
-      <CardHeader title="Details" sx={{ paddingBottom: 0, paddingTop: 1 }} />
+      <CardHeader title="Address" sx={{ paddingBottom: 0, paddingTop: 1 }} />
       <CardContent>
         <AddressDetails addressDetailsRef={props.addressDetailsRef} />
       </CardContent>

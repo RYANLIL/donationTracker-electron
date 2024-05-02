@@ -1,7 +1,5 @@
-import { Button, Card, CardContent, CardHeader } from "@mui/material";
+import { Card, CardContent, CardHeader } from "@mui/material";
 import ReceiptRecords from "./ReceiptRecords";
-import { Add } from "@mui/icons-material";
-import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import React, { useEffect, useRef, useState } from "react";
 
 interface IReceiptCard {}

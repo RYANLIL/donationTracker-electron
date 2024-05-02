@@ -5,7 +5,7 @@
  * Warn user about data loss and backup if they already have existing
  * installation
  */
-import { existsSync, fstat, mkdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { Database } from "better-sqlite3";
 import {
   DATABASE_FOLDER,
@@ -49,7 +49,6 @@ export default class InitDatabase {
         if (!this._db.inTransaction) throw error; // (transaction was forcefully rolled back)
       }
     }
-    console.log(res);
   }
 
   insertMockData() {

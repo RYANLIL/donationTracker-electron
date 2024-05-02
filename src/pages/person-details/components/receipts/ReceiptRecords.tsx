@@ -1,7 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import ReceiptItem from "./ReceiptItem";
-import { useState } from "react";
 import { useAtomValue } from "jotai";
 import { receiptsAtom } from "@/atoms/atoms";
 

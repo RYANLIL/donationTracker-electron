@@ -17,7 +17,7 @@ export default function MainSummary() {
       {!detailOpen ? (
         <Stack>
           <Stack direction="row" justifyContent="space-between">
-            <Logg />
+            {/* <Logg /> isDebug */}
           </Stack>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h4" gutterBottom>

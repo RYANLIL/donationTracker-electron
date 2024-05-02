@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
-import { showOpenDialogBox, showSaveDialogBox } from "./dialogs";
+import { showSaveDialogBox } from "./dialogs";
 
 const isMac = process.platform === "darwin";
 
