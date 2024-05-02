@@ -139,7 +139,7 @@ export default function DetailsPage(props: IDetailsPage) {
               Back
             </Button>
           </Stack>
-          <Logg />
+          {/* <Logg /> */}
           <PersonCard personDetailsRef={personDetailsRef} />
           <AddressCard addressDetailsRef={addressDetailsRef} />
           <DonationReceiptCombo personId={props.personId} />
