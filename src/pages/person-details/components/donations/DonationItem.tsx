@@ -1,5 +1,5 @@
 import { IconButton, InputAdornment, Stack, TextField } from "@mui/material";
-import { IDonationRecord } from "models/Persons";
+import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -7,7 +7,11 @@ import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { DeleteForever, Restore } from "@mui/icons-material";
 import { useAtom, useAtomValue } from "jotai";
-import { donationsAtom, printedReceiptsAtom } from "@/atoms/atoms";
+import {
+  donationsAtom,
+  printedReceiptsAtom,
+  receiptsAtom,
+} from "@/atoms/atoms";
 
 interface IDonationItem {
   dRec: IDonationRecord;
@@ -20,11 +24,12 @@ export default function DonationItem(props: IDonationItem) {
   const [donations, setDonations] = useAtom(donationsAtom);
   ///const dd = getDefaultStore().get(donationsAtom)
 
-  const [amount, setAmount] = useState(props.dRec.amount?.toString());
+  const [amount, setAmount] = useState(props.dRec.amount);
   const [isDeleted, setIsDeleted] = useState(props.dRec.isDeleted);
   const [isValid, setIsValid] = useState(true);
   const [helperText, setHelperText] = useState("");
   const printedReceipts = useAtomValue(printedReceiptsAtom);
+  //const [receipts, setReceipts] = useAtom(receiptsAtom);
 
   //Check if receipt is printed
   const year = props.dRec.donationDate.substring(0, 4);
@@ -33,21 +38,42 @@ export default function DonationItem(props: IDonationItem) {
   });
   const isReceiptPrinted = receipt ? receipt.isPrinted : false;
 
-  function handleDateChange(e: Dayjs | any) {
-    const date = e.format("YYYY-MM-DD");
+  function handleDateChange(date: Dayjs | null) {
+    if (!date) return;
+    const formattedDate = date.format("YYYY-MM-DD");
     const updatedDonations = donations.map((rec) => {
       if (rec.id === props.dRec.id) {
-        return { ...rec, donationDate: date }; // gets everything that was already in rec and updates the date
+        return { ...rec, donationDate: formattedDate }; // gets everything that was already in rec and updates the date
       }
       return rec; //returns un modified item
     });
 
     setDonations(updatedDonations);
+    // //check if receipt exists for the year if not create receipt
+    // const donationYear = date.year();
+    // const receiptExists = receipts.find((rec) => {
+    //   return rec.receiptYear === donationYear.toString();
+    // });
+
+    // if (receiptExists === undefined) {
+    //   const newReceipt: IReceiptRecord = {
+    //     fk_personId: props.dRec.fk_personId,
+    //     amount: amount,
+    //     receiptYear: donationYear.toString(),
+    //     isPrinted: false,
+    //     id: donationYear * -1,
+    //   };
+    //   setReceipts([newReceipt, ...receipts]);
+    // }
   }
 
   function amountChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
-    setAmount(value);
+    if (isNaN(Number(value))) {
+      return;
+    } else {
+      setAmount(+value);
+    }
 
     //Validate if value is a dollar amount
     const re = /^(?:\d{1,3}(?:,\d{3})*|\d+)(?:\.\d{2})?$/;
