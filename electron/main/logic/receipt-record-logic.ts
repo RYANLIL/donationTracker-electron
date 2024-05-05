@@ -126,6 +126,7 @@ export default class ReceiptRecordLogic {
     const distinctDonationYears = Array.from(new Set(donationYears));
     const receiptYears = receiptRecs.map((rRec) => rRec.receiptYear);
     let receiptsToInsert: IReceiptRecord[] = [];
+    // Create Missing Receipts
     distinctDonationYears.forEach((dYear) => {
       if (!receiptYears.includes(dYear)) {
         isValid = false;
@@ -151,11 +152,29 @@ export default class ReceiptRecordLogic {
         receiptsToInsert.push(newReceipt);
       }
     });
+    // Remove Receipts Records that no longer have any donation records
+    let receiptsToDelete: (number | bigint)[] = [];
+    receiptRecs.forEach((receiptRec) => {
+      if (!distinctDonationYears.includes(receiptRec.receiptYear)) {
+        isValid = false;
+        receiptsToDelete.push(receiptRec.id);
+      }
+    });
 
     if (!isValid) {
-      console.log("Receipts To Insert", receiptsToInsert);
-      this.insertManyReceiptRecords(receiptsToInsert);
-      console.log("Receipts Have been inserted");
+      const updateReceipts = this._db.transaction((toInsert, toDelete) => {
+        console.log("Receipts To insert", receiptsToInsert);
+        for (const receipt of toInsert) this.insertReceiptRecord(receipt);
+        console.log("Receipts have been INSERTED");
+        console.log("Receipt Ids to DELETE", receiptsToDelete);
+        for (const receipt of toDelete) this.deleteReceiptRecord(receipt);
+      });
+      try {
+        updateReceipts(receiptsToInsert, receiptsToDelete);
+      } catch (error) {
+        if (!this._db.inTransaction) throw error; // (transaction was forcefully rolled back)
+        //...
+      }
     }
 
     return isValid;
