@@ -6,13 +6,17 @@ import { receiptsAtom } from "@/atoms/atoms";
 
 export default function ReceiptRecords() {
   const receipts = useAtomValue(receiptsAtom);
-  console.log(`render Receipt Records`);
+  //console.log(`render Receipt Records`);
+  console.log(`render Receipt Records`, receipts);
   return (
     <Stack spacing={2} overflow={"auto"} paddingTop={1}>
-      <Stack direction="row"></Stack>
-      {receipts.map((receipt) => (
-        <ReceiptItem key={receipt.id} receipt={receipt} />
-      ))}
+      {receipts.map((receipt) => {
+        if (receipt.isDeleted) {
+          return null;
+        } else {
+          return <ReceiptItem key={receipt.id} receipt={receipt} />;
+        }
+      })}
     </Stack>
   );
 }
