@@ -5,7 +5,8 @@ import { IDonationRecord, IReceiptRecord } from "models/Persons";
 import { useRef } from "react";
 import DonationRecords from "./DonationRecords";
 import { getDefaultStore, useSetAtom } from "jotai";
-import { donationsAtom } from "@/atoms/atoms";
+import { donationsAtom, receiptsAtom } from "@/atoms/atoms";
+import { createNewReceipt } from "../rec-don-utils";
 
 interface IDonationCard {
   personId: number;
@@ -14,6 +15,7 @@ interface IDonationCard {
 export default function DonationCard(props: IDonationCard) {
   console.log(`render Donation Card`);
   const setDonations = useSetAtom(donationsAtom);
+  const setReceipts = useSetAtom(receiptsAtom);
   const newDonationIdRef = useRef(-1);
 
   function createNewDonation() {
@@ -26,7 +28,20 @@ export default function DonationCard(props: IDonationCard) {
     newDonationIdRef.current = newDonationIdRef.current - 1;
     let updateDonationRecs = [newDRec, ...getDefaultStore().get(donationsAtom)];
     setDonations(updateDonationRecs);
+    //Check if receipt for current year exists if not create it
+    const donationYear = new Date().getFullYear().toString();
+    const receipts = getDefaultStore().get(receiptsAtom);
+    const receiptExists = receipts.findIndex(
+      (r) => r.receiptYear === donationYear
+    );
+    if (receiptExists < 0) {
+      setReceipts([
+        createNewReceipt(props.personId, 0, donationYear),
+        ...receipts,
+      ]);
+    }
   }
+
   return (
     <Card variant="outlined" sx={{ flex: 1 }}>
       <CardHeader

@@ -39,13 +39,7 @@ export function validateReceiptRecords(
           return acc;
         }
       }, 0);
-      const newReceipt: IReceiptRecord = {
-        id: newReceiptId--,
-        fk_personId: personId,
-        amount: +(Math.round(donationAmount * 100) / 100).toFixed(2),
-        receiptYear: dYear,
-        isPrinted: false,
-      };
+      const newReceipt = createNewReceipt(personId, donationAmount, dYear);
       receiptsToCreate.push(newReceipt);
     }
   });
@@ -81,4 +75,19 @@ export function sortRecordsByDate<
     dayjs(curr[sortField]).diff(dayjs(prev[sortField]))
   );
   return sortedRec as DonoOrRec<T>;
+}
+
+export function createNewReceipt(
+  personId: number | bigint,
+  donationAmount: number,
+  receiptYear: string
+): IReceiptRecord {
+  return {
+    id: newReceiptId--,
+    fk_personId: personId,
+    amount: +(Math.round(donationAmount * 100) / 100).toFixed(2),
+    receiptYear: receiptYear,
+    isPrinted: false,
+    isDeleted: false,
+  };
 }

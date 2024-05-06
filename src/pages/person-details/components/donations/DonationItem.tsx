@@ -48,8 +48,11 @@ export default function DonationItem(props: IDonationItem) {
       }
       return rec; //returns un modified item
     });
-
     setDonations(updatedDonations);
+    updateReceiptRecords(updatedDonations);
+  }
+
+  function updateReceiptRecords(updatedDonations: IDonationRecord[]) {
     // //check if receipt exists for the year if not create receipt
     const receiptsToUpdate = validateReceiptRecords(
       props.dRec.fk_personId,
@@ -70,6 +73,7 @@ export default function DonationItem(props: IDonationItem) {
         return rec;
       }
     });
+
     // Checking if receipt already exists ie is from database and setting isDeleted to false
     if (receiptsToUpdate.toCreate.length > 0) {
       for (let i = 0; i < receiptsToUpdate.toCreate.length; i++) {
@@ -93,8 +97,6 @@ export default function DonationItem(props: IDonationItem) {
 
     console.log(updatedReceipts);
   }
-
-  function updateReceiptRecords() {}
 
   function amountChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
@@ -136,22 +138,26 @@ export default function DonationItem(props: IDonationItem) {
       }
     });
     setDonations(update);
+    return update;
   }
   function handleDeleteRecord() {
+    let updatedDonations = [];
     //Completely remove deleted record form donation Record object this
     //is done for newly added records that have not been saved to the database
     if (props.dRec.id < 0) {
-      const reducedArray = donations.filter((rec) => rec.id !== props.dRec.id);
-      setDonations(reducedArray);
+      updatedDonations = donations.filter((rec) => rec.id !== props.dRec.id);
+      setDonations(updatedDonations);
     } else {
-      updateDonationRecs("isDeleted", true);
+      updatedDonations = updateDonationRecs("isDeleted", true);
       setIsDeleted(true);
     }
+    updateReceiptRecords(updatedDonations);
   }
 
   function handleRestoreRecord() {
-    updateDonationRecs("isDeleted", false);
+    const updatedDonations = updateDonationRecs("isDeleted", false);
     setIsDeleted(false);
+    updateReceiptRecords(updatedDonations);
   }
 
   return (

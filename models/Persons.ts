@@ -60,6 +60,7 @@ export interface IReceiptRecord extends IMetaData {
   amount: number;
   receiptYear: string;
   isPrinted: boolean;
+  isDeleted: boolean;
   [key: string]: any;
 }
 
