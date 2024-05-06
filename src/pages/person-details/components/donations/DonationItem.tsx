@@ -12,14 +12,15 @@ import {
   printedReceiptsAtom,
   receiptsAtom,
 } from "@/atoms/atoms";
+import { sortRecordsByDate, validateReceiptRecords } from "../rec-don-utils";
 
 interface IDonationItem {
   dRec: IDonationRecord;
 }
 export default function DonationItem(props: IDonationItem) {
-  console.log(
-    `render Donation Item Date:${props.dRec.donationDate} Amount:${props.dRec.amount}`
-  );
+  // console.log(
+  //   `render Donation Item Date:${props.dRec.donationDate} Amount:${props.dRec.amount}`
+  // );
 
   const [donations, setDonations] = useAtom(donationsAtom);
   ///const dd = getDefaultStore().get(donationsAtom)
@@ -29,7 +30,7 @@ export default function DonationItem(props: IDonationItem) {
   const [isValid, setIsValid] = useState(true);
   const [helperText, setHelperText] = useState("");
   const printedReceipts = useAtomValue(printedReceiptsAtom);
-  //const [receipts, setReceipts] = useAtom(receiptsAtom);
+  const [receipts, setReceipts] = useAtom(receiptsAtom);
 
   //Check if receipt is printed
   const year = props.dRec.donationDate.substring(0, 4);
@@ -50,22 +51,50 @@ export default function DonationItem(props: IDonationItem) {
 
     setDonations(updatedDonations);
     // //check if receipt exists for the year if not create receipt
-    // const donationYear = date.year();
-    // const receiptExists = receipts.find((rec) => {
-    //   return rec.receiptYear === donationYear.toString();
-    // });
+    const receiptsToUpdate = validateReceiptRecords(
+      props.dRec.fk_personId,
+      receipts,
+      updatedDonations
+    );
+    console.log("Receipts To UPDATE", receiptsToUpdate);
+    if (receiptsToUpdate.deleteAll) {
+      setReceipts([]);
+      return;
+    }
 
-    // if (receiptExists === undefined) {
-    //   const newReceipt: IReceiptRecord = {
-    //     fk_personId: props.dRec.fk_personId,
-    //     amount: amount,
-    //     receiptYear: donationYear.toString(),
-    //     isPrinted: false,
-    //     id: donationYear * -1,
-    //   };
-    //   setReceipts([newReceipt, ...receipts]);
-    // }
+    // set is isDeleted property of receipts
+    let rec1 = receipts.map((rec) => {
+      if (receiptsToUpdate.toDelete.includes(rec.id)) {
+        return { ...rec, isDeleted: true };
+      } else {
+        return rec;
+      }
+    });
+    // Checking if receipt already exists ie is from database and setting isDeleted to false
+    if (receiptsToUpdate.toCreate.length > 0) {
+      for (let i = 0; i < receiptsToUpdate.toCreate.length; i++) {
+        const receiptExistsIndex = rec1.findIndex(
+          (r) => r.receiptYear === receiptsToUpdate.toCreate[i].receiptYear
+        );
+        if (receiptExistsIndex >= 0) {
+          rec1[receiptExistsIndex].isDeleted = false;
+          receiptsToUpdate.toCreate.splice(i, 1);
+        }
+      }
+    }
+    console.log("Receipts To UPDATE SPLICED", receiptsToUpdate);
+
+    const rec2 = [];
+    for (const year of receiptsToUpdate.toCreate) {
+      rec1.push(year);
+    }
+    const updatedReceipts = sortRecordsByDate([...rec1], "receiptYear");
+    setReceipts(updatedReceipts);
+
+    console.log(updatedReceipts);
   }
+
+  function updateReceiptRecords() {}
 
   function amountChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;

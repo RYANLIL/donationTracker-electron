@@ -23,23 +23,6 @@ export default class ReceiptRecordLogic {
     return stmnt.run(receiptRecord);
   }
 
-  insertManyReceiptRecords(receiptRecords: IReceiptRecord[]) {
-    const stmnt = this._db.prepare(
-      `INSERT INTO receipt_records (fk_personId,amount,receiptYear,isPrinted)
-        VALUES(@fk_personId,@amount,@receiptYear,@isPrinted);`
-    );
-    const insertManyReceipts = this._db.transaction((receipts) => {
-      for (const receipt of receipts) stmnt.run(receipt);
-    });
-
-    try {
-      insertManyReceipts(receiptRecords);
-    } catch (err) {
-      //if (!this._db.inTransaction) throw err; // (transaction was forcefully rolled back)
-      throw err;
-    }
-  }
-
   /**
    * @param ReceiptRecord
    * @returns better-sqlite3 `info` object
@@ -163,11 +146,13 @@ export default class ReceiptRecordLogic {
 
     if (!isValid) {
       const updateReceipts = this._db.transaction((toInsert, toDelete) => {
-        console.log("Receipts To insert", receiptsToInsert);
+        console.log("Receipts To INSERT", receiptsToInsert);
         for (const receipt of toInsert) this.insertReceiptRecord(receipt);
         console.log("Receipts have been INSERTED");
+
         console.log("Receipt Ids to DELETE", receiptsToDelete);
         for (const receipt of toDelete) this.deleteReceiptRecord(receipt);
+        console.log("Receipt Ids have been DELETED");
       });
       try {
         updateReceipts(receiptsToInsert, receiptsToDelete);
