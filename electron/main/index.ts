@@ -12,6 +12,7 @@ import { PersonInfo } from "../../models/Persons";
 import DonationRecordLogic from "./logic/donation-record-logic";
 import ReceiptRecordLogic from "./logic/receipt-record-logic";
 import { setMainMenu, setContextMenu } from "./utils/menu-maker";
+import { update } from "./update";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -100,7 +101,7 @@ async function createWindow() {
   });
 
   // Apply electron-updater
-  //update(win)
+  update(win);
 }
 
 // Setting the Application Menu

@@ -34,6 +34,15 @@ export function setMainMenu(browserWindow: BrowserWindow) {
         { role: "forceReload" },
       ],
     },
+    {
+      label: "Help",
+      submenu: [
+        {
+          label: "Check for updates",
+          click: () => browserWindow.webContents.send("check-for-update"),
+        },
+      ],
+    },
   ];
 
   const template = [...(isMac ? macMenuTemplate : windowsMenuTemplate)];

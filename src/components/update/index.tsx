@@ -21,7 +21,7 @@ const Update = () => {
     onOk: () => window.ipcRenderer.invoke("start-download"),
   });
 
-  const checkUpdate = async () => {
+  const checkUpdate = useCallback(async () => {
     setChecking(true);
     /**
      * @type {import('electron-updater').UpdateCheckResult | null | { message: string, error: Error }}
@@ -34,7 +34,7 @@ const Update = () => {
       setUpdateAvailable(false);
       setUpdateError(result?.error);
     }
-  };
+  }, []);
 
   const onUpdateCanAvailable = useCallback(
     (_event: Electron.IpcRendererEvent, arg1: VersionInfo) => {
@@ -85,6 +85,7 @@ const Update = () => {
   );
 
   useEffect(() => {
+    window.ipcRenderer.on("check-for-update", checkUpdate);
     // Get version information and whether to update
     window.ipcRenderer.on("update-can-available", onUpdateCanAvailable);
     window.ipcRenderer.on("update-error", onUpdateError);
@@ -92,6 +93,7 @@ const Update = () => {
     window.ipcRenderer.on("update-downloaded", onUpdateDownloaded);
 
     return () => {
+      window.ipcRenderer.off("check-update", checkUpdate);
       window.ipcRenderer.off("update-can-available", onUpdateCanAvailable);
       window.ipcRenderer.off("update-error", onUpdateError);
       window.ipcRenderer.off("download-progress", onDownloadProgress);
@@ -135,9 +137,9 @@ const Update = () => {
           )}
         </div>
       </Modal>
-      <button disabled={checking} onClick={checkUpdate}>
+      {/* <button disabled={checking} onClick={checkUpdate}>
         {checking ? "Checking..." : "Check update"}
-      </button>
+      </button> */}
     </>
   );
 };
