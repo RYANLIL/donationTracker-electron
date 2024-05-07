@@ -11,3 +11,16 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <App />
   </React.StrictMode>
 );
+
+//Setting app version to window title
+const setAppVersion = (
+  _event: Electron.IpcRendererEvent,
+  arg1: {
+    appVersion: string;
+    date: string;
+  }
+) => {
+  console.log("[Receive Main-process message]:", arg1);
+  document.title = `DRTracker v${arg1.appVersion}`;
+};
+window.ipcRenderer.on("main-process-message", setAppVersion);
