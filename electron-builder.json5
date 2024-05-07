@@ -2,7 +2,7 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  appId: "YourAppID",
+  appId: "com.ryanlil.donationTracker",
   asar: true,
   directories: {
     output: "release/${version}",
@@ -19,7 +19,7 @@
         arch: ["x64"],
       },
     ],
-    //artifactName: "${productName}_${version}.${ext}",
+    artifactName: "${productName}_${version}.${ext}",
   },
   portable: {
     artifactName: "${productName}_${version}.exe",
@@ -28,13 +28,18 @@
   nsis: {
     oneClick: false,
     perMachine: false,
-    allowToChangeInstallationDirectory: true,
+    allowToChangeInstallationDirectory: false,
     deleteAppDataOnUninstall: false,
   },
-  publish: {
-    provider: "generic",
-    channel: "latest",
-    url: "https://github.com/electron-vite/electron-vite-react/releases/download/v0.9.9/",
-  },
+  publish: [
+    {
+      provider: "github",
+      repo: "donationTracker-electron",
+      owner: "RYANLIL",
+      releaseType: "release",
+      channel: "latest",
+      private: false,
+    },
+  ],
   extraResources: ["./additional-resources/**"],
 }

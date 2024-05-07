@@ -93,7 +93,7 @@ const Update = () => {
     window.ipcRenderer.on("update-downloaded", onUpdateDownloaded);
 
     return () => {
-      window.ipcRenderer.off("check-update", checkUpdate);
+      window.ipcRenderer.off("check-for-update", checkUpdate);
       window.ipcRenderer.off("update-can-available", onUpdateCanAvailable);
       window.ipcRenderer.off("update-error", onUpdateError);
       window.ipcRenderer.off("download-progress", onDownloadProgress);
