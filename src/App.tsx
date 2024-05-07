@@ -6,8 +6,6 @@ import MainSummary from "./pages/main-page/MainSummary";
 import Update from "./components/update";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className="App">
       <MainSummary />

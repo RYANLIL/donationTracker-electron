@@ -37,6 +37,7 @@ export default function Table(props: ITableProps) {
       const data = await window.fileOps.getAllPersons();
       setPersons(data);
       setDataLoaded(true);
+      postMessage({ payload: "removeLoading" }, "*");
     }
     if (!persons) getAllPersons();
   }, []);
