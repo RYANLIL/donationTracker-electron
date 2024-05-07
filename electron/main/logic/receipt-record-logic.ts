@@ -16,6 +16,12 @@ export default class ReceiptRecordLogic {
    * completely ignored.
    */
   insertReceiptRecord(receiptRecord: IReceiptRecord) {
+    // convert boolean to int value for sqlite type
+    receiptRecord.isPrinted
+      ? //@ts-ignore
+        (receiptRecord.isPrinted = 1)
+      : //@ts-ignore
+        (receiptRecord.isPrinted = 0);
     const stmnt = this._db.prepare(
       `INSERT INTO receipt_records (fk_personId,amount,receiptYear,isPrinted)
         VALUES(@fk_personId,@amount,@receiptYear,@isPrinted);`
@@ -33,7 +39,13 @@ export default class ReceiptRecordLogic {
    * statement did not insert any rows into the database, this number should be
    * completely ignored.
    */
-  updateReceiptRecord(ReceiptRecord: IReceiptRecord) {
+  updateReceiptRecord(receiptRecord: IReceiptRecord) {
+    // convert boolean to int value for sqlite type
+    receiptRecord.isPrinted
+      ? // @ts-ignore
+        (receiptRecord.isPrinted = 1)
+      : // @ts-ignore
+        (receiptRecord.isPrinted = 0);
     const stmnt = this._db.prepare(
       `UPDATE receipt_records SET 
         amount = @amount,
@@ -42,7 +54,7 @@ export default class ReceiptRecordLogic {
       WHERE id = @id`
     );
 
-    return stmnt.run(ReceiptRecord);
+    return stmnt.run(receiptRecord);
   }
 
   /**
@@ -80,7 +92,7 @@ export default class ReceiptRecordLogic {
     // convert int 0 1 into boolean true false
     data.forEach((rec) => {
       rec.isPrinted = Boolean(rec.isPrinted);
-      rec.isDeleted = Boolean(rec.isDeleted);
+      rec.isDeleted = false;
     });
     return data;
   }
