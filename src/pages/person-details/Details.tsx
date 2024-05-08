@@ -128,6 +128,9 @@ export default function DetailsPage(props: IDetailsPage) {
     <>
       {isLoading ? (
         <Stack spacing={1}>
+          <Stack direction="row" justifyContent="space-between">
+            <Skeleton variant="rounded" height={37} width={72} />
+          </Stack>
           <Skeleton variant="rounded" height={100} />
           <Skeleton variant="rounded" height={300} />
           <Skeleton variant="rounded" height={300} />

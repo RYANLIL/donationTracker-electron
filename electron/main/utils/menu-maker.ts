@@ -22,7 +22,7 @@ export function setMainMenu(browserWindow: BrowserWindow) {
             showSaveDialogBox(browserWindow);
           },
         },
-        { label: "exit", role: "close" },
+        { label: "Exit", role: "close" },
       ],
     },
     {
