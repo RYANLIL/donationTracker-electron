@@ -5,6 +5,7 @@
  * Warn user about data loss and backup if they already have existing
  * installation
  */
+import { app } from "electron";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { Database } from "better-sqlite3";
 import {
@@ -14,6 +15,7 @@ import {
 } from "../../../constants";
 import { getSqlite3 } from "./better-sqlite3";
 import { join } from "node:path";
+import UserSettingsLogic from "../logic/user-settings-logic";
 
 export default class InitDatabase {
   private _db: Database;
@@ -44,9 +46,22 @@ export default class InitDatabase {
           "utf8"
         );
         this._db.exec(createTablesSQL);
-        res = tables.all();
+
+        // Set default path for auto backups
+        const backupFilePath = join(
+          app.getPath("documents"),
+          "/donationTrackerBackups"
+        );
+        const userLogic = new UserSettingsLogic(this._db);
+        let userSettings = userLogic.getUserSettings();
+        userSettings.backupLocation = backupFilePath;
+        userLogic.updateUserSettings(userSettings);
+        //If folder doesNot exist create it
+        if (!existsSync(backupFilePath)) {
+          mkdirSync(backupFilePath, { recursive: true });
+        }
       } catch (error) {
-        if (!this._db.inTransaction) throw error; // (transaction was forcefully rolled back)
+        throw error; // (transaction was forcefully rolled back)
       }
     }
   }

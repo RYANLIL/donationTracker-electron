@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
-import { showOpenDialogBox, showSaveDialogBox } from "./dialogs";
+import { setBackUpLocationDialogBox, backUpDatabaseDialogBox } from "./dialogs";
 
 const isMac = process.platform === "darwin";
 
@@ -18,14 +18,14 @@ export function setMainMenu(browserWindow: BrowserWindow) {
         {
           label: "BackUp Database",
           click: () => {
-            showSaveDialogBox(browserWindow);
+            backUpDatabaseDialogBox(browserWindow);
           },
         },
         {
           label: "Set Backup Location",
           click: () => {
             console.log("Choose Back Up Folder");
-            showOpenDialogBox(browserWindow);
+            setBackUpLocationDialogBox(browserWindow);
           },
         },
         { label: "Exit", role: "close" },

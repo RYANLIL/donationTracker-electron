@@ -13,6 +13,7 @@ import DonationRecordLogic from "./logic/donation-record-logic";
 import ReceiptRecordLogic from "./logic/receipt-record-logic";
 import { setMainMenu, setContextMenu } from "./utils/menu-maker";
 import { update } from "./update";
+import { createBackUp } from "./utils/backups";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -111,7 +112,9 @@ async function createWindow() {
 
 app.whenReady().then(createWindow);
 
-app.on("window-all-closed", () => {
+app.on("window-all-closed", async () => {
+  const res = await createBackUp();
+  console.log("exit backup", res);
   win = null;
   if (process.platform !== "darwin") app.quit();
 });
@@ -229,7 +232,7 @@ ipcMain.handle("savePersonDetails", (sender, personInfo: PersonInfo) => {
 
       for (const receipt of person.receipts) {
         // @ts-ignore
-        // Used to save to SQLite int as there is now bool type in SQLite
+        // Used to save to SQLite int as there is no bool type in SQLite
         receipt.isPrinted = Number(receipt.isPrinted);
 
         if (receipt.id > 0) {

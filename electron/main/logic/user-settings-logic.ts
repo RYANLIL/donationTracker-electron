@@ -25,7 +25,7 @@ export default class UserSettingsLogic {
         backupLocation = @backupLocation,
         lastBack = @lastBack,
         backupIntervalHr = @backupIntervalHr,
-        lastUpdated = @lastUpdated
+        lastUpdated = CURRENT_TIMESTAMP
       WHERE id = @id`
     );
 
