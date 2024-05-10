@@ -1,25 +1,33 @@
 import { DATABASE_PATH } from "../../../constants";
 import { BrowserWindow, app, dialog } from "electron";
-import fs from "node:fs";
 import path from "node:path";
 import { getSqlite3 } from "../data/better-sqlite3";
+import UserSettingsLogic from "../logic/user-settings-logic";
 
-export function showOpenDialogBox(browserWindow: BrowserWindow) {
-  const filePaths = dialog.showOpenDialog(browserWindow, {
+/**
+ * Sets user defined location to save automatic backups
+ * @param browserWindow
+ */
+export async function showOpenDialogBox(browserWindow: BrowserWindow) {
+  const filePaths = await dialog.showOpenDialog(browserWindow, {
     defaultPath: app.getPath("downloads"),
-    filters: [
-      {
-        name: "Records",
-        extensions: ["records", "sqlite", "sqlite3"],
-      },
-    ],
+    properties: ["openDirectory"],
   });
   console.log(filePaths);
+  const db = getSqlite3();
+  let uSLogic = new UserSettingsLogic(db);
+  let userSettings = uSLogic.getUserSettings();
+  console.log("user", userSettings);
+  if (!filePaths.canceled) {
+    userSettings.backupLocation = filePaths.filePaths[0];
+    uSLogic.updateUserSettings(userSettings);
+    console.log("updated", userSettings);
+  }
 }
 
 export async function showSaveDialogBox(browserWindow: BrowserWindow) {
   const date = new Date();
-  // filename like = records-BACKUP-2024-05-01-17-58:03
+  // filename like = records-BACKUP-2024-05-01-17-58-03
   const fileName = `records-BACKUP-${date.toISOString().split("T")[0]}-${date
     .toTimeString()
     .split(" ")[0]

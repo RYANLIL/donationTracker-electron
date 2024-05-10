@@ -53,3 +53,13 @@ CREATE TABLE "receipt_records" (
 	"deletedAt" 	TEXT DEFAULT '' NOT NULL,
 	FOREIGN KEY("fk_personId") REFERENCES person("id")
 );
+
+CREATE TABLE "user_settings" (
+	"id"			    INTEGER PRIMARY KEY,
+	"backupLocation"    TEXT DEFAULT '' NOT NULL,
+    "lastBack"          TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "backupIntervalHr"  TEXT DEFAULT '6' NOT NULL,
+	"lastUpdated" 	    TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+INSERT INTO user_settings (backupLocation) VALUES ('')
