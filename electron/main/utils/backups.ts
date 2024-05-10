@@ -34,6 +34,11 @@ export async function createBackUp(filePath?: string) {
   return backUpMetaData;
 }
 
+/**
+ * Deletes old backup files from the user selected folder
+ * keeps number of backups specified in database default is 20
+ */
+export function cleanUpBackUpFolder() {}
 // export function checkLastBackupTime() {
 //   const userSettingsLogic = new UserSettingsLogic(db);
 //   let userSettings = userSettingsLogic.getUserSettings();

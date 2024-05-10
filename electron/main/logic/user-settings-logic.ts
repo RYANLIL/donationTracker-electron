@@ -24,7 +24,7 @@ export default class UserSettingsLogic {
       `UPDATE user_settings SET 
         backupLocation = @backupLocation,
         lastBack = @lastBack,
-        backupIntervalHr = @backupIntervalHr,
+        numOfBackUpsToKeep = @numOfBackUpsToKeep,
         lastUpdated = CURRENT_TIMESTAMP
       WHERE id = @id`
     );
