@@ -1,10 +1,7 @@
 import { join } from "node:path";
 import { getSqlite3 } from "../data/better-sqlite3";
 import UserSettingsLogic from "../logic/user-settings-logic";
-import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
-import { existsSync, mkdirSync } from "node:fs";
-dayjs.extend(duration);
+import { existsSync, mkdirSync, promises, readdir } from "node:fs";
 
 export async function createBackUp(filePath?: string) {
   const db = getSqlite3();
@@ -38,25 +35,39 @@ export async function createBackUp(filePath?: string) {
  * Deletes old backup files from the user selected folder
  * keeps number of backups specified in database default is 20
  */
-export function cleanUpBackUpFolder() {}
-// export function checkLastBackupTime() {
-//   const userSettingsLogic = new UserSettingsLogic(db);
-//   let userSettings = userSettingsLogic.getUserSettings();
+export async function cleanUpBackUpFolder() {
+  const db = getSqlite3();
+  const userSettingsLogic = new UserSettingsLogic(db);
+  let userSettings = userSettingsLogic.getUserSettings();
+  if (!existsSync(userSettings.backupLocation)) {
+    mkdirSync(userSettings.backupLocation, { recursive: true });
+  }
+  try {
+    const files = await promises.readdir(userSettings.backupLocation, {
+      withFileTypes: true,
+    });
 
-//   const lastBackUp = dayjs(userSettings.lastBack);
-//   const currentTime = dayjs();
-//   const diffFromLastBackup = currentTime.diff(lastBackUp);
-//   const backupInterval = dayjs
-//     .duration({
-//       hours: userSettings.backupIntervalHr,
-//     })
-//     .asMilliseconds();
+    let fileList = files
+      .filter((file) => file.isFile()) // Only care about file types ignore all others
+      .map((file) => {
+        //create new object with the full path and a date object of file
+        let filePath = join(file.path, file.name);
+        let dateExtracted = /\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/.exec(
+          file.name
+        );
+        let date = new Date();
+        if (dateExtracted) {
+          let d = dateExtracted[0].split("-");
+          //Date object month is indexed 0-11 for jan to dec
+          date = new Date(+d[0], +d[1] - 1, +d[2], +d[3], +d[4], +d[5]);
+        }
+        return { filePath: filePath, date: date };
+      })
+      .sort((prev, curr) => prev.date.getTime() - curr.date.getTime()); //Sort by date oldest will be at the beginning of array
 
-//   if (diffFromLastBackup >= backupInterval) {
-//     console.log("create Backup");
-//   }
-//   console.log("lastBackUp", lastBackUp.toString());
-//   console.log("currentTime", currentTime.toString());
-//   console.log("diffFromLastBackup", diffFromLastBackup);
-//   console.log("backupInterval", backupInterval);
-// }
+    console.log("fileList", fileList);
+    //TODO: Delete oldest file if there are more backups than userSettings.numOfBackUpsToKeep
+  } catch (err) {
+    throw err;
+  }
+}

@@ -1,5 +1,6 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
 import { setBackUpLocationDialogBox, backUpDatabaseDialogBox } from "./dialogs";
+import { cleanUpBackUpFolder } from "./backups";
 
 const isMac = process.platform === "darwin";
 
@@ -49,6 +50,12 @@ export function setMainMenu(browserWindow: BrowserWindow) {
         },
       ],
     },
+    {
+      label: "DEV",
+      click: () => {
+        TEST();
+      },
+    },
   ];
 
   const template = [...(isMac ? macMenuTemplate : windowsMenuTemplate)];
@@ -63,4 +70,8 @@ export function setContextMenu() {
     { role: "paste" },
   ];
   return Menu.buildFromTemplate(contextMenuTemplate);
+}
+
+function TEST() {
+  cleanUpBackUpFolder();
 }
