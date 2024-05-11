@@ -13,7 +13,7 @@ import DonationRecordLogic from "./logic/donation-record-logic";
 import ReceiptRecordLogic from "./logic/receipt-record-logic";
 import { setMainMenu, setContextMenu } from "./utils/menu-maker";
 import { update } from "./update";
-import { createBackUp } from "./utils/backups";
+import { cleanUpBackUpFolder, createBackUp } from "./utils/backups";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -115,6 +115,8 @@ app.whenReady().then(createWindow);
 app.on("window-all-closed", async () => {
   const res = await createBackUp();
   console.log("exit backup", res);
+  //Clean Remove old automated backups
+  await cleanUpBackUpFolder();
   win = null;
   if (process.platform !== "darwin") app.quit();
 });

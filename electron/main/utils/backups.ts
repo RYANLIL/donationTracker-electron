@@ -3,6 +3,7 @@ import { getSqlite3 } from "../data/better-sqlite3";
 import UserSettingsLogic from "../logic/user-settings-logic";
 import { existsSync, mkdirSync, promises, readdir } from "node:fs";
 import { BACKUP_PREFIX } from "../../../constants";
+import { unlink } from "original-fs";
 
 export async function createBackUp(filePath?: string) {
   const db = getSqlite3();
@@ -60,11 +61,17 @@ export async function cleanUpBackUpFolder() {
           date = new Date(+d[0], +d[1] - 1, +d[2], +d[3], +d[4], +d[5]);
         }
         return { filePath: filePath, date: date };
-      });
-    fileList.sort((prev, curr) => prev.date.getTime() - curr.date.getTime()); //Sort by date oldest will be at the beginning of array
+      })
+      .sort((prev, curr) => prev.date.getTime() - curr.date.getTime()); //Sort by date oldest will be at the beginning of array
 
-    console.log("fileList", fileList);
-    //TODO: Delete oldest file if there are more backups than userSettings.numOfBackUpsToKeep
+    //console.log("fileList", fileList);
+    const toDeleteCount = fileList.length - userSettings.numOfBackUpsToKeep;
+    if (toDeleteCount > 0) {
+      for (let i = 0; i < toDeleteCount; i++) {
+        console.log("DELETED", fileList[i].filePath);
+        await promises.unlink(fileList[i].filePath);
+      }
+    }
   } catch (err) {
     throw err;
   }
