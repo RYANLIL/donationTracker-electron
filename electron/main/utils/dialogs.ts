@@ -1,8 +1,8 @@
-import { DATABASE_PATH } from "../../../constants";
+import { BACKUP_PREFIX, DATABASE_PATH } from "../../../constants";
 import { BrowserWindow, app, dialog } from "electron";
 import path from "node:path";
 import UserSettingsLogic from "../logic/user-settings-logic";
-import { createBackUp } from "./backups";
+import { createBackUp, generateBackUpFileName } from "./backups";
 import { getSqlite3 } from "../data/better-sqlite3";
 
 /**
@@ -28,11 +28,8 @@ export async function setBackUpLocationDialogBox(browserWindow: BrowserWindow) {
 
 export async function backUpDatabaseDialogBox(browserWindow: BrowserWindow) {
   const date = new Date();
-  // filename like = records-BACKUP-2024-05-01-17-58-03
-  const fileName = `records-BACKUP-${date.toISOString().split("T")[0]}-${date
-    .toTimeString()
-    .split(" ")[0]
-    .replace(/:/g, "-")}.sqlite`;
+  // filename like = BACKUP_PREFIX-2024-05-01-17-58-03.sqlite
+  const fileName = generateBackUpFileName();
 
   const file = await dialog.showSaveDialog(browserWindow, {
     defaultPath: path.join(app.getPath("desktop"), fileName),

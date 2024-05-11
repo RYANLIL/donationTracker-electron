@@ -2,6 +2,7 @@ import { join } from "node:path";
 import { getSqlite3 } from "../data/better-sqlite3";
 import UserSettingsLogic from "../logic/user-settings-logic";
 import { existsSync, mkdirSync, promises, readdir } from "node:fs";
+import { BACKUP_PREFIX } from "../../../constants";
 
 export async function createBackUp(filePath?: string) {
   const db = getSqlite3();
@@ -14,10 +15,7 @@ export async function createBackUp(filePath?: string) {
     }
     const date = new Date();
     // filename like = records-BACKUP-2024-05-01-17-58-03
-    let fileName = `donations-BACKUP-${date.toISOString().split("T")[0]}-${date
-      .toTimeString()
-      .split(" ")[0]
-      .replace(/:/g, "-")}.sqlite`;
+    let fileName = generateBackUpFileName();
     filePath = join(userSettings.backupLocation, fileName);
   }
 
@@ -52,22 +50,33 @@ export async function cleanUpBackUpFolder() {
       .map((file) => {
         //create new object with the full path and a date object of file
         let filePath = join(file.path, file.name);
-        let dateExtracted = /\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/.exec(
+        let dateSubstring = /\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/.exec(
           file.name
         );
         let date = new Date();
-        if (dateExtracted) {
-          let d = dateExtracted[0].split("-");
+        if (dateSubstring) {
+          let d = dateSubstring[0].split("-");
           //Date object month is indexed 0-11 for jan to dec
           date = new Date(+d[0], +d[1] - 1, +d[2], +d[3], +d[4], +d[5]);
         }
         return { filePath: filePath, date: date };
-      })
-      .sort((prev, curr) => prev.date.getTime() - curr.date.getTime()); //Sort by date oldest will be at the beginning of array
+      });
+    fileList.sort((prev, curr) => prev.date.getTime() - curr.date.getTime()); //Sort by date oldest will be at the beginning of array
 
     console.log("fileList", fileList);
     //TODO: Delete oldest file if there are more backups than userSettings.numOfBackUpsToKeep
   } catch (err) {
     throw err;
   }
+}
+
+export function generateBackUpFileName() {
+  const date = new Date();
+  //add 1 to month because they are zero based
+  return `${BACKUP_PREFIX}-${date.getFullYear()}-${
+    date.getMonth() + 1
+  }-${date.getDate()}-${date
+    .toTimeString()
+    .split(" ")[0]
+    .replace(/:/g, "-")}.sqlite`;
 }

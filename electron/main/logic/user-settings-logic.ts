@@ -23,7 +23,7 @@ export default class UserSettingsLogic {
     const stmnt = this._db.prepare(
       `UPDATE user_settings SET 
         backupLocation = @backupLocation,
-        lastBack = @lastBack,
+        lastBackUp = @lastBackUp,
         numOfBackUpsToKeep = @numOfBackUpsToKeep,
         lastUpdated = CURRENT_TIMESTAMP
       WHERE id = @id`

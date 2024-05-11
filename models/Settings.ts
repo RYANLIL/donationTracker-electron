@@ -1,7 +1,7 @@
 export interface IUserSettings {
   id: number | bigint;
   backupLocation: string;
-  lastBack: string;
+  lastBackUp: string;
   numOfBackUpsToKeep: number;
   lastUpdated: string;
 }
