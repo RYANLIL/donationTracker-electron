@@ -20,3 +20,5 @@ export const DATABASE_PATH = join(DATABASE_FOLDER, "./donation-tracker.sqlite");
 export const ADD_RESOURCES = isDev
   ? "./additional-resources"
   : join(process.resourcesPath, "./additional-resources");
+
+export const BACKUP_PREFIX = "donations-BACKUP";
