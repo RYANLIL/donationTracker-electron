@@ -50,12 +50,12 @@ export function setMainMenu(browserWindow: BrowserWindow) {
         },
       ],
     },
-    {
-      label: "DEV",
-      click: () => {
-        TEST();
-      },
-    },
+    // {
+    //   label: "DEV",
+    //   click: () => {
+    //     TEST();
+    //   },
+    // },
   ];
 
   const template = [...(isMac ? macMenuTemplate : windowsMenuTemplate)];
