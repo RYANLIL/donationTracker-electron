@@ -1,5 +1,6 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
-import { showSaveDialogBox } from "./dialogs";
+import { setBackUpLocationDialogBox, backUpDatabaseDialogBox } from "./dialogs";
+import { cleanUpBackUpFolder } from "./backups";
 
 const isMac = process.platform === "darwin";
 
@@ -18,8 +19,14 @@ export function setMainMenu(browserWindow: BrowserWindow) {
         {
           label: "BackUp Database",
           click: () => {
-            console.log("Open menu");
-            showSaveDialogBox(browserWindow);
+            backUpDatabaseDialogBox(browserWindow);
+          },
+        },
+        {
+          label: "Set Backup Location",
+          click: () => {
+            console.log("Choose Back Up Folder");
+            setBackUpLocationDialogBox(browserWindow);
           },
         },
         { label: "Exit", role: "close" },
@@ -43,6 +50,12 @@ export function setMainMenu(browserWindow: BrowserWindow) {
         },
       ],
     },
+    // {
+    //   label: "DEV",
+    //   click: () => {
+    //     TEST();
+    //   },
+    // },
   ];
 
   const template = [...(isMac ? macMenuTemplate : windowsMenuTemplate)];
@@ -57,4 +70,8 @@ export function setContextMenu() {
     { role: "paste" },
   ];
   return Menu.buildFromTemplate(contextMenuTemplate);
+}
+
+function TEST() {
+  cleanUpBackUpFolder();
 }
