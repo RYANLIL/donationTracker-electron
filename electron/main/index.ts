@@ -14,6 +14,7 @@ import ReceiptRecordLogic from "./logic/receipt-record-logic";
 import { setMainMenu, setContextMenu } from "./utils/menu-maker";
 import { update } from "./update";
 import { cleanUpBackUpFolder, createBackUp } from "./utils/backups";
+import { checkDb } from "./utils/validate-startup";
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(__filename);
@@ -176,6 +177,9 @@ if (isFirstRun()) {
   initDb.readyDatabase();
   if (isDev) initDb.insertMockData();
 }
+//Check Database
+checkDb();
+//******************
 
 const db = getSqlite3(DATABASE_PATH);
 const personLogic = new PersonLogic(db);

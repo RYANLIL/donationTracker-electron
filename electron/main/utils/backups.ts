@@ -1,9 +1,8 @@
 import { join } from "node:path";
 import { getSqlite3 } from "../data/better-sqlite3";
 import UserSettingsLogic from "../logic/user-settings-logic";
-import { existsSync, mkdirSync, promises, readdir } from "node:fs";
+import { existsSync, mkdirSync, promises } from "node:fs";
 import { BACKUP_PREFIX } from "../../../constants";
-import { unlink } from "original-fs";
 
 export async function createBackUp(filePath?: string) {
   const db = getSqlite3();
