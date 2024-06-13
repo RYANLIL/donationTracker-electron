@@ -17,9 +17,9 @@
     "build": "tsc && vite build && electron-builder",
     "preview": "vite preview",
     "pree2e": "vite build --mode=test",
+    "//": " for unix users use 'rebuild' windows users use 'rebuildWin'",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
-    "rebuild1": ".\\node_modules\\.bin\\electron-rebuild",
-    "postinstall": "npm run rebuild1"
+    "rebuildWin": ".\\node_modules\\.bin\\electron-rebuild"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
