@@ -20,7 +20,7 @@ export default function MainSummary() {
             {/* <Logg /> isDebug */}
           </Stack>
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h4">People</Typography>
+            <Typography variant="h4">Members</Typography>
             <Button
               variant="contained"
               sx={{ maxHeight: "36.5px" }}
