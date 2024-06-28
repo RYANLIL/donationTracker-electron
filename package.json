@@ -1,6 +1,6 @@
 {
   "name": "donation-tracker",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist-electron/main/index.js",
   "description": "App to track people and donations",
   "author": "R.L",
