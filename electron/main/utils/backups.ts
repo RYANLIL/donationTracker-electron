@@ -49,16 +49,19 @@ export async function cleanUpBackUpFolder() {
       .filter((file) => file.isFile()) // Only care about file types ignore all others
       .map((file) => {
         //create new object with the full path and a date object of file
-        let filePath = join(file.path, file.name);
-        let dateSubstring = /\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/.exec(
-          file.name
-        );
+        let filePath = join(file.parentPath, file.name);
+        let regex = /(\d+-\d+-\d+-\d+-\d+-\d+)\.sqlite/;
+        let parsedFileName = file.name.match(regex);
+        let dateSubstring = parsedFileName ? parsedFileName[1] : null;
         let date = new Date();
         if (dateSubstring) {
-          let d = dateSubstring[0].split("-");
+          let d = dateSubstring.split("-");
           //Date object month is indexed 0-11 for jan to dec
           date = new Date(+d[0], +d[1] - 1, +d[2], +d[3], +d[4], +d[5]);
-        }
+        } else
+          throw new Error(
+            `INVALID FILE NAME ${file.name} Please delete this file manually`
+          );
         return { filePath: filePath, date: date };
       })
       .sort((prev, curr) => prev.date.getTime() - curr.date.getTime()); //Sort by date oldest will be at the beginning of array
